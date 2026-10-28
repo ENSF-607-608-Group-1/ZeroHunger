@@ -1,4 +1,4 @@
-# 🍏 ZeroHunger — Food Sharing Platform
+#  ZeroHunger — Food Sharing Platform
 ### ENSF 607 | Group #1 — Project Check-In 1 Documentation
 **Academic Lead:** Dr. Ronnie de Souza Santos, PhD.
 
