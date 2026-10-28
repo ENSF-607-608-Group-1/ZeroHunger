@@ -5,12 +5,12 @@ Share Food, End Hunger
 
 ---
 
-## 📋 Project Overview
+## Project Overview
 **ZeroHunger** is a fully functional, cross-platform mobile application engineered to directly operationalize **United Nations Sustainable Development Goal 2: Zero Hunger**. Built using an asynchronous, **Event-Driven Architecture (EDA)** backed by a relational database, the platform mitigates urban food waste by connecting surplus food Donors (restaurants, bakeries) with community Recipients and local Food Bank Organizations in real-time.
 
 ---
 
-## 👥 Team Members & Contribution Directory
+## Team Members & Contribution Directory
 
 | Name | UCID | Core Check-In 1 Responsibility Area |
 | :--- | :--- | :--- |
@@ -23,7 +23,7 @@ Share Food, End Hunger
 
 ---
 
-## 🛠️ System Prerequisites & Environment Setup
+## System Prerequisites & Environment Setup
 
 ### 1. Client App Layer (Flutter & Mobile SDKs)
 * **Flutter SDK:** Stable Channel `v3.19.x` or higher
