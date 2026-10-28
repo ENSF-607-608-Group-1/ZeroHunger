@@ -42,7 +42,7 @@
 
 ---
 
-## 🚀 Local Configuration & Boot Guide
+## Local Configuration & Boot Guide
 
 ### Step 1: Clone and Stage the Workspace
 ```bash
