@@ -1,7 +1,7 @@
 #  ZeroHunger
 Share Food, End Hunger
 ### ENSF 607 | Group #1 — Project Check-In 1 Documentation
-**Academic Lead:** Dr. Ronnie de Souza Santos, PhD.
+**Professor:** Dr. Ronnie de Souza Santos, PhD.
 
 ---
 
