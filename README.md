@@ -87,7 +87,7 @@ flutter run
 
 ---
 
-## ⚡ Verified Check-In 1 Event Flow: `FoodAvailable`
+## Verified Check-In 1 Event Flow: `FoodAvailable`
 
-To satisfy Section 5 of the project attributes guidelines, we have operationalized one complete end-to-end event slice:
+To satisfy Section 5 of the project attributes guidelines, we have operationalized one complete end-to-end event:
 
