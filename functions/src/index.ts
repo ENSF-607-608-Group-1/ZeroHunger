@@ -46,6 +46,8 @@ import {subscribe} from "./events/subscribe";
 import {Topics} from "./events/topics";
 import {CancelOrRescheduleDonation, ExpiryCheck, FoodClaimed, PostFood, UpdateQuantity} from "./events/types";
 import {ListingProcessor} from "./processors/listing";
+import {onCall} from "firebase-functions/https";
+import {CancelOrRescheduleRequest, PostFoodRequest, UpdateQuantityRequest, ZeroHungerApi} from "./api/zeroHungerApi";
 
 
 
@@ -72,4 +74,20 @@ export const listing = {
     Topics.cancelOrRescheduleDonation, (e) => listingProcessor.onCancelOrReschedule(e)),
   onFoodClaimed: subscribe<FoodClaimed>(Topics.foodClaimed, (e) => listingProcessor.onFoodClaimed(e)),
   onExpiryCheck: subscribe<ExpiryCheck>(Topics.expiryCheck, (e) => listingProcessor.onExpiryCheck(e)),
+};
+
+
+
+
+//API (ZeroHungerApi): the functions zero hunger flutter calls
+//Grouping them under `api` names them api-postFood, api-updateQuantity and api-cancelOrRescheduleDonation. The app calls them by those names.
+// Deploy just these with:  firebase.cmd deploy --only functions:api
+const zeroHungerApi = new ZeroHungerApi();
+
+export const api = {
+  // name in the cloud   what the app sends              method that handles it
+  postFood: onCall<PostFoodRequest>((request) => zeroHungerApi.postFood(request)),
+  updateQuantity: onCall<UpdateQuantityRequest>((request) => zeroHungerApi.updateQuantity(request)),
+  cancelOrRescheduleDonation: onCall<CancelOrRescheduleRequest>(
+    (request) => zeroHungerApi.cancelOrRescheduleDonation(request)),
 };

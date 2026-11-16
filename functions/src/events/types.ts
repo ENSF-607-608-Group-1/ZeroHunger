@@ -16,13 +16,23 @@
 // Where a donation is in its life (FR14).
 export type DonationState = "AVAILABLE" | "CLAIMED" | "COMPLETED" | "CANCELLED" | "EXPIRED";
 
-// Food categories (FR9, FR11).
-export type FoodCategory = "HALAL" | "VEGAN" | "VEGETARIAN" | "UNCOOKED" | "GRAIN";
+//Food categories (FR9, FR11).
+//Types disappear when TypeScript turns into JavaScript, so the running code can't
+//check a value against a type. It can check against a real list, so we keep one:
+//FOOD_CATEGORIES : the list, used by the API to check what the app sends
+// FoodCategory    : the type made from that list
+export const FOOD_CATEGORIES = ["HALAL", "VEGAN", "VEGETARIAN", "UNCOOKED", "GRAIN"] as const;
+export type FoodCategory = (typeof FOOD_CATEGORIES)[number];
 
-// Allergen tags (FR10, FR12): Health Canada's priority food allergens.
-export type Allergen =
-  | "PEANUTS" | "TREE_NUTS" | "MILK" | "EGGS" | "WHEAT" | "SOY"
-  | "SESAME" | "FISH" | "SHELLFISH" | "MUSTARD" | "SULPHITES";
+
+//Health Canadas priority food allergens
+//ALLERGENS is list, Allergen is the type made from it.
+export const ALLERGENS = [
+  "PEANUTS", "TREE_NUTS", "MILK", "EGGS", "WHEAT", "SOY",
+  "SESAME", "FISH", "SHELLFISH", "MUSTARD", "SULPHITES",
+] as const;
+export type Allergen = (typeof ALLERGENS)[number];
+
 
 // A pickup address.
 export interface Address {
