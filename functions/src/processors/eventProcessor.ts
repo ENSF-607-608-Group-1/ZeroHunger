@@ -30,7 +30,7 @@ export abstract class EventProcessor {
 
   // publish: the function used to send events. Normally publishEvent.
   // A test can pass in a fake one, so nothing is really sent.
-  constructor(private readonly publish: PublishFn = publishEvent) {}
+  constructor(protected readonly publish: PublishFn = publishEvent) {}
 
   // handle() runs one event the same way for every processor:
   //   1. run the processor's own work, which returns the events to send next

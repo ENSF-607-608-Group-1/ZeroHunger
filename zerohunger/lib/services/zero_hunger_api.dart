@@ -2,9 +2,11 @@
 // The app's side of the callable API (functions/src/api/zeroHungerApi.ts)
 //
 //   screen ──postFood()──> api-postFood (Cloud Function) ──PostFood──> Listing processor
+//   screen ──claimFood()──> api-claimFood ──> Claim processor, which answers with the reservation
 //
 // Each method sends a request and gets back a Submitted (donationId, correlationId)
 // Submitted means "accepted", not "live yet": the Listing processor does the rest a moment later
+// claimFood is different: it waits and gets back a ClaimResult (request-reply)
 // We never send donorId: the cloud_functions package adds the signed-in user's token,
 // and the function takes the user ID from that
 
@@ -74,6 +76,49 @@ class Submitted {
   const Submitted(this.donationId, this.correlationId);
 }
 
+// One item to claim, e.g. 2 portions of the rice.
+class ClaimItem {
+  final String itemId;  // the item's ID in the donation
+  final int quantity;   // how many, 1 or more
+
+  const ClaimItem({required this.itemId, required this.quantity});
+
+  // The shape api-claimFood expects for one item.
+  Map<String, dynamic> toJson() => {'itemId': itemId, 'quantity': quantity};
+}
+
+// What claimFood answers instead: the reservation.
+class ClaimResult {
+  final String reservationId;
+  final String donationId;
+  final int quantityReserved;   // all the items added up
+  final DateTime pickupStart;
+  final DateTime pickupEnd;
+  final String pickupCode;      // 6 digits, shown to the donor at pickup
+  final String correlationId;   // search the logs for this
+
+  const ClaimResult({
+    required this.reservationId,
+    required this.donationId,
+    required this.quantityReserved,
+    required this.pickupStart,
+    required this.pickupEnd,
+    required this.pickupCode,
+    required this.correlationId,
+  });
+
+  // Reads api-claimFood's answer.
+  factory ClaimResult.fromJson(Map<String, dynamic> json) => ClaimResult(
+        reservationId: json['reservationId'] as String,
+        donationId: json['donationId'] as String,
+        quantityReserved: (json['quantityReserved'] as num).toInt(),
+        pickupStart: DateTime.parse(json['pickupStart'] as String),
+        pickupEnd: DateTime.parse(json['pickupEnd'] as String),
+        pickupCode: json['pickupCode'] as String,
+        correlationId: json['correlationId'] as String,
+      );
+}
+
 // A call that failed, with a message we can show the user
 class ApiException implements Exception {
   final String code;     // e.g. "permission-denied"
@@ -121,7 +166,7 @@ class ZeroHungerApi {
     return _call('api-cancelOrRescheduleDonation', {
       'donationId': donationId,
       'action': 'CANCEL',
-      if (reason != null) 'reason': reason,
+      'reason': ?reason,// left out if null
     });
   }
 
@@ -139,13 +184,33 @@ class ZeroHungerApi {
     });
   }
 
+  // api-claimFood: a recipient (guests too) claims some of a donation's items.
+  // Waits for the reservation, so the screen can show the pickup code straight away.
+  Future<ClaimResult> claimFood({
+    required String donationId,
+    required List<ClaimItem> items,
+    String? note,
+  }) async {
+    final answer = await _answer('api-claimFood', {
+      'donationId': donationId,
+      'items': items.map((item) => item.toJson()).toList(),
+      'note': ?note,// left out if null
+    });
+    return ClaimResult.fromJson(answer);
+  }
+
   // Calls one function by name and turns its answer into a Submitted.
   // If the function says no, throws an ApiException with words for the user.
   Future<Submitted> _call(String name, Map<String, dynamic> data) async {
+    final answer = await _answer(name, data);
+    return Submitted(answer['donationId'] as String, answer['correlationId'] as String);
+  }
+
+  // Calls one function by name and returns its answer as a map (used by _call and claimFood).
+  Future<Map<String, dynamic>> _answer(String name, Map<String, dynamic> data) async {
     try {
       final result = await _functions.httpsCallable(name).call(data);
-      final answer = Map<String, dynamic>.from(result.data as Map);
-      return Submitted(answer['donationId'] as String, answer['correlationId'] as String);
+      return Map<String, dynamic>.from(result.data as Map);
     } on FirebaseFunctionsException catch (e) {
       final code = e.code.toLowerCase().replaceAll('_', '-'); // e.g. "permission-denied"
       throw ApiException(code, _friendly(code, e.message));
@@ -161,6 +226,10 @@ class ZeroHungerApi {
         return 'Create an account to do this.';
       case 'invalid-argument':
         return message ?? 'Something in the form is not right.'; // e.g. "title is missing"
+      case 'not-found':
+        return 'This food is no longer listed.';
+      case 'failed-precondition':
+        return message ?? 'This food cannot be claimed right now.'; // e.g. "not enough left"
       case 'unavailable':
         return 'No connection. Check your internet and try again.';
       default:

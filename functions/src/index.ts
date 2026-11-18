@@ -38,36 +38,38 @@
 
 
 // index.ts
-// Every Cloud Function in the project is listed (exported) here.
-// When you deploy, Firebase reads this file to find out which functions exist.
+// Exports every Cloud Function. Firebase reads this file on deploy.
 
 import {setGlobalOptions} from "firebase-functions";
 import {subscribe} from "./events/subscribe";
 import {Topics} from "./events/topics";
-import {CancelOrRescheduleDonation, ExpiryCheck, FoodClaimed, PostFood, UpdateQuantity} from "./events/types";
+import {
+  CancelOrRescheduleDonation,
+  ClaimFoodRequest,
+  DonationCancelled,
+  DonationRescheduled,
+  ExpiryCheck,
+  FoodClaimed,
+  PostFood,
+  UpdateQuantity,
+} from "./events/types";
 import {ListingProcessor} from "./processors/listing";
+import {ClaimProcessor} from "./processors/claim";
 import {onCall} from "firebase-functions/https";
 import {CancelOrRescheduleRequest, PostFoodRequest, UpdateQuantityRequest, ZeroHungerApi} from "./api/zeroHungerApi";
 
 
 
-// Settings for every function:
-//   region: run everything in the same place (us-central1, Iowa). Without this, the
-//           Firebase CLI puts Pub/Sub-triggered functions in us-east1 and the rest in us-central1.
-//   maxInstances: at most 10 copies of one function running at once (cost control).
+// All functions: region us-central1, at most 10 copies running at once (cost control).
 setGlobalOptions({region: "us-central1", maxInstances: 10});
 
 
 
-// ---------------------------------------------------------------------------
-// Listing processor: one Cloud Function per topic it listens to (Table 2).
-// Grouping them under `listing` names them listing-onPostFood, listing-onUpdateQuantity, …
-// and lets you deploy just these with:  firebase deploy --only functions:listing
-// ---------------------------------------------------------------------------
+// Listing processor: one function per topic (Table 2), named listing-onPostFood, etc.
+// Deploy: firebase.cmd deploy --only functions:listing
 const listingProcessor = new ListingProcessor();
 
 export const listing = {
-  // name in the cloud       topic it listens to                 method that handles it
   onPostFood: subscribe<PostFood>(Topics.postFood, (e) => listingProcessor.onPostFood(e)),
   onUpdateQuantity: subscribe<UpdateQuantity>(Topics.updateQuantity, (e) => listingProcessor.onUpdateQuantity(e)),
   onCancelOrReschedule: subscribe<CancelOrRescheduleDonation>(
@@ -78,16 +80,29 @@ export const listing = {
 
 
 
+// Claim processor: one function per topic (Table 2), named claim-onDonationCancelled, etc.
+// claimFood is reached through api-claimFood below.
+// Deploy: firebase.cmd deploy --only functions:claim
+const claimProcessor = new ClaimProcessor();
 
-//API (ZeroHungerApi): the functions zero hunger flutter calls
-//Grouping them under `api` names them api-postFood, api-updateQuantity and api-cancelOrRescheduleDonation. The app calls them by those names.
-// Deploy just these with:  firebase.cmd deploy --only functions:api
+export const claim = {
+  onDonationCancelled: subscribe<DonationCancelled>(
+    Topics.donationCancelled, (e) => claimProcessor.onDonationCancelled(e)),
+  onDonationRescheduled: subscribe<DonationRescheduled>(
+    Topics.donationRescheduled, (e) => claimProcessor.onDonationRescheduled(e)),
+};
+
+
+
+
+//API (ZeroHungerApi): the functions zero hunger flutter calls, named api-postFood, etc.
+// Deploy: firebase.cmd deploy --only functions:api
 const zeroHungerApi = new ZeroHungerApi();
 
 export const api = {
-  // name in the cloud   what the app sends              method that handles it
   postFood: onCall<PostFoodRequest>((request) => zeroHungerApi.postFood(request)),
   updateQuantity: onCall<UpdateQuantityRequest>((request) => zeroHungerApi.updateQuantity(request)),
   cancelOrRescheduleDonation: onCall<CancelOrRescheduleRequest>(
     (request) => zeroHungerApi.cancelOrRescheduleDonation(request)),
+  claimFood: onCall<ClaimFoodRequest>((request) => zeroHungerApi.claimFood(request)), // request-reply: the app waits
 };

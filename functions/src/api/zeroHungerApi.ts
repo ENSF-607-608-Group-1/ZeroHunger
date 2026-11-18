@@ -9,8 +9,7 @@
 //   3 publishes an initiating event to its topic
 //   4 answers the app straight away
 
-// The processor does the real work a moment later, so the app should show "Submitted",
-// not "Live". The app never talks to Pub/Sub or the database itself.
+// The processor does the real work a moment later, so the app should show "Submitted" not "Live". The app never talks to Pub/Sub or the database itself.
 
 // Who checks what:
 //   - this API: the shape, so a broken request never reaches a processor
@@ -26,11 +25,15 @@ import {
   Address,
   ALLERGENS,
   CancelOrRescheduleDonation,
+  ClaimFoodRequest,
+  ClaimItem,
+  ClaimResult,
   FOOD_CATEGORIES,
   ItemInput,
   PostFood,
   UpdateQuantity,
 } from "../events/types";
+import {Claimant, ClaimProcessor, ClaimRefused} from "../processors/claim";
 import {PublishFn} from "../processors/eventProcessor";
 
 // What the app sends and what it gets back
@@ -40,7 +43,8 @@ import {PublishFn} from "../processors/eventProcessor";
 // Omit<A, "x"> means "A without the field x".
 
 // postFood: PostFood without donationId (the API makes a new one)and donorId (the signed-in user).
-export type PostFoodRequest = Omit<PostFood, "donationId" | "donorId">;
+// The app sends items without IDs; the API gives each one an ID ("&" adds the items field back as ItemInput[]).
+export type PostFoodRequest = Omit<PostFood, "donationId" | "donorId" | "items"> & {items: ItemInput[]};
 
 // updateQuantity: UpdateQuantity without donorId.
 export type UpdateQuantityRequest = Omit<UpdateQuantity, "donorId">;
@@ -52,14 +56,19 @@ export type CancelOrRescheduleRequest = Omit<CancelOrRescheduleDonation, "donorI
 export interface Submitted {
   donationId: string;     // the donation this is about (a new one for postFood)
   correlationId: string;  // search the logs for this to follow what happened next
+  itemIds?: string[];     // postFood only: the new item IDs, in the order the items were sent
 }
 
 
 // The API. index.ts turns each method into its own callable Cloud Function.
 export class ZeroHungerApi {
   // publish: the function used to send events. Normally publishEvent.
+  // claims: the Claim processor. api-claimFood calls it directly and waits (request-reply).
 
-  constructor(private readonly publish: PublishFn = publishEvent) {}
+  constructor(
+    private readonly publish: PublishFn = publishEvent,
+    private readonly claims: ClaimProcessor = new ClaimProcessor(publish),
+  ) {}
 
   // api-postFood: a donor posts food.
   // Sends PostFood to post-food → ListingProcessor.onPostFood
@@ -79,12 +88,15 @@ export class ZeroHungerApi {
       donorId,
       title: needText(d.title, "title"),
       description: optionalText(d.description, "description"),
-      items: needList(d.items, "items").map((item, i) => checkItem(item, i + 1)),
+      // Each item gets a new ID. "...checkItem(...)" copies the checked item's fields in after it.
+      items: needList(d.items, "items").map((item, i) => ({itemId: randomUUID(), ...checkItem(item, i + 1)})),
       address: checkAddress(d.address),
       pickupStart: needText(d.pickupStart, "pickupStart"),
       pickupEnd: needText(d.pickupEnd, "pickupEnd"),
     };
-    return this.send(Topics.postFood, createEvent("PostFood", post), post.donationId);
+    const sent = await this.send(Topics.postFood, createEvent("PostFood", post), post.donationId);
+    // Answer with the item IDs too, so the app has them straight away (our claim test uses them).
+    return {...sent, itemIds: post.items.map((item) => item.itemId)};
   }
 
   // api-updateQuantity: a donor sets how much food is left.
@@ -126,6 +138,32 @@ export class ZeroHungerApi {
       createEvent("CancelOrRescheduleDonation", change),
       change.donationId,
     );
+  }
+
+  // api-claimFood: a recipient (guests too) claims some of a donation's items.
+  // Request-reply: unlike the methods above, this one waits for the Claim processor,
+  // because the recipient needs to know straight away whether they got the food.
+  async claimFood(request: CallableRequest<ClaimFoodRequest>): Promise<ClaimResult> {
+    const who: Claimant = {
+      userId: signedInUser(request), // guests can claim (decided), so not accountHolder
+      isGuest: request.auth?.token.firebase.sign_in_provider === "anonymous",
+    };
+    const d: Partial<ClaimFoodRequest> = request.data ?? {};
+
+    // Build the claim from checked fields only, like postFood.
+    const claim: ClaimFoodRequest = {
+      donationId: needText(d.donationId, "donationId"),
+      items: needList(d.items, "items").map((item, i) => checkClaimItem(item, i + 1)),
+      note: optionalText(d.note, "note") || undefined, // left out if empty
+    };
+
+    try {
+      return await this.claims.claimFood(who, claim);
+    } catch (err) {
+      // A refused claim becomes an error the app receives, e.g. "not enough left".
+      if (err instanceof ClaimRefused) throw new HttpsError(err.code, err.message);
+      throw err; // anything else: the app gets "internal" and can try again
+    }
   }
 
   // Publishes the event, then tells the app it was accepted
@@ -216,6 +254,16 @@ function checkItem(item: Partial<ItemInput>, n: number): ItemInput {
     allergens: needTags(item.allergens, ALLERGENS, `item ${n} allergens`),
     quantity: needNumber(item.quantity, `item ${n} quantity`),
     unit: needText(item.unit, `item ${n} unit`),
+  };
+}
+
+// One claimed item, e.g. {itemId: "3f2a…", quantity: 2}.
+// n is its place in the list (1, 2, ...), used in error messages.
+function checkClaimItem(item: Partial<ClaimItem>, n: number): ClaimItem {
+  if (typeof item !== "object" || item === null) throw invalid(`item ${n} is not an item`);
+  return {
+    itemId: needText(item.itemId, `item ${n} itemId`),
+    quantity: needNumber(item.quantity, `item ${n} quantity`),
   };
 }
 
