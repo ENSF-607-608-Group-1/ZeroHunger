@@ -125,6 +125,7 @@ class _SignInSheetState extends State<_SignInSheet> {
                 ButtonSegment(value: _Mode.signIn, label: Text('Sign in')),
               ],
               selected: {_mode},
+              showSelectedIcon: false, // no tick on the chosen tab
               onSelectionChanged: (picked) => setState(() {
                 _mode = picked.first;
                 _error = null;
@@ -151,10 +152,9 @@ class _SignInSheetState extends State<_SignInSheet> {
               decoration: zhField(
                 label: 'Password',
                 helper: 'At least 6 characters',
-                suffixIcon: IconButton(
-                  tooltip: _hidePassword ? 'Show password' : 'Hide password',
-                  icon: Icon(_hidePassword ? Icons.visibility_off_rounded : Icons.visibility_rounded),
+                suffixIcon: TextButton(
                   onPressed: () => setState(() => _hidePassword = !_hidePassword),
+                  child: Text(_hidePassword ? 'Show' : 'Hide'), // words instead of an eye icon
                 ),
               ),
             ),
@@ -208,3 +208,5 @@ class _SignInSheetState extends State<_SignInSheet> {
     );
   }
 }
+
+
