@@ -1,0 +1,118 @@
+// query_service.dart
+// The app's read side: the food that can be claimed.
+
+
+
+// TODO: Implement the actual cloud QueryService and database integration.
+//NOTE:The cloud QueryService and the database don't exist yet, so this returns sample donations.
+// Screens only ask this class, so real data later changes this file only.
+
+
+
+import 'zero_hunger_api.dart';
+
+// One food item in a donation, e.g. 6 portions of rice.
+class DonationItem {
+  final String itemId;            // what api-claimFood needs
+  final String name;              // e.g. "Jasmine rice"
+  final List<String> categories;  // from foodCategoryOptions, e.g. ["HALAL"]
+  final List<String> allergens;   // from allergenOptions, or empty
+  final int quantityLeft;         // how many can still be claimed
+  final String unit;              // e.g. "portions"
+
+  const DonationItem({
+    required this.itemId,
+    required this.name,
+    this.categories = const [],
+    this.allergens = const [],
+    required this.quantityLeft,
+    required this.unit,
+  });
+}
+
+// A donation as recipients see it.
+class Donation {
+  final String donationId;
+  final String title;           // e.g. "Rice and stew"
+  final String description;
+  final List<DonationItem> items;
+  final String area;            // the postal code's first part, e.g. "T2N" (gridCell in the events)
+  final PickupAddress address;  // the full address, shown only after claiming
+  final DateTime pickupStart;
+  final DateTime pickupEnd;
+
+  const Donation({
+    required this.donationId,
+    required this.title,
+    required this.description,
+    required this.items,
+    required this.area,
+    required this.address,
+    required this.pickupStart,
+    required this.pickupEnd,
+  });
+
+  // Every category of its items, e.g. {"HALAL", "VEGAN"}.
+  Set<String> get categories => {for (final item in items) ...item.categories};
+
+  // Every allergen of its items, e.g. {"SOY"}.
+  Set<String> get allergens => {for (final item in items) ...item.allergens};
+}
+
+class QueryService {
+  // The donations that can be claimed now.
+  // TODO: Review when database is complete. Ask the cloud QueryService for AVAILABLE donations
+  //   near the user, without the full address (api-claimFood returns it after claiming).
+  Future<List<Donation>> availableDonations() async {
+    await Future<void>.delayed(const Duration(milliseconds: 400)); // like a real network call
+    return _sampleDonations();
+  }
+}
+
+// Made-up donations for building and testing the screens.
+List<Donation> _sampleDonations() {
+  final now = DateTime.now();
+  DateTime at(int days, int hour, [int minute = 0]) => DateTime(now.year, now.month, now.day + days, hour, minute);
+
+  return [
+    Donation(
+      donationId: 'sample-rice-and-stew',
+      title: 'Rice and stew',
+      description: 'Vegetable rice and bean stew made this afternoon, in microwave-safe containers. Reheat before eating.',
+      items: const [
+        DonationItem(itemId: 'sample-rice', name: 'Jasmine rice', categories: ['VEGAN', 'HALAL'], quantityLeft: 6, unit: 'portions'),
+        DonationItem(itemId: 'sample-stew', name: 'Bean stew', categories: ['VEGAN', 'HALAL'], allergens: ['SOY'], quantityLeft: 4, unit: 'portions'),
+      ],
+      area: 'T2N',
+      address: const PickupAddress(line1: '12 Sample Crescent NW', city: 'Calgary', province: 'AB', postalCode: 'T2N 1A1'),
+      pickupStart: at(0, 17),
+      pickupEnd: at(0, 19),
+    ),
+    Donation(
+      donationId: 'sample-bagels-and-bread',
+      title: 'Fresh bagels and bread',
+      description: "Today's unsold bagels and sourdough from a local bakery.",
+      items: const [
+        DonationItem(itemId: 'sample-bagels', name: 'Assorted bagels', categories: ['VEGETARIAN'], allergens: ['WHEAT', 'SESAME'], quantityLeft: 12, unit: 'items'),
+        DonationItem(itemId: 'sample-sourdough', name: 'Sourdough loaf', categories: ['VEGETARIAN'], allergens: ['WHEAT'], quantityLeft: 2, unit: 'items'),
+      ],
+      area: 'T2G',
+      address: const PickupAddress(line1: '34 Sample Avenue SE', city: 'Calgary', province: 'AB', postalCode: 'T2G 0A1'),
+      pickupStart: at(0, 18),
+      pickupEnd: at(0, 20, 30),
+    ),
+    Donation(
+      donationId: 'sample-biryani-and-raita',
+      title: 'Vegetable biryani and raita',
+      description: 'Leftover catering trays, kept in the fridge since lunch.',
+      items: const [
+        DonationItem(itemId: 'sample-biryani', name: 'Vegetable biryani', categories: ['VEGETARIAN', 'HALAL'], quantityLeft: 5, unit: 'portions'),
+        DonationItem(itemId: 'sample-raita', name: 'Raita', categories: ['VEGETARIAN', 'HALAL'], allergens: ['MILK'], quantityLeft: 5, unit: 'portions'),
+      ],
+      area: 'T3A',
+      address: const PickupAddress(line1: '56 Sample Road NW', city: 'Calgary', province: 'AB', postalCode: 'T3A 0A1'),
+      pickupStart: at(1, 12),
+      pickupEnd: at(1, 14),
+    ),
+  ];
+}

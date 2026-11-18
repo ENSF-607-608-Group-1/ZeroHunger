@@ -7,8 +7,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'services/auth_service.dart';
 //import 'screens/backend_test_screen.dart';
-import 'screens/donate_food_screen.dart';
+//import 'screens/donate_food_screen.dart';
 import 'theme/app_theme.dart';
+import 'screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Zero Hunger',
       theme: zeroHungerTheme(),
       //COMMENTED OUT TO TRY NEW THEME FOR SCREENS
       // theme: ThemeData(
@@ -60,7 +61,8 @@ class MyApp extends StatelessWidget {
       // ),
       //home: const MyHomePage(title: 'Flutter Demo Home Page')
       //home: const BackendTestScreen(), // temporary, until the real Donate food screen is built
-      home: const DonateFoodScreen(), // first screen for now; later the home screen opens it
+      //home: const DonateFoodScreen(), // first screen for now; later the home screen opens it
+      home: const HomeScreen(), // everyone starts here(guests and donors)
     );
   }
 }
