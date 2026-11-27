@@ -1,15 +1,16 @@
-type User @table(name: "User", key: "userId") {
+type User @table(name: "Users", key: "userId") {
   userId: Int64! @col(name: "UserID", dataType: "bigserial")
-  firstName: String! @col(name: "FirstName", dataType: "varchar(100)")
-  lastName: String! @col(name: "LastName", dataType: "varchar(100)")
-  email: String! @col(name: "Email", dataType: "varchar(255)") @unique
+  authUid: String! @col(name: "AuthUID", dataType: "varchar(128)") @unique
+  firstName: String @col(name: "FirstName", dataType: "varchar(100)")
+  lastName: String @col(name: "LastName", dataType: "varchar(100)")
+  email: String @col(name: "Email", dataType: "varchar(255)") @unique
   phoneNumber: String @col(name: "PhoneNumber", dataType: "varchar(30)")
   createdAt: Timestamp! @col(name: "CreatedAt") @default(sql: "now()")
   isActive: Boolean! @col(name: "IsActive") @default(value: true)
-  userRole: String! @col(name: "UserRole", dataType: "varchar(30)")
+  userRole: String! @col(name: "UserRole", dataType: "varchar(30)") @default(value: "guest")
   street: String @col(name: "Street", dataType: "varchar(150)")
-  city: String @col(name: "City", dataType: "varchar(100)")
-  province: String @col(name: "Province", dataType: "varchar(100)")
+  postalCode: PostalCode @ref(fields: "postalCodeId")
+  postalCodeId: Int64 @col(name: "PostalCodeID")
 }
 
 type Organization @table(name: "Organization", key: "orgId") {
@@ -18,8 +19,8 @@ type Organization @table(name: "Organization", key: "orgId") {
   orgPrimaryEmail: String! @col(name: "OrgPrimaryEmail", dataType: "varchar(255)") @unique
   createdAt: Timestamp! @col(name: "CreatedAt") @default(sql: "now()")
   street: String @col(name: "Street", dataType: "varchar(150)")
-  city: String @col(name: "City", dataType: "varchar(100)")
-  province: String @col(name: "Province", dataType: "varchar(100)")
+  postalCode: PostalCode @ref(fields: "postalCodeId")
+  postalCodeId: Int64 @col(name: "PostalCodeID")
 }
 
 type Conversations @table(name: "Conversations", key: "conversationId") {
@@ -49,6 +50,8 @@ type DonationStatus @table(name: "DonationStatus", key: "statusId") {
 type PostalCode @table(name: "PostalCode", key: "postalCodeId") {
   postalCodeId: Int64! @col(name: "PostalCodeID", dataType: "bigserial")
   code: String! @col(name: "Code", dataType: "varchar(10)") @unique
+  city: String @col(name: "City", dataType: "varchar(100)")
+  province: String @col(name: "Province", dataType: "varchar(100)")
 }
 
 type Locations
@@ -58,15 +61,13 @@ type Locations
   @index(fields: ["postalCodeId"], name: "idx_location_postalcode") {
   locationId: Int64! @col(name: "LocationID", dataType: "bigserial")
   street: String! @col(name: "Street", dataType: "varchar(150)")
-  city: String! @col(name: "City", dataType: "varchar(100)")
-  province: String! @col(name: "Province", dataType: "varchar(100)")
   updatedAt: Timestamp! @col(name: "UpdatedAt") @default(sql: "now()")
   user: User @ref(fields: "userId")
   userId: Int64 @col(name: "UserID")
   organization: Organization @ref(fields: "orgId")
   orgId: Int64 @col(name: "OrgID")
-  postalCode: PostalCode @ref(fields: "postalCodeId")
-  postalCodeId: Int64 @col(name: "PostalCodeID")
+  postalCode: PostalCode! @ref(fields: "postalCodeId")
+  postalCodeId: Int64! @col(name: "PostalCodeID")
 }
 
 type UserOrganization
@@ -114,8 +115,12 @@ type Tags
 
 type Messages
   @table(name: "Messages", key: "messageId")
-  @index(fields: ["conversationId"], name: "idx_message_conversation") {
+  @index(fields: ["conversationId"], name: "idx_message_conversation")
+  @index(fields: ["senderId"], name: "idx_message_sender") {
   messageId: Int64! @col(name: "MessageID", dataType: "bigserial")
+  sender: User! @ref(fields: "senderId")
+  senderId: Int64! @col(name: "SenderID")
+  content: String! @col(name: "Content", dataType: "text")
   sentAt: Timestamp! @col(name: "SentAt") @default(sql: "now()")
   readAt: Timestamp @col(name: "ReadAt")
   conversation: Conversations! @ref(fields: "conversationId")
@@ -172,6 +177,8 @@ type FoodItem
   distributedOn: Timestamp @col(name: "DistributedOn")
   user: User! @ref(fields: "userId")
   userId: Int64! @col(name: "UserID")
+  donation: Donation! @ref(fields: "donationId")
+  donationId: UUID! @col(name: "DonationID")
 }
 
 type FoodItemAllergen
@@ -217,15 +224,40 @@ type UserDistributionEvent
 
 type Donation
   @table(name: "Donation", key: "donationId")
-  @index(fields: ["foodItemId"], name: "idx_donation_fooditem")
   @index(fields: ["eventId"], name: "idx_donation_event")
   @index(fields: ["statusId"], name: "idx_donation_status") {
-  donationId: Int64! @col(name: "DonationID", dataType: "bigserial")
+  donationId: UUID! @col(name: "DonationID") @default(expr: "uuidV4()")
+  donationTitle: String! @col(name: "DonationTitle", dataType: "varchar(100)")
+  pickupTime: String! @col(name: "PickupTime", dataType: "time")
+  itemQuantities: Int64! @col(name: "ItemQuantities", dataType: "bigint")
   updatedAt: Timestamp! @col(name: "UpdatedAt") @default(sql: "now()")
-  foodItem: FoodItem! @ref(fields: "foodItemId")
-  foodItemId: Int64! @col(name: "FoodItemID")
   event: DistributionEvent @ref(fields: "eventId")
   eventId: Int64 @col(name: "EventID")
   status: DonationStatus! @ref(fields: "statusId")
   statusId: Int64! @col(name: "StatusID")
+}
+
+type Notification
+  @table(name: "Notification", key: "notificationId") {
+  notificationId: Int64! @col(name: "NotificationID", dataType: "bigserial")
+  title: String! @col(name: "Title", dataType: "varchar(200)")
+  content: String! @col(name: "Content", dataType: "text")
+  createdAt: Timestamp! @col(name: "CreatedAt") @default(sql: "now()")
+  user: User! @ref(fields: "userId")
+  userId: Int64! @col(name: "UserID")
+  event: DistributionEvent @ref(fields: "eventId")
+  eventId: Int64 @col(name: "EventID")
+}
+
+type UserActivity
+  @table(name: "UserActivity", key: "activityId") {
+  activityId: Int64! @col(name: "ActivityID", dataType: "bigserial")
+  activityType: String! @col(name: "ActivityType", dataType: "varchar(50)")
+  occurredAt: Timestamp! @col(name: "OccurredAt") @default(sql: "now()")
+  user: User! @ref(fields: "userId")
+  userId: Int64! @col(name: "UserID")
+  donation: Donation @ref(fields: "donationId")
+  donationId: UUID @col(name: "DonationID")
+  event: DistributionEvent @ref(fields: "eventId")
+  eventId: Int64 @col(name: "EventID")
 }
