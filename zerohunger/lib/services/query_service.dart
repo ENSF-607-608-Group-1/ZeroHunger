@@ -96,6 +96,8 @@ class Reservation {
 
   // Active and rescheduled claims still need to be picked up.
   bool get isUpcoming => status == ReservationStatus.active || status == ReservationStatus.rescheduled;
+}
+
 // Where a donation is in its life (matches DonationState in functions/src/events/types.ts).
 enum DonationStatus {
   available,
