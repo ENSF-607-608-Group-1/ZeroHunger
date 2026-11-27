@@ -1,0 +1,38 @@
+query ListAvailableDonations @auth(level: USER_ANON) {
+  donations(where: { status: { name: { eq: "AVAILABLE" } } }) {
+    donationId
+    donationTitle
+    pickupTime
+    itemQuantities
+  }
+}
+
+query ListOrganizations @auth(level: USER_ANON) {
+  organizations {
+    orgId
+    orgName
+    orgPrimaryEmail
+    street
+    postalCode {
+      code
+      city
+      province
+    }
+  }
+}
+
+query ListFoodCategories @auth(level: USER_ANON) {
+  foodCategories {
+    categoryId
+    categoryName
+    description
+  }
+}
+
+query ListAllergens @auth(level: USER_ANON) {
+  allergens {
+    allergenId
+    name
+    description
+  }
+}
