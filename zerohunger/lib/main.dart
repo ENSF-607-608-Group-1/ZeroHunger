@@ -1,14 +1,32 @@
+// import 'package:flutter/material.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'firebase_options.dart';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'services/auth_service.dart';
+//import 'screens/backend_test_screen.dart';
+//import 'screens/donate_food_screen.dart';
+import 'theme/app_theme.dart';
+import 'screens/home_screen.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // No one signed in yet? Sign in as a guest: no screen, no form.
+  // Firebase remembers the user on the phone, so this only happens on first launch
+  final auth = AuthService();
+  try {
+    await auth.signInAsGuest();
+    debugPrint('Signed in. User ID: ${auth.currentUser?.uid}');
+  } catch (e) {
+    debugPrint('Guest sign-in failed: $e'); // e.g. no internet; the app still opens
+  }
 
   runApp(const MyApp());
 }
@@ -20,26 +38,31 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      title: 'Zero Hunger',
+      theme: zeroHungerTheme(),
+      //COMMENTED OUT TO TRY NEW THEME FOR SCREENS
+      // theme: ThemeData(
+      //   // This is the theme of your application.
+      //   //
+      //   // TRY THIS: Try running your application with "flutter run". You'll see
+      //   // the application has a purple toolbar. Then, without quitting the app,
+      //   // try changing the seedColor in the colorScheme below to Colors.green
+      //   // and then invoke "hot reload" (save your changes or press the "hot
+      //   // reload" button in a Flutter-supported IDE, or press "r" if you used
+      //   // the command line to start the app).
+      //   //
+      //   // Notice that the counter didn't reset back to zero; the application
+      //   // state is not lost during the reload. To reset the state, use hot
+      //   // restart instead.
+      //   //
+      //   // This works for code too, not just values: Most code changes can be
+      //   // tested with just a hot reload.
+      //   colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+      // ),
+      //home: const MyHomePage(title: 'Flutter Demo Home Page')
+      //home: const BackendTestScreen(), // temporary, until the real Donate food screen is built
+      //home: const DonateFoodScreen(), // first screen for now; later the home screen opens it
+      home: const HomeScreen(), // everyone starts here(guests and donors)
     );
   }
 }
