@@ -13,6 +13,7 @@ import 'donate_food_screen.dart';
 import 'events_screen.dart';
 import 'find_food_screen.dart';
 import 'my_donations_screen.dart';
+import 'organizations_screen.dart';
 import 'post_event_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -107,6 +108,15 @@ class HomeScreen extends StatelessWidget {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const PostEventScreen()),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _ActionCard(
+                title: 'Organizations',
+                subtitle: 'Find local food banks and groups to follow',
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const OrganizationsScreen()),
                 ),
               ),
             ],

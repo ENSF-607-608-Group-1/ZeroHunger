@@ -214,6 +214,30 @@ class CommunityEvent {
   }
 }
 
+// A local food bank or community group that users can follow for alerts.
+class OrganizationSummary {
+  final String organizationId;
+  final String name;
+  final String city;
+  final bool following;
+
+  const OrganizationSummary({
+    required this.organizationId,
+    required this.name,
+    required this.city,
+    this.following = false,
+  });
+
+  OrganizationSummary copyWith({bool? following}) {
+    return OrganizationSummary(
+      organizationId: organizationId,
+      name: name,
+      city: city,
+      following: following ?? this.following,
+    );
+  }
+}
+
 class QueryService {
   // The donations that can be claimed now.
   // TODO: Review when database is complete. Ask the cloud QueryService for AVAILABLE donations
@@ -238,6 +262,46 @@ class QueryService {
     await Future<void>.delayed(const Duration(milliseconds: 400)); // like a real network call
     return _sampleEvents();
   }
+
+  // Local food banks and community groups users can follow for alerts.
+  // TODO: Review when database is complete. Ask the cloud QueryService for Organization rows
+  //   and whether the signed-in user/guest currently follows each one.
+  Future<List<OrganizationSummary>> organizations() async {
+    await Future<void>.delayed(const Duration(milliseconds: 400)); // like a real network call
+    return _sampleOrganizations();
+  }
+}
+
+// Made-up local organizations for building and testing the Organizations screen.
+List<OrganizationSummary> _sampleOrganizations() {
+  return const [
+    OrganizationSummary(
+      organizationId: 'org-calgary-food-bank',
+      name: 'Calgary Food Bank',
+      city: 'Calgary',
+    ),
+    OrganizationSummary(
+      organizationId: 'org-community-fridge-yyc',
+      name: 'Community Fridge YYC',
+      city: 'Calgary',
+    ),
+    OrganizationSummary(
+      organizationId: 'org-ucalgary-food-pantry',
+      name: 'UCalgary Food Pantry',
+      city: 'Calgary',
+      following: true,
+    ),
+    OrganizationSummary(
+      organizationId: 'org-leftovers-calgary',
+      name: 'Leftovers Foundation',
+      city: 'Calgary',
+    ),
+    OrganizationSummary(
+      organizationId: 'org-airdrie-food-bank',
+      name: 'Airdrie Food Bank',
+      city: 'Airdrie',
+    ),
+  ];
 }
 
 // Made-up upcoming events for building and testing the Events screen.
