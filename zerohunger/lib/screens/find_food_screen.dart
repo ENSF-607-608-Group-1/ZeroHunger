@@ -16,6 +16,7 @@ import '../theme/app_theme.dart';
 import '../widgets/account_button.dart';
 import '../widgets/food_parts.dart';
 import '../widgets/form_parts.dart';
+import '../widgets/notification_button.dart';
 import 'food_details_screen.dart';
 
 class FindFoodScreen extends StatefulWidget {
@@ -68,6 +69,7 @@ class _FindFoodScreenState extends State<FindFoodScreen> {
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500, color: ZhColors.text),
         ),
         actions: [
+          const NotificationButton(),
           StreamBuilder<User?>(
             stream: _auth.userChanges,
             initialData: _auth.currentUser,

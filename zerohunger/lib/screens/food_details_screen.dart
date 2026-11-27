@@ -15,20 +15,27 @@ import '../theme/app_theme.dart';
 import '../widgets/account_button.dart';
 import '../widgets/food_parts.dart';
 import '../widgets/form_parts.dart';
+import '../widgets/notification_button.dart';
 import 'claimed_screen.dart';
 
+
 class FoodDetailsScreen extends StatefulWidget {
-  const FoodDetailsScreen({super.key, required this.donation});
+  const FoodDetailsScreen({
+    super.key,
+    required this.donation,
+    this.accountAction,
+  });
 
   final Donation donation;
+  final Widget? accountAction;
 
   @override
   State<FoodDetailsScreen> createState() => _FoodDetailsScreenState();
 }
 
 class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
-  final _auth = AuthService();
-  final _api = ZeroHungerApi();
+  late final AuthService? _auth = widget.accountAction == null ? AuthService() : null;
+  late final ZeroHungerApi _api = ZeroHungerApi();
 
   final _wanted = <String>{}; // the itemIds switched on, e.g. {"sample-rice"}
   bool _claiming = false;     // true while waiting for api-claimFood
@@ -91,11 +98,15 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500, color: ZhColors.text),
         ),
         actions: [
-          StreamBuilder<User?>(
-            stream: _auth.userChanges,
-            initialData: _auth.currentUser,
-            builder: (context, snapshot) => AccountButton(user: snapshot.data),
-          ),
+          NotificationButton(accountAction: widget.accountAction),
+          if (widget.accountAction != null)
+            widget.accountAction!
+          else
+            StreamBuilder<User?>(
+              stream: _auth!.userChanges,
+              initialData: _auth.currentUser,
+              builder: (context, snapshot) => AccountButton(user: snapshot.data),
+            ),
           const SizedBox(width: 8),
         ],
       ),
