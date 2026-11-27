@@ -4,9 +4,10 @@
 // only has to write its own logic.
 
 import * as logger from "firebase-functions/logger";
-import {EventEnvelope} from "../events/envelope";
+import {createEvent, EventEnvelope} from "../events/envelope";
 import {publishEvent} from "../events/publisher";
-import {Topic} from "../events/topics";
+import {Topic, Topics} from "../events/topics";
+import {ProcessingError} from "../events/types";
 
 // An event to send once the current event has been handled.
 export interface Outgoing {
@@ -50,7 +51,7 @@ export abstract class EventProcessor {
       outgoing = await work();
     } catch (err) {
       if (err instanceof InvalidEvent) {
-        this.reportError(e, err.message); // bad data: report it and stop
+        await this.reportError(e, err.message); // bad data: report it and stop
         return;
       }
       throw err; // anything else: let Pub/Sub retry
@@ -64,11 +65,13 @@ export abstract class EventProcessor {
 
   // Workflow event pattern (from the project description): pass a bad event to the
   // workflow processor so it can be fixed, and carry on with the next event.
-  protected reportError(e: EventEnvelope, reason: string): void {
+  protected async reportError(e: EventEnvelope, reason: string): Promise<void> {
     logger.warn(`${this.name} could not process ${e.eventType}: ${reason}`, {
       eventId: e.eventId,
       correlationId: e.correlationId,
     });
     // TODO: Publish a ProcessingError to the workflow-errors topic once the workflow processor exists.
+    const report: ProcessingError = {failedEvent: e, processor: this.name, reason};
+    await this.publish(Topics.workflowErrors, createEvent("ProcessingError", report, e)); // same correlationId, one more hop
   }
 }

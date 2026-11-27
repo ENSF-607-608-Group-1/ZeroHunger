@@ -31,6 +31,11 @@ export const Topics = {
   messageSent: "message-sent",
   usersNotified: "users-notified",
   activityRecorded: "activity-recorded",
+
+// workflow: events a processor couldn't use go here to be fixed (the workflow event pattern)
+  workflowErrors: "workflow-errors",
+// events that failed 5 deliveries in a row, moved here by Pub/Sub itself
+  deadLetter: "dead-letter",
 } as const;
 
 //Any one of the topic names above

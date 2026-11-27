@@ -16,6 +16,8 @@ import '../widgets/account_button.dart';
 import '../widgets/food_parts.dart';
 import '../widgets/form_parts.dart';
 import '../widgets/notification_button.dart';
+import 'claimed_screen.dart';
+
 
 class FoodDetailsScreen extends StatefulWidget {
   const FoodDetailsScreen({
@@ -54,8 +56,17 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
       );
       if (!mounted) return; // the screen was closed while we waited
       debugPrint('Claimed: reservation ${result.reservationId}, pickup code ${result.pickupCode}');
-      // Next step: open the Claimed screen here.
-      showZhMessage(context, 'chill guys...its not done yet :)');
+      // Swap this screen for Claimed, so Back goes to the Find food list.
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ClaimedScreen(
+            donation: widget.donation,
+            items: [for (final item in widget.donation.items) if (_wanted.contains(item.itemId)) item],
+            result: result,
+          ),
+        ),
+      );
     } on ApiException catch (e) {
       if (!mounted) return;
       showZhMessage(context, e.message, onRetry: _claim); // e.g. "This food is no longer listed."
@@ -252,5 +263,3 @@ class _ItemCard extends StatelessWidget {
     );
   }
 }
-
-
