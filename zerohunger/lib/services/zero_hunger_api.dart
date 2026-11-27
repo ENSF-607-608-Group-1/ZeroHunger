@@ -3,10 +3,14 @@
 //
 //   screen ──postFood()──> api-postFood (Cloud Function) ──PostFood──> Listing processor
 //   screen ──claimFood()──> api-claimFood ──> Claim processor, which answers with the reservation
+//   screen ──sendMessage()──> api-sendMessage ──SendMessage──> Messaging processor
+//   screen ──postDistribution()──> api-postDistribution ──PostDistribution──> Distribution processor
 //
 // Each method sends a request and gets back a Submitted (donationId, correlationId)
 // Submitted means "accepted", not "live yet": the Listing processor does the rest a moment later
 // claimFood is different: it waits and gets back a ClaimResult (request-reply)
+// sendMessage gets back a MessageSubmitted (messageId, correlationId)
+// postDistribution gets back a DistributionSubmitted (distributionId, correlationId)
 // We never send donorId: the cloud_functions package adds the signed-in user's token,
 // and the function takes the user ID from that
 
@@ -19,6 +23,9 @@ const allergenOptions = [
   'PEANUTS', 'TREE_NUTS', 'MILK', 'EGGS', 'WHEAT', 'SOY',
   'SESAME', 'FISH', 'SHELLFISH', 'MUSTARD', 'SULPHITES',
 ];
+
+// What someone can post, the same as DistributionKind in types.ts
+const distributionKindOptions = ['DISTRIBUTION', 'DONATION_EVENT'];
 
 // One food item in a donation, e.g. 6 portions of rice
 class FoodItem {
@@ -119,6 +126,22 @@ class ClaimResult {
       );
 }
 
+// What sendMessage answers: the message was accepted, Messaging saves it a moment later
+class MessageSubmitted {
+  final String messageId;      // the new message's ID
+  final String correlationId;  // search the logs for this
+
+  const MessageSubmitted(this.messageId, this.correlationId);
+}
+
+// What postDistribution answers: the event was accepted, Distribution saves it a moment later
+class DistributionSubmitted {
+  final String distributionId;  // the new event's ID
+  final String correlationId;   // search the logs for this
+
+  const DistributionSubmitted(this.distributionId, this.correlationId);
+}
+
 // A call that failed, with a message we can show the user
 class ApiException implements Exception {
   final String code;     // e.g. "permission-denied"
@@ -197,6 +220,39 @@ class ZeroHungerApi {
       'note': ?note,// left out if null
     });
     return ClaimResult.fromJson(answer);
+  }
+
+  // api-sendMessage: send a message in a chat
+  // Guests can only write in their own pickup chat, whose ID is the claim's reservationId
+  Future<MessageSubmitted> sendMessage({required String conversationId, required String text}) async {
+    final answer = await _answer('api-sendMessage', {
+      'conversationId': conversationId,
+      'text': text,
+    });
+    return MessageSubmitted(answer['messageId'] as String, answer['correlationId'] as String);
+  }
+
+  // api-postDistribution: an organization or donor posts a distribution or a donation event
+  // Guests get "permission-denied", like postFood
+  Future<DistributionSubmitted> postDistribution({
+    required String kind,  // from distributionKindOptions
+    required String title,
+    String comments = '',
+    required PickupAddress address,
+    required DateTime startTime,
+    required DateTime endTime,
+    String? organizationId,  // the organization it's posted for, if any
+  }) async {
+    final answer = await _answer('api-postDistribution', {
+      'kind': kind,
+      'title': title,
+      'comments': comments,
+      'address': address.toJson(),
+      'startTime': startTime.toUtc().toIso8601String(),
+      'endTime': endTime.toUtc().toIso8601String(),
+      'organizationId': ?organizationId, // left out if null
+    });
+    return DistributionSubmitted(answer['distributionId'] as String, answer['correlationId'] as String);
   }
 
   // Calls one function by name and turns its answer into a Submitted.
