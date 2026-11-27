@@ -1,0 +1,14 @@
+serviceId: zerohunger
+location: us-central1
+
+schema:
+  source: schema
+  datasource:
+    postgresql:
+      database: zerohunger
+      cloudSql:
+        instanceId: zerohunger-db
+        schemaValidation: COMPATIBLE
+
+connectorDirs:
+  - connector
