@@ -1,0 +1,1154 @@
+extend type Query {
+  """
+  Look up a single `Allergen` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  allergen(
+    """
+    The key used to identify the object.
+    """
+    key: Allergen_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Allergen_FirstRow
+  ): Allergen @fdc_generated(from: "Allergen", purpose: QUERY_SINGLE)
+  """
+  Look up a single `Conversations` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  conversations(
+    """
+    The key used to identify the object.
+    """
+    key: Conversations_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Conversations_FirstRow
+  ): Conversations @fdc_generated(from: "Conversations", purpose: QUERY_SINGLE)
+  """
+  Look up a single `DistributionEvent` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  distributionEvent(
+    """
+    The key used to identify the object.
+    """
+    key: DistributionEvent_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: DistributionEvent_FirstRow
+  ): DistributionEvent @fdc_generated(from: "DistributionEvent", purpose: QUERY_SINGLE)
+  """
+  Look up a single `Donation` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  donation(
+    """
+    The key used to identify the object.
+    """
+    key: Donation_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Donation_FirstRow
+  ): Donation @fdc_generated(from: "Donation", purpose: QUERY_SINGLE)
+  """
+  Look up a single `DonationStatus` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  donationStatus(
+    """
+    The key used to identify the object.
+    """
+    key: DonationStatus_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: DonationStatus_FirstRow
+  ): DonationStatus @fdc_generated(from: "DonationStatus", purpose: QUERY_SINGLE)
+  """
+  Look up a single `FoodCategory` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  foodCategory(
+    """
+    The key used to identify the object.
+    """
+    key: FoodCategory_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: FoodCategory_FirstRow
+  ): FoodCategory @fdc_generated(from: "FoodCategory", purpose: QUERY_SINGLE)
+  """
+  Look up a single `FoodItem` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  foodItem(
+    """
+    The key used to identify the object.
+    """
+    key: FoodItem_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: FoodItem_FirstRow
+  ): FoodItem @fdc_generated(from: "FoodItem", purpose: QUERY_SINGLE)
+  """
+  Look up a single `FoodItemAllergen` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  foodItemAllergen(
+    """
+    The key used to identify the object.
+    """
+    key: FoodItemAllergen_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: FoodItemAllergen_FirstRow
+  ): FoodItemAllergen @fdc_generated(from: "FoodItemAllergen", purpose: QUERY_SINGLE)
+  """
+  Look up a single `FoodItemFoodCategory` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  foodItemFoodCategory(
+    """
+    The key used to identify the object.
+    """
+    key: FoodItemFoodCategory_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: FoodItemFoodCategory_FirstRow
+  ): FoodItemFoodCategory @fdc_generated(from: "FoodItemFoodCategory", purpose: QUERY_SINGLE)
+  """
+  Look up a single `Locations` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  locations(
+    """
+    The key used to identify the object.
+    """
+    key: Locations_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Locations_FirstRow
+  ): Locations @fdc_generated(from: "Locations", purpose: QUERY_SINGLE)
+  """
+  Look up a single `Messages` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  messages(
+    """
+    The key used to identify the object.
+    """
+    key: Messages_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Messages_FirstRow
+  ): Messages @fdc_generated(from: "Messages", purpose: QUERY_SINGLE)
+  """
+  Look up a single `Organization` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  organization(
+    """
+    The key used to identify the object.
+    """
+    key: Organization_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Organization_FirstRow
+  ): Organization @fdc_generated(from: "Organization", purpose: QUERY_SINGLE)
+  """
+  Look up a single `OrganizationContactEmail` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  organizationContactEmail(
+    """
+    The key used to identify the object.
+    """
+    key: OrganizationContactEmail_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: OrganizationContactEmail_FirstRow
+  ): OrganizationContactEmail @fdc_generated(from: "OrganizationContactEmail", purpose: QUERY_SINGLE)
+  """
+  Look up a single `OrganizationContactPhoneNumber` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  organizationContactPhoneNumber(
+    """
+    The key used to identify the object.
+    """
+    key: OrganizationContactPhoneNumber_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: OrganizationContactPhoneNumber_FirstRow
+  ): OrganizationContactPhoneNumber @fdc_generated(from: "OrganizationContactPhoneNumber", purpose: QUERY_SINGLE)
+  """
+  Look up a single `PostalCode` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  postalCode(
+    """
+    The key used to identify the object.
+    """
+    key: PostalCode_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: PostalCode_FirstRow
+  ): PostalCode @fdc_generated(from: "PostalCode", purpose: QUERY_SINGLE)
+  """
+  Look up a single `Posts` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  posts(
+    """
+    The key used to identify the object.
+    """
+    key: Posts_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Posts_FirstRow
+  ): Posts @fdc_generated(from: "Posts", purpose: QUERY_SINGLE)
+  """
+  Look up a single `Tags` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  tags(
+    """
+    The key used to identify the object.
+    """
+    key: Tags_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Tags_FirstRow
+  ): Tags @fdc_generated(from: "Tags", purpose: QUERY_SINGLE)
+  """
+  Look up a single `User` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  user(
+    """
+    The key used to identify the object.
+    """
+    key: User_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: User_FirstRow
+  ): User @fdc_generated(from: "User", purpose: QUERY_SINGLE)
+  """
+  Look up a single `UserConversation` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  userConversation(
+    """
+    The key used to identify the object.
+    """
+    key: UserConversation_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserConversation_FirstRow
+  ): UserConversation @fdc_generated(from: "UserConversation", purpose: QUERY_SINGLE)
+  """
+  Look up a single `UserDistributionEvent` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  userDistributionEvent(
+    """
+    The key used to identify the object.
+    """
+    key: UserDistributionEvent_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserDistributionEvent_FirstRow
+  ): UserDistributionEvent @fdc_generated(from: "UserDistributionEvent", purpose: QUERY_SINGLE)
+  """
+  Look up a single `UserOrganization` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  userOrganization(
+    """
+    The key used to identify the object.
+    """
+    key: UserOrganization_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserOrganization_FirstRow
+  ): UserOrganization @fdc_generated(from: "UserOrganization", purpose: QUERY_SINGLE)
+  """
+  Look up a single `UserPreferenceAllergen` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  userPreferenceAllergen(
+    """
+    The key used to identify the object.
+    """
+    key: UserPreferenceAllergen_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserPreferenceAllergen_FirstRow
+  ): UserPreferenceAllergen @fdc_generated(from: "UserPreferenceAllergen", purpose: QUERY_SINGLE)
+  """
+  Look up a single `UserPreferenceFoodCategory` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  userPreferenceFoodCategory(
+    """
+    The key used to identify the object.
+    """
+    key: UserPreferenceFoodCategory_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserPreferenceFoodCategory_FirstRow
+  ): UserPreferenceFoodCategory @fdc_generated(from: "UserPreferenceFoodCategory", purpose: QUERY_SINGLE)
+  """
+  Look up a single `UserPreferences` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  userPreferences(
+    """
+    The key used to identify the object.
+    """
+    key: UserPreferences_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserPreferences_FirstRow
+  ): UserPreferences @fdc_generated(from: "UserPreferences", purpose: QUERY_SINGLE)
+  """
+  List `Allergen` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  allergens(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Allergen_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Allergen_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Allergen_Having
+  ): [Allergen!]! @fdc_generated(from: "Allergen", purpose: QUERY_MULTIPLE)
+  """
+  List `Conversations` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  conversationss(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Conversations_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Conversations_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Conversations_Having
+  ): [Conversations!]! @fdc_generated(from: "Conversations", purpose: QUERY_MULTIPLE)
+  """
+  List `DistributionEvent` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  distributionEvents(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: DistributionEvent_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [DistributionEvent_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: DistributionEvent_Having
+  ): [DistributionEvent!]! @fdc_generated(from: "DistributionEvent", purpose: QUERY_MULTIPLE)
+  """
+  List `Donation` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  donations(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Donation_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Donation_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Donation_Having
+  ): [Donation!]! @fdc_generated(from: "Donation", purpose: QUERY_MULTIPLE)
+  """
+  List `DonationStatus` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  donationStatuses(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: DonationStatus_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [DonationStatus_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: DonationStatus_Having
+  ): [DonationStatus!]! @fdc_generated(from: "DonationStatus", purpose: QUERY_MULTIPLE)
+  """
+  List `FoodCategory` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  foodCategories(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: FoodCategory_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [FoodCategory_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: FoodCategory_Having
+  ): [FoodCategory!]! @fdc_generated(from: "FoodCategory", purpose: QUERY_MULTIPLE)
+  """
+  List `FoodItem` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  foodItems(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: FoodItem_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [FoodItem_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: FoodItem_Having
+  ): [FoodItem!]! @fdc_generated(from: "FoodItem", purpose: QUERY_MULTIPLE)
+  """
+  List `FoodItemAllergen` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  foodItemAllergens(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: FoodItemAllergen_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [FoodItemAllergen_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: FoodItemAllergen_Having
+  ): [FoodItemAllergen!]! @fdc_generated(from: "FoodItemAllergen", purpose: QUERY_MULTIPLE)
+  """
+  List `FoodItemFoodCategory` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  foodItemFoodCategories(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: FoodItemFoodCategory_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [FoodItemFoodCategory_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: FoodItemFoodCategory_Having
+  ): [FoodItemFoodCategory!]! @fdc_generated(from: "FoodItemFoodCategory", purpose: QUERY_MULTIPLE)
+  """
+  List `Locations` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  locationss(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Locations_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Locations_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Locations_Having
+  ): [Locations!]! @fdc_generated(from: "Locations", purpose: QUERY_MULTIPLE)
+  """
+  List `Messages` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  messagess(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Messages_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Messages_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Messages_Having
+  ): [Messages!]! @fdc_generated(from: "Messages", purpose: QUERY_MULTIPLE)
+  """
+  List `Organization` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  organizations(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Organization_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Organization_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Organization_Having
+  ): [Organization!]! @fdc_generated(from: "Organization", purpose: QUERY_MULTIPLE)
+  """
+  List `OrganizationContactEmail` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  organizationContactEmails(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: OrganizationContactEmail_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [OrganizationContactEmail_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: OrganizationContactEmail_Having
+  ): [OrganizationContactEmail!]! @fdc_generated(from: "OrganizationContactEmail", purpose: QUERY_MULTIPLE)
+  """
+  List `OrganizationContactPhoneNumber` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  organizationContactPhoneNumbers(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: OrganizationContactPhoneNumber_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [OrganizationContactPhoneNumber_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: OrganizationContactPhoneNumber_Having
+  ): [OrganizationContactPhoneNumber!]! @fdc_generated(from: "OrganizationContactPhoneNumber", purpose: QUERY_MULTIPLE)
+  """
+  List `PostalCode` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  postalCodes(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: PostalCode_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [PostalCode_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: PostalCode_Having
+  ): [PostalCode!]! @fdc_generated(from: "PostalCode", purpose: QUERY_MULTIPLE)
+  """
+  List `Posts` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  postss(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Posts_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Posts_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Posts_Having
+  ): [Posts!]! @fdc_generated(from: "Posts", purpose: QUERY_MULTIPLE)
+  """
+  List `Tags` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  tagss(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Tags_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Tags_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Tags_Having
+  ): [Tags!]! @fdc_generated(from: "Tags", purpose: QUERY_MULTIPLE)
+  """
+  List `User` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  users(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: User_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [User_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: User_Having
+  ): [User!]! @fdc_generated(from: "User", purpose: QUERY_MULTIPLE)
+  """
+  List `UserConversation` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  userConversations(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserConversation_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserConversation_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserConversation_Having
+  ): [UserConversation!]! @fdc_generated(from: "UserConversation", purpose: QUERY_MULTIPLE)
+  """
+  List `UserDistributionEvent` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  userDistributionEvents(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserDistributionEvent_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserDistributionEvent_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserDistributionEvent_Having
+  ): [UserDistributionEvent!]! @fdc_generated(from: "UserDistributionEvent", purpose: QUERY_MULTIPLE)
+  """
+  List `UserOrganization` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  userOrganizations(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserOrganization_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserOrganization_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserOrganization_Having
+  ): [UserOrganization!]! @fdc_generated(from: "UserOrganization", purpose: QUERY_MULTIPLE)
+  """
+  List `UserPreferenceAllergen` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  userPreferenceAllergens(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserPreferenceAllergen_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserPreferenceAllergen_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserPreferenceAllergen_Having
+  ): [UserPreferenceAllergen!]! @fdc_generated(from: "UserPreferenceAllergen", purpose: QUERY_MULTIPLE)
+  """
+  List `UserPreferenceFoodCategory` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  userPreferenceFoodCategories(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserPreferenceFoodCategory_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserPreferenceFoodCategory_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserPreferenceFoodCategory_Having
+  ): [UserPreferenceFoodCategory!]! @fdc_generated(from: "UserPreferenceFoodCategory", purpose: QUERY_MULTIPLE)
+  """
+  List `UserPreferences` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  userPreferencess(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserPreferences_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserPreferences_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserPreferences_Having
+  ): [UserPreferences!]! @fdc_generated(from: "UserPreferences", purpose: QUERY_MULTIPLE)
+}
