@@ -1,0 +1,231 @@
+type User @table(name: "User", key: "userId") {
+  userId: Int64! @col(name: "UserID", dataType: "bigserial")
+  firstName: String! @col(name: "FirstName", dataType: "varchar(100)")
+  lastName: String! @col(name: "LastName", dataType: "varchar(100)")
+  email: String! @col(name: "Email", dataType: "varchar(255)") @unique
+  phoneNumber: String @col(name: "PhoneNumber", dataType: "varchar(30)")
+  createdAt: Timestamp! @col(name: "CreatedAt") @default(sql: "now()")
+  isActive: Boolean! @col(name: "IsActive") @default(value: true)
+  userRole: String! @col(name: "UserRole", dataType: "varchar(30)")
+  street: String @col(name: "Street", dataType: "varchar(150)")
+  city: String @col(name: "City", dataType: "varchar(100)")
+  province: String @col(name: "Province", dataType: "varchar(100)")
+}
+
+type Organization @table(name: "Organization", key: "orgId") {
+  orgId: Int64! @col(name: "OrgID", dataType: "bigserial")
+  orgName: String! @col(name: "OrgName", dataType: "varchar(200)")
+  orgPrimaryEmail: String! @col(name: "OrgPrimaryEmail", dataType: "varchar(255)") @unique
+  createdAt: Timestamp! @col(name: "CreatedAt") @default(sql: "now()")
+  street: String @col(name: "Street", dataType: "varchar(150)")
+  city: String @col(name: "City", dataType: "varchar(100)")
+  province: String @col(name: "Province", dataType: "varchar(100)")
+}
+
+type Conversations @table(name: "Conversations", key: "conversationId") {
+  conversationId: Int64! @col(name: "ConversationID", dataType: "bigserial")
+  conversationType: String! @col(name: "ConversationType", dataType: "varchar(30)")
+  createdAt: Timestamp! @col(name: "CreatedAt") @default(sql: "now()")
+}
+
+type Allergen @table(name: "Allergen", key: "allergenId") {
+  allergenId: Int64! @col(name: "AllergenID", dataType: "bigserial")
+  name: String! @col(name: "Name", dataType: "varchar(100)") @unique
+  description: String @col(name: "Description", dataType: "text")
+}
+
+type FoodCategory @table(name: "FoodCategory", key: "categoryId") {
+  categoryId: Int64! @col(name: "CategoryID", dataType: "bigserial")
+  categoryName: String! @col(name: "CategoryName", dataType: "varchar(100)") @unique
+  description: String @col(name: "Description", dataType: "text")
+}
+
+type DonationStatus @table(name: "DonationStatus", key: "statusId") {
+  statusId: Int64! @col(name: "StatusID", dataType: "bigserial")
+  name: String! @col(name: "Name", dataType: "varchar(50)") @unique
+  description: String @col(name: "Description", dataType: "text")
+}
+
+type PostalCode @table(name: "PostalCode", key: "postalCodeId") {
+  postalCodeId: Int64! @col(name: "PostalCodeID", dataType: "bigserial")
+  code: String! @col(name: "Code", dataType: "varchar(10)") @unique
+}
+
+type Locations
+  @table(name: "Locations", key: "locationId")
+  @index(fields: ["userId"], name: "idx_location_user")
+  @index(fields: ["orgId"], name: "idx_location_org")
+  @index(fields: ["postalCodeId"], name: "idx_location_postalcode") {
+  locationId: Int64! @col(name: "LocationID", dataType: "bigserial")
+  street: String! @col(name: "Street", dataType: "varchar(150)")
+  city: String! @col(name: "City", dataType: "varchar(100)")
+  province: String! @col(name: "Province", dataType: "varchar(100)")
+  updatedAt: Timestamp! @col(name: "UpdatedAt") @default(sql: "now()")
+  user: User @ref(fields: "userId")
+  userId: Int64 @col(name: "UserID")
+  organization: Organization @ref(fields: "orgId")
+  orgId: Int64 @col(name: "OrgID")
+  postalCode: PostalCode @ref(fields: "postalCodeId")
+  postalCodeId: Int64 @col(name: "PostalCodeID")
+}
+
+type UserOrganization
+  @table(name: "User_Organization", key: ["user", "organization"])
+  @index(fields: ["orgId"], name: "idx_userorg_org") {
+  user: User! @ref(fields: "userId")
+  userId: Int64! @col(name: "UserID")
+  organization: Organization! @ref(fields: "orgId")
+  orgId: Int64! @col(name: "OrgID")
+  memberRole: String! @col(name: "MemberRole", dataType: "varchar(50)")
+}
+
+type OrganizationContactEmail @table(name: "OrganizationContactEmail", key: ["organization", "contactEmail"]) {
+  organization: Organization! @ref(fields: "orgId")
+  orgId: Int64! @col(name: "OrgID")
+  contactEmail: String! @col(name: "ContactEmail", dataType: "varchar(255)")
+}
+
+type OrganizationContactPhoneNumber
+  @table(name: "OrganizationContactPhoneNumber", key: ["organization", "contactPhoneNumber"]) {
+  organization: Organization! @ref(fields: "orgId")
+  orgId: Int64! @col(name: "OrgID")
+  contactPhoneNumber: String! @col(name: "ContactPhoneNumber", dataType: "varchar(30)")
+}
+
+type Posts
+  @table(name: "Posts", key: "postId")
+  @index(fields: ["userId"], name: "idx_posts_user") {
+  postId: Int64! @col(name: "PostID", dataType: "bigserial")
+  title: String! @col(name: "Title", dataType: "varchar(200)")
+  content: String! @col(name: "Content", dataType: "text")
+  createdAt: Timestamp! @col(name: "CreatedAt") @default(sql: "now()")
+  user: User! @ref(fields: "userId")
+  userId: Int64! @col(name: "UserID")
+}
+
+type Tags
+  @table(name: "Tags", key: "tagId")
+  @index(fields: ["postId"], name: "idx_tags_post") {
+  tagId: Int64! @col(name: "TagID", dataType: "bigserial")
+  tagLabel: String! @col(name: "TagLabel", dataType: "varchar(50)")
+  post: Posts! @ref(fields: "postId")
+  postId: Int64! @col(name: "PostID")
+}
+
+type Messages
+  @table(name: "Messages", key: "messageId")
+  @index(fields: ["conversationId"], name: "idx_message_conversation") {
+  messageId: Int64! @col(name: "MessageID", dataType: "bigserial")
+  sentAt: Timestamp! @col(name: "SentAt") @default(sql: "now()")
+  readAt: Timestamp @col(name: "ReadAt")
+  conversation: Conversations! @ref(fields: "conversationId")
+  conversationId: Int64! @col(name: "ConversationID")
+}
+
+type UserConversation
+  @table(name: "User_Conversation", key: ["user", "conversation"])
+  @index(fields: ["conversationId"], name: "idx_userconv_conversation") {
+  user: User! @ref(fields: "userId")
+  userId: Int64! @col(name: "UserID")
+  conversation: Conversations! @ref(fields: "conversationId")
+  conversationId: Int64! @col(name: "ConversationID")
+}
+
+type UserPreferences
+  @table(name: "UserPreferences", key: "profileId")
+  @index(fields: ["locationId"], name: "idx_userprefs_location") {
+  profileId: Int64! @col(name: "ProfileID", dataType: "bigserial")
+  user: User! @unique @ref(fields: "userId")
+  userId: Int64! @col(name: "UserID")
+  foodPreference: String @col(name: "FoodPreference", dataType: "varchar(100)")
+  radiusSearch: Int @col(name: "RadiusSearch")
+  notificationPreference: String @col(name: "NotificationPreference", dataType: "varchar(50)")
+  alertSetting: String @col(name: "AlertSetting", dataType: "varchar(50)")
+  updatedAt: Timestamp! @col(name: "UpdatedAt") @default(sql: "now()")
+  location: Locations @ref(fields: "locationId")
+  locationId: Int64 @col(name: "LocationID")
+}
+
+type UserPreferenceAllergen
+  @table(name: "UserPref_Allergen", key: ["profile", "allergen"])
+  @index(fields: ["allergenId"], name: "idx_userprefallergen_alg") {
+  profile: UserPreferences! @ref(fields: "profileId")
+  profileId: Int64! @col(name: "ProfileID")
+  allergen: Allergen! @ref(fields: "allergenId")
+  allergenId: Int64! @col(name: "AllergenID")
+}
+
+type UserPreferenceFoodCategory
+  @table(name: "UserPref_FoodCateg", key: ["profile", "category"])
+  @index(fields: ["categoryId"], name: "idx_userprefcateg_cat") {
+  profile: UserPreferences! @ref(fields: "profileId")
+  profileId: Int64! @col(name: "ProfileID")
+  category: FoodCategory! @ref(fields: "categoryId")
+  categoryId: Int64! @col(name: "CategoryID")
+}
+
+type FoodItem
+  @table(name: "FoodItem", key: "foodItemId")
+  @index(fields: ["userId"], name: "idx_fooditem_user") {
+  foodItemId: Int64! @col(name: "FoodItemID", dataType: "bigserial")
+  condition: String! @col(name: "Condition", dataType: "varchar(50)")
+  distributedOn: Timestamp @col(name: "DistributedOn")
+  user: User! @ref(fields: "userId")
+  userId: Int64! @col(name: "UserID")
+}
+
+type FoodItemAllergen
+  @table(name: "FoodItem_Allergen", key: ["foodItem", "allergen"])
+  @index(fields: ["allergenId"], name: "idx_fooditemallergen_alg") {
+  foodItem: FoodItem! @ref(fields: "foodItemId")
+  foodItemId: Int64! @col(name: "FoodItemID")
+  allergen: Allergen! @ref(fields: "allergenId")
+  allergenId: Int64! @col(name: "AllergenID")
+}
+
+type FoodItemFoodCategory
+  @table(name: "FoodItem_FoodCategory", key: ["foodItem", "category"])
+  @index(fields: ["categoryId"], name: "idx_fooditemcategory_cat") {
+  foodItem: FoodItem! @ref(fields: "foodItemId")
+  foodItemId: Int64! @col(name: "FoodItemID")
+  category: FoodCategory! @ref(fields: "categoryId")
+  categoryId: Int64! @col(name: "CategoryID")
+}
+
+type DistributionEvent
+  @table(name: "DistributionEvent", key: "eventId")
+  @index(fields: ["locationId"], name: "idx_event_location") {
+  eventId: Int64! @col(name: "EventID", dataType: "bigserial")
+  eventType: String! @col(name: "EventType", dataType: "varchar(50)")
+  timeStart: Timestamp! @col(name: "TimeStart")
+  timeEnd: Timestamp! @col(name: "TimeEnd")
+  location: Locations! @ref(fields: "locationId")
+  locationId: Int64! @col(name: "LocationID")
+}
+
+type UserDistributionEvent
+  @table(name: "User_DistributionEvent", key: ["user", "event"])
+  @index(fields: ["eventId"], name: "idx_userevent_event") {
+  user: User! @ref(fields: "userId")
+  userId: Int64! @col(name: "UserID")
+  event: DistributionEvent! @ref(fields: "eventId")
+  eventId: Int64! @col(name: "EventID")
+  role: String! @col(name: "Role", dataType: "varchar(50)")
+  status: String! @col(name: "Status", dataType: "varchar(50)")
+  updatedAt: Timestamp! @col(name: "UpdatedAt") @default(sql: "now()")
+}
+
+type Donation
+  @table(name: "Donation", key: "donationId")
+  @index(fields: ["foodItemId"], name: "idx_donation_fooditem")
+  @index(fields: ["eventId"], name: "idx_donation_event")
+  @index(fields: ["statusId"], name: "idx_donation_status") {
+  donationId: Int64! @col(name: "DonationID", dataType: "bigserial")
+  updatedAt: Timestamp! @col(name: "UpdatedAt") @default(sql: "now()")
+  foodItem: FoodItem! @ref(fields: "foodItemId")
+  foodItemId: Int64! @col(name: "FoodItemID")
+  event: DistributionEvent @ref(fields: "eventId")
+  eventId: Int64 @col(name: "EventID")
+  status: DonationStatus! @ref(fields: "statusId")
+  statusId: Int64! @col(name: "StatusID")
+}

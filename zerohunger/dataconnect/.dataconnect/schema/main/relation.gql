@@ -1,0 +1,3906 @@
+extend type Allergen {
+  """
+  List `FoodItemAllergen` objects in a one-to-many relationship (where `FoodItemAllergen`.`allergen` is this object).
+  """
+  foodItemAllergens_on_allergen(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: FoodItemAllergen_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [FoodItemAllergen_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: FoodItemAllergen_Having
+  ): [FoodItemAllergen!]! @fdc_generated(from: "FoodItemAllergen.allergen", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `UserPreferenceAllergen` objects in a one-to-many relationship (where `UserPreferenceAllergen`.`allergen` is this object).
+  """
+  userPreferenceAllergens_on_allergen(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserPreferenceAllergen_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserPreferenceAllergen_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserPreferenceAllergen_Having
+  ): [UserPreferenceAllergen!]! @fdc_generated(from: "UserPreferenceAllergen.allergen", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `FoodItem` objects using `FoodItemAllergen` as the join table (a `FoodItemAllergen` object exists where its `allergen` is this and its `foodItem` is that).
+  """
+  foodItems_via_FoodItemAllergen(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: FoodItemAllergen_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [FoodItemAllergen_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: FoodItemAllergen_Having
+  ): [FoodItem!]! @fdc_generated(from: "FoodItemAllergen", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  List `UserPreferences` objects using `UserPreferenceAllergen` as the join table (a `UserPreferenceAllergen` object exists where its `allergen` is this and its `profile` is that).
+  """
+  userPreferencess_via_UserPreferenceAllergen(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserPreferenceAllergen_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserPreferenceAllergen_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserPreferenceAllergen_Having
+  ): [UserPreferences!]! @fdc_generated(from: "UserPreferenceAllergen", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Allergen", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `Allergen` table.
+  """
+  _count: Int! @fdc_generated(from: "Allergen.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Allergen` table where the `allergenId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  allergenId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Allergen.allergenId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Allergen` table where the `description` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  description_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Allergen.description", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Allergen` table where the `name` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  name_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Allergen.name", purpose: QUERY_COUNT)
+  """
+  Sum the `allergenId` field in the `Allergen` table.
+  """
+  allergenId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "Allergen.allergenId", purpose: QUERY_SUM)
+  """
+  Average the `allergenId` field in the `Allergen` table.
+  """
+  allergenId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Allergen.allergenId", purpose: QUERY_AVG)
+  """
+  Minimum of the `allergenId` field in the `Allergen` table.
+  """
+  allergenId_min: Int64 @fdc_generated(from: "Allergen.allergenId", purpose: QUERY_MIN)
+  """
+  Maximum of the `allergenId` field in the `Allergen` table.
+  """
+  allergenId_max: Int64 @fdc_generated(from: "Allergen.allergenId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "Allergen.allergenId", purpose: ENTITY_ID)
+}
+extend type Conversations {
+  """
+  List `Messages` objects in a one-to-many relationship (where `Messages`.`conversation` is this object).
+  """
+  messagess_on_conversation(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Messages_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Messages_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Messages_Having
+  ): [Messages!]! @fdc_generated(from: "Messages.conversation", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `UserConversation` objects in a one-to-many relationship (where `UserConversation`.`conversation` is this object).
+  """
+  userConversations_on_conversation(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserConversation_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserConversation_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserConversation_Having
+  ): [UserConversation!]! @fdc_generated(from: "UserConversation.conversation", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `User` objects using `UserConversation` as the join table (a `UserConversation` object exists where its `conversation` is this and its `user` is that).
+  """
+  users_via_UserConversation(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserConversation_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserConversation_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserConversation_Having
+  ): [User!]! @fdc_generated(from: "UserConversation", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Conversations", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `Conversations` table.
+  """
+  _count: Int! @fdc_generated(from: "Conversations.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Conversations` table where the `conversationId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  conversationId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Conversations.conversationId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Conversations` table where the `conversationType` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  conversationType_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Conversations.conversationType", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Conversations` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Conversations.createdAt", purpose: QUERY_COUNT)
+  """
+  Sum the `conversationId` field in the `Conversations` table.
+  """
+  conversationId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "Conversations.conversationId", purpose: QUERY_SUM)
+  """
+  Average the `conversationId` field in the `Conversations` table.
+  """
+  conversationId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Conversations.conversationId", purpose: QUERY_AVG)
+  """
+  Minimum of the `conversationId` field in the `Conversations` table.
+  """
+  conversationId_min: Int64 @fdc_generated(from: "Conversations.conversationId", purpose: QUERY_MIN)
+  """
+  Minimum of the `createdAt` field in the `Conversations` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Conversations.createdAt", purpose: QUERY_MIN)
+  """
+  Maximum of the `conversationId` field in the `Conversations` table.
+  """
+  conversationId_max: Int64 @fdc_generated(from: "Conversations.conversationId", purpose: QUERY_MAX)
+  """
+  Maximum of the `createdAt` field in the `Conversations` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Conversations.createdAt", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "Conversations.conversationId", purpose: ENTITY_ID)
+}
+extend type DistributionEvent {
+  """
+  List `Donation` objects in a one-to-many relationship (where `Donation`.`event` is this object).
+  """
+  donations_on_event(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Donation_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Donation_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Donation_Having
+  ): [Donation!]! @fdc_generated(from: "Donation.event", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `UserDistributionEvent` objects in a one-to-many relationship (where `UserDistributionEvent`.`event` is this object).
+  """
+  userDistributionEvents_on_event(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserDistributionEvent_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserDistributionEvent_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserDistributionEvent_Having
+  ): [UserDistributionEvent!]! @fdc_generated(from: "UserDistributionEvent.event", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `User` objects using `UserDistributionEvent` as the join table (a `UserDistributionEvent` object exists where its `event` is this and its `user` is that).
+  """
+  users_via_UserDistributionEvent(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserDistributionEvent_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserDistributionEvent_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserDistributionEvent_Having
+  ): [User!]! @fdc_generated(from: "UserDistributionEvent", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "DistributionEvent", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `DistributionEvent` table.
+  """
+  _count: Int! @fdc_generated(from: "DistributionEvent.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `DistributionEvent` table where the `eventId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  eventId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "DistributionEvent.eventId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `DistributionEvent` table where the `eventType` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  eventType_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "DistributionEvent.eventType", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `DistributionEvent` table where the `locationId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  locationId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "DistributionEvent.locationId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `DistributionEvent` table where the `timeEnd` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  timeEnd_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "DistributionEvent.timeEnd", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `DistributionEvent` table where the `timeStart` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  timeStart_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "DistributionEvent.timeStart", purpose: QUERY_COUNT)
+  """
+  Sum the `eventId` field in the `DistributionEvent` table.
+  """
+  eventId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "DistributionEvent.eventId", purpose: QUERY_SUM)
+  """
+  Sum the `locationId` field in the `DistributionEvent` table.
+  """
+  locationId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "DistributionEvent.locationId", purpose: QUERY_SUM)
+  """
+  Average the `eventId` field in the `DistributionEvent` table.
+  """
+  eventId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "DistributionEvent.eventId", purpose: QUERY_AVG)
+  """
+  Average the `locationId` field in the `DistributionEvent` table.
+  """
+  locationId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "DistributionEvent.locationId", purpose: QUERY_AVG)
+  """
+  Minimum of the `eventId` field in the `DistributionEvent` table.
+  """
+  eventId_min: Int64 @fdc_generated(from: "DistributionEvent.eventId", purpose: QUERY_MIN)
+  """
+  Minimum of the `locationId` field in the `DistributionEvent` table.
+  """
+  locationId_min: Int64 @fdc_generated(from: "DistributionEvent.locationId", purpose: QUERY_MIN)
+  """
+  Minimum of the `timeEnd` field in the `DistributionEvent` table.
+  """
+  timeEnd_min: Timestamp @fdc_generated(from: "DistributionEvent.timeEnd", purpose: QUERY_MIN)
+  """
+  Minimum of the `timeStart` field in the `DistributionEvent` table.
+  """
+  timeStart_min: Timestamp @fdc_generated(from: "DistributionEvent.timeStart", purpose: QUERY_MIN)
+  """
+  Maximum of the `eventId` field in the `DistributionEvent` table.
+  """
+  eventId_max: Int64 @fdc_generated(from: "DistributionEvent.eventId", purpose: QUERY_MAX)
+  """
+  Maximum of the `locationId` field in the `DistributionEvent` table.
+  """
+  locationId_max: Int64 @fdc_generated(from: "DistributionEvent.locationId", purpose: QUERY_MAX)
+  """
+  Maximum of the `timeEnd` field in the `DistributionEvent` table.
+  """
+  timeEnd_max: Timestamp @fdc_generated(from: "DistributionEvent.timeEnd", purpose: QUERY_MAX)
+  """
+  Maximum of the `timeStart` field in the `DistributionEvent` table.
+  """
+  timeStart_max: Timestamp @fdc_generated(from: "DistributionEvent.timeStart", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "DistributionEvent.eventId", purpose: ENTITY_ID)
+}
+extend type Donation {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Donation", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `Donation` table.
+  """
+  _count: Int! @fdc_generated(from: "Donation.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Donation` table where the `donationId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  donationId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Donation.donationId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Donation` table where the `eventId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  eventId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Donation.eventId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Donation` table where the `foodItemId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  foodItemId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Donation.foodItemId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Donation` table where the `statusId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  statusId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Donation.statusId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Donation` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Donation.updatedAt", purpose: QUERY_COUNT)
+  """
+  Sum the `donationId` field in the `Donation` table.
+  """
+  donationId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "Donation.donationId", purpose: QUERY_SUM)
+  """
+  Sum the `eventId` field in the `Donation` table.
+  """
+  eventId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "Donation.eventId", purpose: QUERY_SUM)
+  """
+  Sum the `foodItemId` field in the `Donation` table.
+  """
+  foodItemId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "Donation.foodItemId", purpose: QUERY_SUM)
+  """
+  Sum the `statusId` field in the `Donation` table.
+  """
+  statusId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "Donation.statusId", purpose: QUERY_SUM)
+  """
+  Average the `donationId` field in the `Donation` table.
+  """
+  donationId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Donation.donationId", purpose: QUERY_AVG)
+  """
+  Average the `eventId` field in the `Donation` table.
+  """
+  eventId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Donation.eventId", purpose: QUERY_AVG)
+  """
+  Average the `foodItemId` field in the `Donation` table.
+  """
+  foodItemId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Donation.foodItemId", purpose: QUERY_AVG)
+  """
+  Average the `statusId` field in the `Donation` table.
+  """
+  statusId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Donation.statusId", purpose: QUERY_AVG)
+  """
+  Minimum of the `donationId` field in the `Donation` table.
+  """
+  donationId_min: Int64 @fdc_generated(from: "Donation.donationId", purpose: QUERY_MIN)
+  """
+  Minimum of the `eventId` field in the `Donation` table.
+  """
+  eventId_min: Int64 @fdc_generated(from: "Donation.eventId", purpose: QUERY_MIN)
+  """
+  Minimum of the `foodItemId` field in the `Donation` table.
+  """
+  foodItemId_min: Int64 @fdc_generated(from: "Donation.foodItemId", purpose: QUERY_MIN)
+  """
+  Minimum of the `statusId` field in the `Donation` table.
+  """
+  statusId_min: Int64 @fdc_generated(from: "Donation.statusId", purpose: QUERY_MIN)
+  """
+  Minimum of the `updatedAt` field in the `Donation` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "Donation.updatedAt", purpose: QUERY_MIN)
+  """
+  Maximum of the `donationId` field in the `Donation` table.
+  """
+  donationId_max: Int64 @fdc_generated(from: "Donation.donationId", purpose: QUERY_MAX)
+  """
+  Maximum of the `eventId` field in the `Donation` table.
+  """
+  eventId_max: Int64 @fdc_generated(from: "Donation.eventId", purpose: QUERY_MAX)
+  """
+  Maximum of the `foodItemId` field in the `Donation` table.
+  """
+  foodItemId_max: Int64 @fdc_generated(from: "Donation.foodItemId", purpose: QUERY_MAX)
+  """
+  Maximum of the `statusId` field in the `Donation` table.
+  """
+  statusId_max: Int64 @fdc_generated(from: "Donation.statusId", purpose: QUERY_MAX)
+  """
+  Maximum of the `updatedAt` field in the `Donation` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "Donation.updatedAt", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "Donation.donationId", purpose: ENTITY_ID)
+}
+extend type DonationStatus {
+  """
+  List `Donation` objects in a one-to-many relationship (where `Donation`.`status` is this object).
+  """
+  donations_on_status(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Donation_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Donation_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Donation_Having
+  ): [Donation!]! @fdc_generated(from: "Donation.status", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "DonationStatus", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `DonationStatus` table.
+  """
+  _count: Int! @fdc_generated(from: "DonationStatus.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `DonationStatus` table where the `description` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  description_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "DonationStatus.description", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `DonationStatus` table where the `name` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  name_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "DonationStatus.name", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `DonationStatus` table where the `statusId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  statusId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "DonationStatus.statusId", purpose: QUERY_COUNT)
+  """
+  Sum the `statusId` field in the `DonationStatus` table.
+  """
+  statusId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "DonationStatus.statusId", purpose: QUERY_SUM)
+  """
+  Average the `statusId` field in the `DonationStatus` table.
+  """
+  statusId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "DonationStatus.statusId", purpose: QUERY_AVG)
+  """
+  Minimum of the `statusId` field in the `DonationStatus` table.
+  """
+  statusId_min: Int64 @fdc_generated(from: "DonationStatus.statusId", purpose: QUERY_MIN)
+  """
+  Maximum of the `statusId` field in the `DonationStatus` table.
+  """
+  statusId_max: Int64 @fdc_generated(from: "DonationStatus.statusId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "DonationStatus.statusId", purpose: ENTITY_ID)
+}
+extend type FoodCategory {
+  """
+  List `FoodItemFoodCategory` objects in a one-to-many relationship (where `FoodItemFoodCategory`.`category` is this object).
+  """
+  foodItemFoodCategories_on_category(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: FoodItemFoodCategory_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [FoodItemFoodCategory_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: FoodItemFoodCategory_Having
+  ): [FoodItemFoodCategory!]! @fdc_generated(from: "FoodItemFoodCategory.category", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `UserPreferenceFoodCategory` objects in a one-to-many relationship (where `UserPreferenceFoodCategory`.`category` is this object).
+  """
+  userPreferenceFoodCategories_on_category(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserPreferenceFoodCategory_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserPreferenceFoodCategory_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserPreferenceFoodCategory_Having
+  ): [UserPreferenceFoodCategory!]! @fdc_generated(from: "UserPreferenceFoodCategory.category", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `FoodItem` objects using `FoodItemFoodCategory` as the join table (a `FoodItemFoodCategory` object exists where its `category` is this and its `foodItem` is that).
+  """
+  foodItems_via_FoodItemFoodCategory(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: FoodItemFoodCategory_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [FoodItemFoodCategory_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: FoodItemFoodCategory_Having
+  ): [FoodItem!]! @fdc_generated(from: "FoodItemFoodCategory", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  List `UserPreferences` objects using `UserPreferenceFoodCategory` as the join table (a `UserPreferenceFoodCategory` object exists where its `category` is this and its `profile` is that).
+  """
+  userPreferencess_via_UserPreferenceFoodCategory(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserPreferenceFoodCategory_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserPreferenceFoodCategory_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserPreferenceFoodCategory_Having
+  ): [UserPreferences!]! @fdc_generated(from: "UserPreferenceFoodCategory", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "FoodCategory", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `FoodCategory` table.
+  """
+  _count: Int! @fdc_generated(from: "FoodCategory.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `FoodCategory` table where the `categoryId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  categoryId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "FoodCategory.categoryId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `FoodCategory` table where the `categoryName` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  categoryName_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "FoodCategory.categoryName", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `FoodCategory` table where the `description` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  description_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "FoodCategory.description", purpose: QUERY_COUNT)
+  """
+  Sum the `categoryId` field in the `FoodCategory` table.
+  """
+  categoryId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "FoodCategory.categoryId", purpose: QUERY_SUM)
+  """
+  Average the `categoryId` field in the `FoodCategory` table.
+  """
+  categoryId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "FoodCategory.categoryId", purpose: QUERY_AVG)
+  """
+  Minimum of the `categoryId` field in the `FoodCategory` table.
+  """
+  categoryId_min: Int64 @fdc_generated(from: "FoodCategory.categoryId", purpose: QUERY_MIN)
+  """
+  Maximum of the `categoryId` field in the `FoodCategory` table.
+  """
+  categoryId_max: Int64 @fdc_generated(from: "FoodCategory.categoryId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "FoodCategory.categoryId", purpose: ENTITY_ID)
+}
+extend type FoodItem {
+  """
+  List `Donation` objects in a one-to-many relationship (where `Donation`.`foodItem` is this object).
+  """
+  donations_on_foodItem(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Donation_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Donation_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Donation_Having
+  ): [Donation!]! @fdc_generated(from: "Donation.foodItem", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `FoodItemAllergen` objects in a one-to-many relationship (where `FoodItemAllergen`.`foodItem` is this object).
+  """
+  foodItemAllergens_on_foodItem(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: FoodItemAllergen_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [FoodItemAllergen_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: FoodItemAllergen_Having
+  ): [FoodItemAllergen!]! @fdc_generated(from: "FoodItemAllergen.foodItem", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `FoodItemFoodCategory` objects in a one-to-many relationship (where `FoodItemFoodCategory`.`foodItem` is this object).
+  """
+  foodItemFoodCategories_on_foodItem(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: FoodItemFoodCategory_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [FoodItemFoodCategory_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: FoodItemFoodCategory_Having
+  ): [FoodItemFoodCategory!]! @fdc_generated(from: "FoodItemFoodCategory.foodItem", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `Allergen` objects using `FoodItemAllergen` as the join table (a `FoodItemAllergen` object exists where its `foodItem` is this and its `allergen` is that).
+  """
+  allergens_via_FoodItemAllergen(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: FoodItemAllergen_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [FoodItemAllergen_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: FoodItemAllergen_Having
+  ): [Allergen!]! @fdc_generated(from: "FoodItemAllergen", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  List `FoodCategory` objects using `FoodItemFoodCategory` as the join table (a `FoodItemFoodCategory` object exists where its `foodItem` is this and its `category` is that).
+  """
+  foodCategories_via_FoodItemFoodCategory(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: FoodItemFoodCategory_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [FoodItemFoodCategory_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: FoodItemFoodCategory_Having
+  ): [FoodCategory!]! @fdc_generated(from: "FoodItemFoodCategory", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "FoodItem", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `FoodItem` table.
+  """
+  _count: Int! @fdc_generated(from: "FoodItem.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `FoodItem` table where the `condition` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  condition_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "FoodItem.condition", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `FoodItem` table where the `distributedOn` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  distributedOn_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "FoodItem.distributedOn", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `FoodItem` table where the `foodItemId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  foodItemId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "FoodItem.foodItemId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `FoodItem` table where the `userId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "FoodItem.userId", purpose: QUERY_COUNT)
+  """
+  Sum the `foodItemId` field in the `FoodItem` table.
+  """
+  foodItemId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "FoodItem.foodItemId", purpose: QUERY_SUM)
+  """
+  Sum the `userId` field in the `FoodItem` table.
+  """
+  userId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "FoodItem.userId", purpose: QUERY_SUM)
+  """
+  Average the `foodItemId` field in the `FoodItem` table.
+  """
+  foodItemId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "FoodItem.foodItemId", purpose: QUERY_AVG)
+  """
+  Average the `userId` field in the `FoodItem` table.
+  """
+  userId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "FoodItem.userId", purpose: QUERY_AVG)
+  """
+  Minimum of the `distributedOn` field in the `FoodItem` table.
+  """
+  distributedOn_min: Timestamp @fdc_generated(from: "FoodItem.distributedOn", purpose: QUERY_MIN)
+  """
+  Minimum of the `foodItemId` field in the `FoodItem` table.
+  """
+  foodItemId_min: Int64 @fdc_generated(from: "FoodItem.foodItemId", purpose: QUERY_MIN)
+  """
+  Minimum of the `userId` field in the `FoodItem` table.
+  """
+  userId_min: Int64 @fdc_generated(from: "FoodItem.userId", purpose: QUERY_MIN)
+  """
+  Maximum of the `distributedOn` field in the `FoodItem` table.
+  """
+  distributedOn_max: Timestamp @fdc_generated(from: "FoodItem.distributedOn", purpose: QUERY_MAX)
+  """
+  Maximum of the `foodItemId` field in the `FoodItem` table.
+  """
+  foodItemId_max: Int64 @fdc_generated(from: "FoodItem.foodItemId", purpose: QUERY_MAX)
+  """
+  Maximum of the `userId` field in the `FoodItem` table.
+  """
+  userId_max: Int64 @fdc_generated(from: "FoodItem.userId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "FoodItem.foodItemId", purpose: ENTITY_ID)
+}
+extend type FoodItemAllergen {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "FoodItemAllergen", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `FoodItemAllergen` table.
+  """
+  _count: Int! @fdc_generated(from: "FoodItemAllergen.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `FoodItemAllergen` table where the `allergenId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  allergenId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "FoodItemAllergen.allergenId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `FoodItemAllergen` table where the `foodItemId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  foodItemId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "FoodItemAllergen.foodItemId", purpose: QUERY_COUNT)
+  """
+  Sum the `allergenId` field in the `FoodItemAllergen` table.
+  """
+  allergenId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "FoodItemAllergen.allergenId", purpose: QUERY_SUM)
+  """
+  Sum the `foodItemId` field in the `FoodItemAllergen` table.
+  """
+  foodItemId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "FoodItemAllergen.foodItemId", purpose: QUERY_SUM)
+  """
+  Average the `allergenId` field in the `FoodItemAllergen` table.
+  """
+  allergenId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "FoodItemAllergen.allergenId", purpose: QUERY_AVG)
+  """
+  Average the `foodItemId` field in the `FoodItemAllergen` table.
+  """
+  foodItemId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "FoodItemAllergen.foodItemId", purpose: QUERY_AVG)
+  """
+  Minimum of the `allergenId` field in the `FoodItemAllergen` table.
+  """
+  allergenId_min: Int64 @fdc_generated(from: "FoodItemAllergen.allergenId", purpose: QUERY_MIN)
+  """
+  Minimum of the `foodItemId` field in the `FoodItemAllergen` table.
+  """
+  foodItemId_min: Int64 @fdc_generated(from: "FoodItemAllergen.foodItemId", purpose: QUERY_MIN)
+  """
+  Maximum of the `allergenId` field in the `FoodItemAllergen` table.
+  """
+  allergenId_max: Int64 @fdc_generated(from: "FoodItemAllergen.allergenId", purpose: QUERY_MAX)
+  """
+  Maximum of the `foodItemId` field in the `FoodItemAllergen` table.
+  """
+  foodItemId_max: Int64 @fdc_generated(from: "FoodItemAllergen.foodItemId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "FoodItemAllergen.foodItemId,allergenId", purpose: ENTITY_ID)
+}
+extend type FoodItemFoodCategory {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "FoodItemFoodCategory", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `FoodItemFoodCategory` table.
+  """
+  _count: Int! @fdc_generated(from: "FoodItemFoodCategory.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `FoodItemFoodCategory` table where the `categoryId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  categoryId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "FoodItemFoodCategory.categoryId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `FoodItemFoodCategory` table where the `foodItemId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  foodItemId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "FoodItemFoodCategory.foodItemId", purpose: QUERY_COUNT)
+  """
+  Sum the `categoryId` field in the `FoodItemFoodCategory` table.
+  """
+  categoryId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "FoodItemFoodCategory.categoryId", purpose: QUERY_SUM)
+  """
+  Sum the `foodItemId` field in the `FoodItemFoodCategory` table.
+  """
+  foodItemId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "FoodItemFoodCategory.foodItemId", purpose: QUERY_SUM)
+  """
+  Average the `categoryId` field in the `FoodItemFoodCategory` table.
+  """
+  categoryId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "FoodItemFoodCategory.categoryId", purpose: QUERY_AVG)
+  """
+  Average the `foodItemId` field in the `FoodItemFoodCategory` table.
+  """
+  foodItemId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "FoodItemFoodCategory.foodItemId", purpose: QUERY_AVG)
+  """
+  Minimum of the `categoryId` field in the `FoodItemFoodCategory` table.
+  """
+  categoryId_min: Int64 @fdc_generated(from: "FoodItemFoodCategory.categoryId", purpose: QUERY_MIN)
+  """
+  Minimum of the `foodItemId` field in the `FoodItemFoodCategory` table.
+  """
+  foodItemId_min: Int64 @fdc_generated(from: "FoodItemFoodCategory.foodItemId", purpose: QUERY_MIN)
+  """
+  Maximum of the `categoryId` field in the `FoodItemFoodCategory` table.
+  """
+  categoryId_max: Int64 @fdc_generated(from: "FoodItemFoodCategory.categoryId", purpose: QUERY_MAX)
+  """
+  Maximum of the `foodItemId` field in the `FoodItemFoodCategory` table.
+  """
+  foodItemId_max: Int64 @fdc_generated(from: "FoodItemFoodCategory.foodItemId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "FoodItemFoodCategory.foodItemId,categoryId", purpose: ENTITY_ID)
+}
+extend type Locations {
+  """
+  List `DistributionEvent` objects in a one-to-many relationship (where `DistributionEvent`.`location` is this object).
+  """
+  distributionEvents_on_location(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: DistributionEvent_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [DistributionEvent_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: DistributionEvent_Having
+  ): [DistributionEvent!]! @fdc_generated(from: "DistributionEvent.location", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `UserPreferences` objects in a one-to-many relationship (where `UserPreferences`.`location` is this object).
+  """
+  userPreferencess_on_location(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserPreferences_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserPreferences_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserPreferences_Having
+  ): [UserPreferences!]! @fdc_generated(from: "UserPreferences.location", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Locations", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `Locations` table.
+  """
+  _count: Int! @fdc_generated(from: "Locations.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Locations` table where the `city` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  city_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Locations.city", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Locations` table where the `locationId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  locationId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Locations.locationId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Locations` table where the `orgId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  orgId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Locations.orgId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Locations` table where the `postalCodeId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  postalCodeId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Locations.postalCodeId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Locations` table where the `province` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  province_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Locations.province", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Locations` table where the `street` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  street_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Locations.street", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Locations` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Locations.updatedAt", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Locations` table where the `userId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Locations.userId", purpose: QUERY_COUNT)
+  """
+  Sum the `locationId` field in the `Locations` table.
+  """
+  locationId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "Locations.locationId", purpose: QUERY_SUM)
+  """
+  Sum the `orgId` field in the `Locations` table.
+  """
+  orgId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "Locations.orgId", purpose: QUERY_SUM)
+  """
+  Sum the `postalCodeId` field in the `Locations` table.
+  """
+  postalCodeId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "Locations.postalCodeId", purpose: QUERY_SUM)
+  """
+  Sum the `userId` field in the `Locations` table.
+  """
+  userId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "Locations.userId", purpose: QUERY_SUM)
+  """
+  Average the `locationId` field in the `Locations` table.
+  """
+  locationId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Locations.locationId", purpose: QUERY_AVG)
+  """
+  Average the `orgId` field in the `Locations` table.
+  """
+  orgId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Locations.orgId", purpose: QUERY_AVG)
+  """
+  Average the `postalCodeId` field in the `Locations` table.
+  """
+  postalCodeId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Locations.postalCodeId", purpose: QUERY_AVG)
+  """
+  Average the `userId` field in the `Locations` table.
+  """
+  userId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Locations.userId", purpose: QUERY_AVG)
+  """
+  Minimum of the `locationId` field in the `Locations` table.
+  """
+  locationId_min: Int64 @fdc_generated(from: "Locations.locationId", purpose: QUERY_MIN)
+  """
+  Minimum of the `orgId` field in the `Locations` table.
+  """
+  orgId_min: Int64 @fdc_generated(from: "Locations.orgId", purpose: QUERY_MIN)
+  """
+  Minimum of the `postalCodeId` field in the `Locations` table.
+  """
+  postalCodeId_min: Int64 @fdc_generated(from: "Locations.postalCodeId", purpose: QUERY_MIN)
+  """
+  Minimum of the `updatedAt` field in the `Locations` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "Locations.updatedAt", purpose: QUERY_MIN)
+  """
+  Minimum of the `userId` field in the `Locations` table.
+  """
+  userId_min: Int64 @fdc_generated(from: "Locations.userId", purpose: QUERY_MIN)
+  """
+  Maximum of the `locationId` field in the `Locations` table.
+  """
+  locationId_max: Int64 @fdc_generated(from: "Locations.locationId", purpose: QUERY_MAX)
+  """
+  Maximum of the `orgId` field in the `Locations` table.
+  """
+  orgId_max: Int64 @fdc_generated(from: "Locations.orgId", purpose: QUERY_MAX)
+  """
+  Maximum of the `postalCodeId` field in the `Locations` table.
+  """
+  postalCodeId_max: Int64 @fdc_generated(from: "Locations.postalCodeId", purpose: QUERY_MAX)
+  """
+  Maximum of the `updatedAt` field in the `Locations` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "Locations.updatedAt", purpose: QUERY_MAX)
+  """
+  Maximum of the `userId` field in the `Locations` table.
+  """
+  userId_max: Int64 @fdc_generated(from: "Locations.userId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "Locations.locationId", purpose: ENTITY_ID)
+}
+extend type Messages {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Messages", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `Messages` table.
+  """
+  _count: Int! @fdc_generated(from: "Messages.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Messages` table where the `conversationId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  conversationId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Messages.conversationId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Messages` table where the `messageId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  messageId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Messages.messageId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Messages` table where the `readAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  readAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Messages.readAt", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Messages` table where the `sentAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  sentAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Messages.sentAt", purpose: QUERY_COUNT)
+  """
+  Sum the `conversationId` field in the `Messages` table.
+  """
+  conversationId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "Messages.conversationId", purpose: QUERY_SUM)
+  """
+  Sum the `messageId` field in the `Messages` table.
+  """
+  messageId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "Messages.messageId", purpose: QUERY_SUM)
+  """
+  Average the `conversationId` field in the `Messages` table.
+  """
+  conversationId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Messages.conversationId", purpose: QUERY_AVG)
+  """
+  Average the `messageId` field in the `Messages` table.
+  """
+  messageId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Messages.messageId", purpose: QUERY_AVG)
+  """
+  Minimum of the `conversationId` field in the `Messages` table.
+  """
+  conversationId_min: Int64 @fdc_generated(from: "Messages.conversationId", purpose: QUERY_MIN)
+  """
+  Minimum of the `messageId` field in the `Messages` table.
+  """
+  messageId_min: Int64 @fdc_generated(from: "Messages.messageId", purpose: QUERY_MIN)
+  """
+  Minimum of the `readAt` field in the `Messages` table.
+  """
+  readAt_min: Timestamp @fdc_generated(from: "Messages.readAt", purpose: QUERY_MIN)
+  """
+  Minimum of the `sentAt` field in the `Messages` table.
+  """
+  sentAt_min: Timestamp @fdc_generated(from: "Messages.sentAt", purpose: QUERY_MIN)
+  """
+  Maximum of the `conversationId` field in the `Messages` table.
+  """
+  conversationId_max: Int64 @fdc_generated(from: "Messages.conversationId", purpose: QUERY_MAX)
+  """
+  Maximum of the `messageId` field in the `Messages` table.
+  """
+  messageId_max: Int64 @fdc_generated(from: "Messages.messageId", purpose: QUERY_MAX)
+  """
+  Maximum of the `readAt` field in the `Messages` table.
+  """
+  readAt_max: Timestamp @fdc_generated(from: "Messages.readAt", purpose: QUERY_MAX)
+  """
+  Maximum of the `sentAt` field in the `Messages` table.
+  """
+  sentAt_max: Timestamp @fdc_generated(from: "Messages.sentAt", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "Messages.messageId", purpose: ENTITY_ID)
+}
+extend type Organization {
+  """
+  List `Locations` objects in a one-to-many relationship (where `Locations`.`organization` is this object).
+  """
+  locationss_on_organization(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Locations_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Locations_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Locations_Having
+  ): [Locations!]! @fdc_generated(from: "Locations.organization", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `OrganizationContactEmail` objects in a one-to-many relationship (where `OrganizationContactEmail`.`organization` is this object).
+  """
+  organizationContactEmails_on_organization(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: OrganizationContactEmail_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [OrganizationContactEmail_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: OrganizationContactEmail_Having
+  ): [OrganizationContactEmail!]! @fdc_generated(from: "OrganizationContactEmail.organization", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `OrganizationContactPhoneNumber` objects in a one-to-many relationship (where `OrganizationContactPhoneNumber`.`organization` is this object).
+  """
+  organizationContactPhoneNumbers_on_organization(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: OrganizationContactPhoneNumber_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [OrganizationContactPhoneNumber_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: OrganizationContactPhoneNumber_Having
+  ): [OrganizationContactPhoneNumber!]! @fdc_generated(from: "OrganizationContactPhoneNumber.organization", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `UserOrganization` objects in a one-to-many relationship (where `UserOrganization`.`organization` is this object).
+  """
+  userOrganizations_on_organization(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserOrganization_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserOrganization_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserOrganization_Having
+  ): [UserOrganization!]! @fdc_generated(from: "UserOrganization.organization", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `User` objects using `UserOrganization` as the join table (a `UserOrganization` object exists where its `organization` is this and its `user` is that).
+  """
+  users_via_UserOrganization(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserOrganization_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserOrganization_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserOrganization_Having
+  ): [User!]! @fdc_generated(from: "UserOrganization", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Organization", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `Organization` table.
+  """
+  _count: Int! @fdc_generated(from: "Organization.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Organization` table where the `city` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  city_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Organization.city", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Organization` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Organization.createdAt", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Organization` table where the `orgId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  orgId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Organization.orgId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Organization` table where the `orgName` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  orgName_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Organization.orgName", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Organization` table where the `orgPrimaryEmail` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  orgPrimaryEmail_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Organization.orgPrimaryEmail", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Organization` table where the `province` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  province_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Organization.province", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Organization` table where the `street` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  street_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Organization.street", purpose: QUERY_COUNT)
+  """
+  Sum the `orgId` field in the `Organization` table.
+  """
+  orgId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "Organization.orgId", purpose: QUERY_SUM)
+  """
+  Average the `orgId` field in the `Organization` table.
+  """
+  orgId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Organization.orgId", purpose: QUERY_AVG)
+  """
+  Minimum of the `createdAt` field in the `Organization` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Organization.createdAt", purpose: QUERY_MIN)
+  """
+  Minimum of the `orgId` field in the `Organization` table.
+  """
+  orgId_min: Int64 @fdc_generated(from: "Organization.orgId", purpose: QUERY_MIN)
+  """
+  Maximum of the `createdAt` field in the `Organization` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Organization.createdAt", purpose: QUERY_MAX)
+  """
+  Maximum of the `orgId` field in the `Organization` table.
+  """
+  orgId_max: Int64 @fdc_generated(from: "Organization.orgId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "Organization.orgId", purpose: ENTITY_ID)
+}
+extend type OrganizationContactEmail {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "OrganizationContactEmail", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `OrganizationContactEmail` table.
+  """
+  _count: Int! @fdc_generated(from: "OrganizationContactEmail.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `OrganizationContactEmail` table where the `contactEmail` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  contactEmail_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "OrganizationContactEmail.contactEmail", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `OrganizationContactEmail` table where the `orgId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  orgId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "OrganizationContactEmail.orgId", purpose: QUERY_COUNT)
+  """
+  Sum the `orgId` field in the `OrganizationContactEmail` table.
+  """
+  orgId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "OrganizationContactEmail.orgId", purpose: QUERY_SUM)
+  """
+  Average the `orgId` field in the `OrganizationContactEmail` table.
+  """
+  orgId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "OrganizationContactEmail.orgId", purpose: QUERY_AVG)
+  """
+  Minimum of the `orgId` field in the `OrganizationContactEmail` table.
+  """
+  orgId_min: Int64 @fdc_generated(from: "OrganizationContactEmail.orgId", purpose: QUERY_MIN)
+  """
+  Maximum of the `orgId` field in the `OrganizationContactEmail` table.
+  """
+  orgId_max: Int64 @fdc_generated(from: "OrganizationContactEmail.orgId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "OrganizationContactEmail.orgId,contactEmail", purpose: ENTITY_ID)
+}
+extend type OrganizationContactPhoneNumber {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "OrganizationContactPhoneNumber", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `OrganizationContactPhoneNumber` table.
+  """
+  _count: Int! @fdc_generated(from: "OrganizationContactPhoneNumber.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `OrganizationContactPhoneNumber` table where the `contactPhoneNumber` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  contactPhoneNumber_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "OrganizationContactPhoneNumber.contactPhoneNumber", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `OrganizationContactPhoneNumber` table where the `orgId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  orgId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "OrganizationContactPhoneNumber.orgId", purpose: QUERY_COUNT)
+  """
+  Sum the `orgId` field in the `OrganizationContactPhoneNumber` table.
+  """
+  orgId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "OrganizationContactPhoneNumber.orgId", purpose: QUERY_SUM)
+  """
+  Average the `orgId` field in the `OrganizationContactPhoneNumber` table.
+  """
+  orgId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "OrganizationContactPhoneNumber.orgId", purpose: QUERY_AVG)
+  """
+  Minimum of the `orgId` field in the `OrganizationContactPhoneNumber` table.
+  """
+  orgId_min: Int64 @fdc_generated(from: "OrganizationContactPhoneNumber.orgId", purpose: QUERY_MIN)
+  """
+  Maximum of the `orgId` field in the `OrganizationContactPhoneNumber` table.
+  """
+  orgId_max: Int64 @fdc_generated(from: "OrganizationContactPhoneNumber.orgId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "OrganizationContactPhoneNumber.orgId,contactPhoneNumber", purpose: ENTITY_ID)
+}
+extend type PostalCode {
+  """
+  List `Locations` objects in a one-to-many relationship (where `Locations`.`postalCode` is this object).
+  """
+  locationss_on_postalCode(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Locations_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Locations_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Locations_Having
+  ): [Locations!]! @fdc_generated(from: "Locations.postalCode", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "PostalCode", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `PostalCode` table.
+  """
+  _count: Int! @fdc_generated(from: "PostalCode.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `PostalCode` table where the `code` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  code_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "PostalCode.code", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `PostalCode` table where the `postalCodeId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  postalCodeId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "PostalCode.postalCodeId", purpose: QUERY_COUNT)
+  """
+  Sum the `postalCodeId` field in the `PostalCode` table.
+  """
+  postalCodeId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "PostalCode.postalCodeId", purpose: QUERY_SUM)
+  """
+  Average the `postalCodeId` field in the `PostalCode` table.
+  """
+  postalCodeId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "PostalCode.postalCodeId", purpose: QUERY_AVG)
+  """
+  Minimum of the `postalCodeId` field in the `PostalCode` table.
+  """
+  postalCodeId_min: Int64 @fdc_generated(from: "PostalCode.postalCodeId", purpose: QUERY_MIN)
+  """
+  Maximum of the `postalCodeId` field in the `PostalCode` table.
+  """
+  postalCodeId_max: Int64 @fdc_generated(from: "PostalCode.postalCodeId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "PostalCode.postalCodeId", purpose: ENTITY_ID)
+}
+extend type Posts {
+  """
+  List `Tags` objects in a one-to-many relationship (where `Tags`.`post` is this object).
+  """
+  tagss_on_post(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Tags_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Tags_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Tags_Having
+  ): [Tags!]! @fdc_generated(from: "Tags.post", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Posts", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `Posts` table.
+  """
+  _count: Int! @fdc_generated(from: "Posts.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Posts` table where the `content` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  content_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Posts.content", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Posts` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Posts.createdAt", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Posts` table where the `postId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  postId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Posts.postId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Posts` table where the `title` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  title_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Posts.title", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Posts` table where the `userId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Posts.userId", purpose: QUERY_COUNT)
+  """
+  Sum the `postId` field in the `Posts` table.
+  """
+  postId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "Posts.postId", purpose: QUERY_SUM)
+  """
+  Sum the `userId` field in the `Posts` table.
+  """
+  userId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "Posts.userId", purpose: QUERY_SUM)
+  """
+  Average the `postId` field in the `Posts` table.
+  """
+  postId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Posts.postId", purpose: QUERY_AVG)
+  """
+  Average the `userId` field in the `Posts` table.
+  """
+  userId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Posts.userId", purpose: QUERY_AVG)
+  """
+  Minimum of the `createdAt` field in the `Posts` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Posts.createdAt", purpose: QUERY_MIN)
+  """
+  Minimum of the `postId` field in the `Posts` table.
+  """
+  postId_min: Int64 @fdc_generated(from: "Posts.postId", purpose: QUERY_MIN)
+  """
+  Minimum of the `userId` field in the `Posts` table.
+  """
+  userId_min: Int64 @fdc_generated(from: "Posts.userId", purpose: QUERY_MIN)
+  """
+  Maximum of the `createdAt` field in the `Posts` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Posts.createdAt", purpose: QUERY_MAX)
+  """
+  Maximum of the `postId` field in the `Posts` table.
+  """
+  postId_max: Int64 @fdc_generated(from: "Posts.postId", purpose: QUERY_MAX)
+  """
+  Maximum of the `userId` field in the `Posts` table.
+  """
+  userId_max: Int64 @fdc_generated(from: "Posts.userId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "Posts.postId", purpose: ENTITY_ID)
+}
+extend type Tags {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Tags", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `Tags` table.
+  """
+  _count: Int! @fdc_generated(from: "Tags.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Tags` table where the `postId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  postId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Tags.postId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Tags` table where the `tagId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  tagId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Tags.tagId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `Tags` table where the `tagLabel` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  tagLabel_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Tags.tagLabel", purpose: QUERY_COUNT)
+  """
+  Sum the `postId` field in the `Tags` table.
+  """
+  postId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "Tags.postId", purpose: QUERY_SUM)
+  """
+  Sum the `tagId` field in the `Tags` table.
+  """
+  tagId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "Tags.tagId", purpose: QUERY_SUM)
+  """
+  Average the `postId` field in the `Tags` table.
+  """
+  postId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Tags.postId", purpose: QUERY_AVG)
+  """
+  Average the `tagId` field in the `Tags` table.
+  """
+  tagId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Tags.tagId", purpose: QUERY_AVG)
+  """
+  Minimum of the `postId` field in the `Tags` table.
+  """
+  postId_min: Int64 @fdc_generated(from: "Tags.postId", purpose: QUERY_MIN)
+  """
+  Minimum of the `tagId` field in the `Tags` table.
+  """
+  tagId_min: Int64 @fdc_generated(from: "Tags.tagId", purpose: QUERY_MIN)
+  """
+  Maximum of the `postId` field in the `Tags` table.
+  """
+  postId_max: Int64 @fdc_generated(from: "Tags.postId", purpose: QUERY_MAX)
+  """
+  Maximum of the `tagId` field in the `Tags` table.
+  """
+  tagId_max: Int64 @fdc_generated(from: "Tags.tagId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "Tags.tagId", purpose: ENTITY_ID)
+}
+extend type User {
+  """
+  List `FoodItem` objects in a one-to-many relationship (where `FoodItem`.`user` is this object).
+  """
+  foodItems_on_user(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: FoodItem_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [FoodItem_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: FoodItem_Having
+  ): [FoodItem!]! @fdc_generated(from: "FoodItem.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `Locations` objects in a one-to-many relationship (where `Locations`.`user` is this object).
+  """
+  locationss_on_user(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Locations_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Locations_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Locations_Having
+  ): [Locations!]! @fdc_generated(from: "Locations.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `Posts` objects in a one-to-many relationship (where `Posts`.`user` is this object).
+  """
+  postss_on_user(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Posts_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Posts_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Posts_Having
+  ): [Posts!]! @fdc_generated(from: "Posts.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `UserConversation` objects in a one-to-many relationship (where `UserConversation`.`user` is this object).
+  """
+  userConversations_on_user(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserConversation_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserConversation_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserConversation_Having
+  ): [UserConversation!]! @fdc_generated(from: "UserConversation.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `UserDistributionEvent` objects in a one-to-many relationship (where `UserDistributionEvent`.`user` is this object).
+  """
+  userDistributionEvents_on_user(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserDistributionEvent_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserDistributionEvent_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserDistributionEvent_Having
+  ): [UserDistributionEvent!]! @fdc_generated(from: "UserDistributionEvent.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `UserOrganization` objects in a one-to-many relationship (where `UserOrganization`.`user` is this object).
+  """
+  userOrganizations_on_user(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserOrganization_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserOrganization_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserOrganization_Having
+  ): [UserOrganization!]! @fdc_generated(from: "UserOrganization.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `UserPreferences` objects in a one-to-one relationship (where `UserPreferences`.`user` is this object).
+  """
+  userPreferences_on_user: UserPreferences @fdc_generated(from: "UserPreferences.user", purpose: QUERY_SINGLE_ONE_TO_ONE)
+  """
+  List `Conversations` objects using `UserConversation` as the join table (a `UserConversation` object exists where its `user` is this and its `conversation` is that).
+  """
+  conversationss_via_UserConversation(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserConversation_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserConversation_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserConversation_Having
+  ): [Conversations!]! @fdc_generated(from: "UserConversation", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  List `DistributionEvent` objects using `UserDistributionEvent` as the join table (a `UserDistributionEvent` object exists where its `user` is this and its `event` is that).
+  """
+  distributionEvents_via_UserDistributionEvent(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserDistributionEvent_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserDistributionEvent_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserDistributionEvent_Having
+  ): [DistributionEvent!]! @fdc_generated(from: "UserDistributionEvent", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  List `Organization` objects using `UserOrganization` as the join table (a `UserOrganization` object exists where its `user` is this and its `organization` is that).
+  """
+  organizations_via_UserOrganization(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserOrganization_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserOrganization_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserOrganization_Having
+  ): [Organization!]! @fdc_generated(from: "UserOrganization", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "User", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `User` table.
+  """
+  _count: Int! @fdc_generated(from: "User.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `User` table where the `city` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  city_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.city", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `User` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.createdAt", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `User` table where the `email` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  email_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.email", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `User` table where the `firstName` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  firstName_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.firstName", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `User` table where the `isActive` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  isActive_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.isActive", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `User` table where the `lastName` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  lastName_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.lastName", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `User` table where the `phoneNumber` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  phoneNumber_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.phoneNumber", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `User` table where the `province` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  province_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.province", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `User` table where the `street` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  street_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.street", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `User` table where the `userId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.userId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `User` table where the `userRole` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userRole_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.userRole", purpose: QUERY_COUNT)
+  """
+  Sum the `userId` field in the `User` table.
+  """
+  userId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "User.userId", purpose: QUERY_SUM)
+  """
+  Average the `userId` field in the `User` table.
+  """
+  userId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "User.userId", purpose: QUERY_AVG)
+  """
+  Minimum of the `createdAt` field in the `User` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "User.createdAt", purpose: QUERY_MIN)
+  """
+  Minimum of the `userId` field in the `User` table.
+  """
+  userId_min: Int64 @fdc_generated(from: "User.userId", purpose: QUERY_MIN)
+  """
+  Maximum of the `createdAt` field in the `User` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "User.createdAt", purpose: QUERY_MAX)
+  """
+  Maximum of the `userId` field in the `User` table.
+  """
+  userId_max: Int64 @fdc_generated(from: "User.userId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "User.userId", purpose: ENTITY_ID)
+}
+extend type UserConversation {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "UserConversation", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `UserConversation` table.
+  """
+  _count: Int! @fdc_generated(from: "UserConversation.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserConversation` table where the `conversationId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  conversationId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserConversation.conversationId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserConversation` table where the `userId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserConversation.userId", purpose: QUERY_COUNT)
+  """
+  Sum the `conversationId` field in the `UserConversation` table.
+  """
+  conversationId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "UserConversation.conversationId", purpose: QUERY_SUM)
+  """
+  Sum the `userId` field in the `UserConversation` table.
+  """
+  userId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "UserConversation.userId", purpose: QUERY_SUM)
+  """
+  Average the `conversationId` field in the `UserConversation` table.
+  """
+  conversationId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "UserConversation.conversationId", purpose: QUERY_AVG)
+  """
+  Average the `userId` field in the `UserConversation` table.
+  """
+  userId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "UserConversation.userId", purpose: QUERY_AVG)
+  """
+  Minimum of the `conversationId` field in the `UserConversation` table.
+  """
+  conversationId_min: Int64 @fdc_generated(from: "UserConversation.conversationId", purpose: QUERY_MIN)
+  """
+  Minimum of the `userId` field in the `UserConversation` table.
+  """
+  userId_min: Int64 @fdc_generated(from: "UserConversation.userId", purpose: QUERY_MIN)
+  """
+  Maximum of the `conversationId` field in the `UserConversation` table.
+  """
+  conversationId_max: Int64 @fdc_generated(from: "UserConversation.conversationId", purpose: QUERY_MAX)
+  """
+  Maximum of the `userId` field in the `UserConversation` table.
+  """
+  userId_max: Int64 @fdc_generated(from: "UserConversation.userId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "UserConversation.userId,conversationId", purpose: ENTITY_ID)
+}
+extend type UserDistributionEvent {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "UserDistributionEvent", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `UserDistributionEvent` table.
+  """
+  _count: Int! @fdc_generated(from: "UserDistributionEvent.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserDistributionEvent` table where the `eventId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  eventId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserDistributionEvent.eventId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserDistributionEvent` table where the `role` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  role_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserDistributionEvent.role", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserDistributionEvent` table where the `status` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  status_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserDistributionEvent.status", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserDistributionEvent` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserDistributionEvent.updatedAt", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserDistributionEvent` table where the `userId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserDistributionEvent.userId", purpose: QUERY_COUNT)
+  """
+  Sum the `eventId` field in the `UserDistributionEvent` table.
+  """
+  eventId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "UserDistributionEvent.eventId", purpose: QUERY_SUM)
+  """
+  Sum the `userId` field in the `UserDistributionEvent` table.
+  """
+  userId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "UserDistributionEvent.userId", purpose: QUERY_SUM)
+  """
+  Average the `eventId` field in the `UserDistributionEvent` table.
+  """
+  eventId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "UserDistributionEvent.eventId", purpose: QUERY_AVG)
+  """
+  Average the `userId` field in the `UserDistributionEvent` table.
+  """
+  userId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "UserDistributionEvent.userId", purpose: QUERY_AVG)
+  """
+  Minimum of the `eventId` field in the `UserDistributionEvent` table.
+  """
+  eventId_min: Int64 @fdc_generated(from: "UserDistributionEvent.eventId", purpose: QUERY_MIN)
+  """
+  Minimum of the `updatedAt` field in the `UserDistributionEvent` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "UserDistributionEvent.updatedAt", purpose: QUERY_MIN)
+  """
+  Minimum of the `userId` field in the `UserDistributionEvent` table.
+  """
+  userId_min: Int64 @fdc_generated(from: "UserDistributionEvent.userId", purpose: QUERY_MIN)
+  """
+  Maximum of the `eventId` field in the `UserDistributionEvent` table.
+  """
+  eventId_max: Int64 @fdc_generated(from: "UserDistributionEvent.eventId", purpose: QUERY_MAX)
+  """
+  Maximum of the `updatedAt` field in the `UserDistributionEvent` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "UserDistributionEvent.updatedAt", purpose: QUERY_MAX)
+  """
+  Maximum of the `userId` field in the `UserDistributionEvent` table.
+  """
+  userId_max: Int64 @fdc_generated(from: "UserDistributionEvent.userId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "UserDistributionEvent.userId,eventId", purpose: ENTITY_ID)
+}
+extend type UserOrganization {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "UserOrganization", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `UserOrganization` table.
+  """
+  _count: Int! @fdc_generated(from: "UserOrganization.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserOrganization` table where the `memberRole` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  memberRole_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserOrganization.memberRole", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserOrganization` table where the `orgId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  orgId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserOrganization.orgId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserOrganization` table where the `userId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserOrganization.userId", purpose: QUERY_COUNT)
+  """
+  Sum the `orgId` field in the `UserOrganization` table.
+  """
+  orgId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "UserOrganization.orgId", purpose: QUERY_SUM)
+  """
+  Sum the `userId` field in the `UserOrganization` table.
+  """
+  userId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "UserOrganization.userId", purpose: QUERY_SUM)
+  """
+  Average the `orgId` field in the `UserOrganization` table.
+  """
+  orgId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "UserOrganization.orgId", purpose: QUERY_AVG)
+  """
+  Average the `userId` field in the `UserOrganization` table.
+  """
+  userId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "UserOrganization.userId", purpose: QUERY_AVG)
+  """
+  Minimum of the `orgId` field in the `UserOrganization` table.
+  """
+  orgId_min: Int64 @fdc_generated(from: "UserOrganization.orgId", purpose: QUERY_MIN)
+  """
+  Minimum of the `userId` field in the `UserOrganization` table.
+  """
+  userId_min: Int64 @fdc_generated(from: "UserOrganization.userId", purpose: QUERY_MIN)
+  """
+  Maximum of the `orgId` field in the `UserOrganization` table.
+  """
+  orgId_max: Int64 @fdc_generated(from: "UserOrganization.orgId", purpose: QUERY_MAX)
+  """
+  Maximum of the `userId` field in the `UserOrganization` table.
+  """
+  userId_max: Int64 @fdc_generated(from: "UserOrganization.userId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "UserOrganization.userId,orgId", purpose: ENTITY_ID)
+}
+extend type UserPreferenceAllergen {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "UserPreferenceAllergen", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `UserPreferenceAllergen` table.
+  """
+  _count: Int! @fdc_generated(from: "UserPreferenceAllergen.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserPreferenceAllergen` table where the `allergenId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  allergenId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserPreferenceAllergen.allergenId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserPreferenceAllergen` table where the `profileId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  profileId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserPreferenceAllergen.profileId", purpose: QUERY_COUNT)
+  """
+  Sum the `allergenId` field in the `UserPreferenceAllergen` table.
+  """
+  allergenId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "UserPreferenceAllergen.allergenId", purpose: QUERY_SUM)
+  """
+  Sum the `profileId` field in the `UserPreferenceAllergen` table.
+  """
+  profileId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "UserPreferenceAllergen.profileId", purpose: QUERY_SUM)
+  """
+  Average the `allergenId` field in the `UserPreferenceAllergen` table.
+  """
+  allergenId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "UserPreferenceAllergen.allergenId", purpose: QUERY_AVG)
+  """
+  Average the `profileId` field in the `UserPreferenceAllergen` table.
+  """
+  profileId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "UserPreferenceAllergen.profileId", purpose: QUERY_AVG)
+  """
+  Minimum of the `allergenId` field in the `UserPreferenceAllergen` table.
+  """
+  allergenId_min: Int64 @fdc_generated(from: "UserPreferenceAllergen.allergenId", purpose: QUERY_MIN)
+  """
+  Minimum of the `profileId` field in the `UserPreferenceAllergen` table.
+  """
+  profileId_min: Int64 @fdc_generated(from: "UserPreferenceAllergen.profileId", purpose: QUERY_MIN)
+  """
+  Maximum of the `allergenId` field in the `UserPreferenceAllergen` table.
+  """
+  allergenId_max: Int64 @fdc_generated(from: "UserPreferenceAllergen.allergenId", purpose: QUERY_MAX)
+  """
+  Maximum of the `profileId` field in the `UserPreferenceAllergen` table.
+  """
+  profileId_max: Int64 @fdc_generated(from: "UserPreferenceAllergen.profileId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "UserPreferenceAllergen.profileId,allergenId", purpose: ENTITY_ID)
+}
+extend type UserPreferenceFoodCategory {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "UserPreferenceFoodCategory", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `UserPreferenceFoodCategory` table.
+  """
+  _count: Int! @fdc_generated(from: "UserPreferenceFoodCategory.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserPreferenceFoodCategory` table where the `categoryId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  categoryId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserPreferenceFoodCategory.categoryId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserPreferenceFoodCategory` table where the `profileId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  profileId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserPreferenceFoodCategory.profileId", purpose: QUERY_COUNT)
+  """
+  Sum the `categoryId` field in the `UserPreferenceFoodCategory` table.
+  """
+  categoryId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "UserPreferenceFoodCategory.categoryId", purpose: QUERY_SUM)
+  """
+  Sum the `profileId` field in the `UserPreferenceFoodCategory` table.
+  """
+  profileId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "UserPreferenceFoodCategory.profileId", purpose: QUERY_SUM)
+  """
+  Average the `categoryId` field in the `UserPreferenceFoodCategory` table.
+  """
+  categoryId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "UserPreferenceFoodCategory.categoryId", purpose: QUERY_AVG)
+  """
+  Average the `profileId` field in the `UserPreferenceFoodCategory` table.
+  """
+  profileId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "UserPreferenceFoodCategory.profileId", purpose: QUERY_AVG)
+  """
+  Minimum of the `categoryId` field in the `UserPreferenceFoodCategory` table.
+  """
+  categoryId_min: Int64 @fdc_generated(from: "UserPreferenceFoodCategory.categoryId", purpose: QUERY_MIN)
+  """
+  Minimum of the `profileId` field in the `UserPreferenceFoodCategory` table.
+  """
+  profileId_min: Int64 @fdc_generated(from: "UserPreferenceFoodCategory.profileId", purpose: QUERY_MIN)
+  """
+  Maximum of the `categoryId` field in the `UserPreferenceFoodCategory` table.
+  """
+  categoryId_max: Int64 @fdc_generated(from: "UserPreferenceFoodCategory.categoryId", purpose: QUERY_MAX)
+  """
+  Maximum of the `profileId` field in the `UserPreferenceFoodCategory` table.
+  """
+  profileId_max: Int64 @fdc_generated(from: "UserPreferenceFoodCategory.profileId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "UserPreferenceFoodCategory.profileId,categoryId", purpose: ENTITY_ID)
+}
+extend type UserPreferences {
+  """
+  List `UserPreferenceAllergen` objects in a one-to-many relationship (where `UserPreferenceAllergen`.`profile` is this object).
+  """
+  userPreferenceAllergens_on_profile(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserPreferenceAllergen_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserPreferenceAllergen_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserPreferenceAllergen_Having
+  ): [UserPreferenceAllergen!]! @fdc_generated(from: "UserPreferenceAllergen.profile", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `UserPreferenceFoodCategory` objects in a one-to-many relationship (where `UserPreferenceFoodCategory`.`profile` is this object).
+  """
+  userPreferenceFoodCategories_on_profile(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserPreferenceFoodCategory_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserPreferenceFoodCategory_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserPreferenceFoodCategory_Having
+  ): [UserPreferenceFoodCategory!]! @fdc_generated(from: "UserPreferenceFoodCategory.profile", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  List `Allergen` objects using `UserPreferenceAllergen` as the join table (a `UserPreferenceAllergen` object exists where its `profile` is this and its `allergen` is that).
+  """
+  allergens_via_UserPreferenceAllergen(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserPreferenceAllergen_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserPreferenceAllergen_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserPreferenceAllergen_Having
+  ): [Allergen!]! @fdc_generated(from: "UserPreferenceAllergen", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  List `FoodCategory` objects using `UserPreferenceFoodCategory` as the join table (a `UserPreferenceFoodCategory` object exists where its `profile` is this and its `category` is that).
+  """
+  foodCategories_via_UserPreferenceFoodCategory(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserPreferenceFoodCategory_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserPreferenceFoodCategory_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserPreferenceFoodCategory_Having
+  ): [FoodCategory!]! @fdc_generated(from: "UserPreferenceFoodCategory", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "UserPreferences", purpose: METADATA_FIELD)
+  """
+  Count the number of rows in the `UserPreferences` table.
+  """
+  _count: Int! @fdc_generated(from: "UserPreferences.", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserPreferences` table where the `alertSetting` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  alertSetting_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserPreferences.alertSetting", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserPreferences` table where the `foodPreference` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  foodPreference_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserPreferences.foodPreference", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserPreferences` table where the `locationId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  locationId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserPreferences.locationId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserPreferences` table where the `notificationPreference` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  notificationPreference_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserPreferences.notificationPreference", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserPreferences` table where the `profileId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  profileId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserPreferences.profileId", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserPreferences` table where the `radiusSearch` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  radiusSearch_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserPreferences.radiusSearch", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserPreferences` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserPreferences.updatedAt", purpose: QUERY_COUNT)
+  """
+  Count the number of rows in the `UserPreferences` table where the `userId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserPreferences.userId", purpose: QUERY_COUNT)
+  """
+  Sum the `locationId` field in the `UserPreferences` table.
+  """
+  locationId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "UserPreferences.locationId", purpose: QUERY_SUM)
+  """
+  Sum the `profileId` field in the `UserPreferences` table.
+  """
+  profileId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "UserPreferences.profileId", purpose: QUERY_SUM)
+  """
+  Sum the `radiusSearch` field in the `UserPreferences` table.
+  """
+  radiusSearch_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int @fdc_generated(from: "UserPreferences.radiusSearch", purpose: QUERY_SUM)
+  """
+  Sum the `userId` field in the `UserPreferences` table.
+  """
+  userId_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int64 @fdc_generated(from: "UserPreferences.userId", purpose: QUERY_SUM)
+  """
+  Average the `locationId` field in the `UserPreferences` table.
+  """
+  locationId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "UserPreferences.locationId", purpose: QUERY_AVG)
+  """
+  Average the `profileId` field in the `UserPreferences` table.
+  """
+  profileId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "UserPreferences.profileId", purpose: QUERY_AVG)
+  """
+  Average the `radiusSearch` field in the `UserPreferences` table.
+  """
+  radiusSearch_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "UserPreferences.radiusSearch", purpose: QUERY_AVG)
+  """
+  Average the `userId` field in the `UserPreferences` table.
+  """
+  userId_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "UserPreferences.userId", purpose: QUERY_AVG)
+  """
+  Minimum of the `locationId` field in the `UserPreferences` table.
+  """
+  locationId_min: Int64 @fdc_generated(from: "UserPreferences.locationId", purpose: QUERY_MIN)
+  """
+  Minimum of the `profileId` field in the `UserPreferences` table.
+  """
+  profileId_min: Int64 @fdc_generated(from: "UserPreferences.profileId", purpose: QUERY_MIN)
+  """
+  Minimum of the `radiusSearch` field in the `UserPreferences` table.
+  """
+  radiusSearch_min: Int @fdc_generated(from: "UserPreferences.radiusSearch", purpose: QUERY_MIN)
+  """
+  Minimum of the `updatedAt` field in the `UserPreferences` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "UserPreferences.updatedAt", purpose: QUERY_MIN)
+  """
+  Minimum of the `userId` field in the `UserPreferences` table.
+  """
+  userId_min: Int64 @fdc_generated(from: "UserPreferences.userId", purpose: QUERY_MIN)
+  """
+  Maximum of the `locationId` field in the `UserPreferences` table.
+  """
+  locationId_max: Int64 @fdc_generated(from: "UserPreferences.locationId", purpose: QUERY_MAX)
+  """
+  Maximum of the `profileId` field in the `UserPreferences` table.
+  """
+  profileId_max: Int64 @fdc_generated(from: "UserPreferences.profileId", purpose: QUERY_MAX)
+  """
+  Maximum of the `radiusSearch` field in the `UserPreferences` table.
+  """
+  radiusSearch_max: Int @fdc_generated(from: "UserPreferences.radiusSearch", purpose: QUERY_MAX)
+  """
+  Maximum of the `updatedAt` field in the `UserPreferences` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "UserPreferences.updatedAt", purpose: QUERY_MAX)
+  """
+  Maximum of the `userId` field in the `UserPreferences` table.
+  """
+  userId_max: Int64 @fdc_generated(from: "UserPreferences.userId", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "UserPreferences.profileId", purpose: ENTITY_ID)
+}

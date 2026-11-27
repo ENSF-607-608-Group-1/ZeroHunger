@@ -1,0 +1,6 @@
+connectorId: zerohunger
+
+generate:
+  dartSdk:
+    outputDir: ../../lib/generated
+    package: zerohunger_data_connect

@@ -1,0 +1,2450 @@
+extend type Mutation {
+  """
+  Insert a single `Allergen` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  allergen_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Allergen_Data!
+  ): Allergen_KeyOutput! @fdc_generated(from: "Allergen", purpose: INSERT_SINGLE)
+  """
+  Insert a single `Conversations` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  conversations_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Conversations_Data!
+  ): Conversations_KeyOutput! @fdc_generated(from: "Conversations", purpose: INSERT_SINGLE)
+  """
+  Insert a single `DistributionEvent` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  distributionEvent_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: DistributionEvent_Data!
+  ): DistributionEvent_KeyOutput! @fdc_generated(from: "DistributionEvent", purpose: INSERT_SINGLE)
+  """
+  Insert a single `Donation` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  donation_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Donation_Data!
+  ): Donation_KeyOutput! @fdc_generated(from: "Donation", purpose: INSERT_SINGLE)
+  """
+  Insert a single `DonationStatus` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  donationStatus_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: DonationStatus_Data!
+  ): DonationStatus_KeyOutput! @fdc_generated(from: "DonationStatus", purpose: INSERT_SINGLE)
+  """
+  Insert a single `FoodCategory` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  foodCategory_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: FoodCategory_Data!
+  ): FoodCategory_KeyOutput! @fdc_generated(from: "FoodCategory", purpose: INSERT_SINGLE)
+  """
+  Insert a single `FoodItem` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  foodItem_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: FoodItem_Data!
+  ): FoodItem_KeyOutput! @fdc_generated(from: "FoodItem", purpose: INSERT_SINGLE)
+  """
+  Insert a single `FoodItemAllergen` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  foodItemAllergen_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: FoodItemAllergen_Data!
+  ): FoodItemAllergen_KeyOutput! @fdc_generated(from: "FoodItemAllergen", purpose: INSERT_SINGLE)
+  """
+  Insert a single `FoodItemFoodCategory` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  foodItemFoodCategory_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: FoodItemFoodCategory_Data!
+  ): FoodItemFoodCategory_KeyOutput! @fdc_generated(from: "FoodItemFoodCategory", purpose: INSERT_SINGLE)
+  """
+  Insert a single `Locations` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  locations_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Locations_Data!
+  ): Locations_KeyOutput! @fdc_generated(from: "Locations", purpose: INSERT_SINGLE)
+  """
+  Insert a single `Messages` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  messages_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Messages_Data!
+  ): Messages_KeyOutput! @fdc_generated(from: "Messages", purpose: INSERT_SINGLE)
+  """
+  Insert a single `Organization` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  organization_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Organization_Data!
+  ): Organization_KeyOutput! @fdc_generated(from: "Organization", purpose: INSERT_SINGLE)
+  """
+  Insert a single `OrganizationContactEmail` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  organizationContactEmail_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: OrganizationContactEmail_Data!
+  ): OrganizationContactEmail_KeyOutput! @fdc_generated(from: "OrganizationContactEmail", purpose: INSERT_SINGLE)
+  """
+  Insert a single `OrganizationContactPhoneNumber` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  organizationContactPhoneNumber_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: OrganizationContactPhoneNumber_Data!
+  ): OrganizationContactPhoneNumber_KeyOutput! @fdc_generated(from: "OrganizationContactPhoneNumber", purpose: INSERT_SINGLE)
+  """
+  Insert a single `PostalCode` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  postalCode_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: PostalCode_Data!
+  ): PostalCode_KeyOutput! @fdc_generated(from: "PostalCode", purpose: INSERT_SINGLE)
+  """
+  Insert a single `Posts` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  posts_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Posts_Data!
+  ): Posts_KeyOutput! @fdc_generated(from: "Posts", purpose: INSERT_SINGLE)
+  """
+  Insert a single `Tags` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  tags_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Tags_Data!
+  ): Tags_KeyOutput! @fdc_generated(from: "Tags", purpose: INSERT_SINGLE)
+  """
+  Insert a single `User` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  user_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: User_Data!
+  ): User_KeyOutput! @fdc_generated(from: "User", purpose: INSERT_SINGLE)
+  """
+  Insert a single `UserConversation` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userConversation_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: UserConversation_Data!
+  ): UserConversation_KeyOutput! @fdc_generated(from: "UserConversation", purpose: INSERT_SINGLE)
+  """
+  Insert a single `UserDistributionEvent` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userDistributionEvent_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: UserDistributionEvent_Data!
+  ): UserDistributionEvent_KeyOutput! @fdc_generated(from: "UserDistributionEvent", purpose: INSERT_SINGLE)
+  """
+  Insert a single `UserOrganization` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userOrganization_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: UserOrganization_Data!
+  ): UserOrganization_KeyOutput! @fdc_generated(from: "UserOrganization", purpose: INSERT_SINGLE)
+  """
+  Insert a single `UserPreferenceAllergen` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userPreferenceAllergen_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: UserPreferenceAllergen_Data!
+  ): UserPreferenceAllergen_KeyOutput! @fdc_generated(from: "UserPreferenceAllergen", purpose: INSERT_SINGLE)
+  """
+  Insert a single `UserPreferenceFoodCategory` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userPreferenceFoodCategory_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: UserPreferenceFoodCategory_Data!
+  ): UserPreferenceFoodCategory_KeyOutput! @fdc_generated(from: "UserPreferenceFoodCategory", purpose: INSERT_SINGLE)
+  """
+  Insert a single `UserPreferences` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userPreferences_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: UserPreferences_Data!
+  ): UserPreferences_KeyOutput! @fdc_generated(from: "UserPreferences", purpose: INSERT_SINGLE)
+  """
+  Insert `Allergen` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  allergen_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Allergen_Data!]!
+  ): [Allergen_KeyOutput!]! @fdc_generated(from: "Allergen", purpose: INSERT_MULTIPLE)
+  """
+  Insert `Conversations` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  conversations_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Conversations_Data!]!
+  ): [Conversations_KeyOutput!]! @fdc_generated(from: "Conversations", purpose: INSERT_MULTIPLE)
+  """
+  Insert `DistributionEvent` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  distributionEvent_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [DistributionEvent_Data!]!
+  ): [DistributionEvent_KeyOutput!]! @fdc_generated(from: "DistributionEvent", purpose: INSERT_MULTIPLE)
+  """
+  Insert `Donation` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  donation_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Donation_Data!]!
+  ): [Donation_KeyOutput!]! @fdc_generated(from: "Donation", purpose: INSERT_MULTIPLE)
+  """
+  Insert `DonationStatus` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  donationStatus_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [DonationStatus_Data!]!
+  ): [DonationStatus_KeyOutput!]! @fdc_generated(from: "DonationStatus", purpose: INSERT_MULTIPLE)
+  """
+  Insert `FoodCategory` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  foodCategory_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [FoodCategory_Data!]!
+  ): [FoodCategory_KeyOutput!]! @fdc_generated(from: "FoodCategory", purpose: INSERT_MULTIPLE)
+  """
+  Insert `FoodItem` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  foodItem_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [FoodItem_Data!]!
+  ): [FoodItem_KeyOutput!]! @fdc_generated(from: "FoodItem", purpose: INSERT_MULTIPLE)
+  """
+  Insert `FoodItemAllergen` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  foodItemAllergen_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [FoodItemAllergen_Data!]!
+  ): [FoodItemAllergen_KeyOutput!]! @fdc_generated(from: "FoodItemAllergen", purpose: INSERT_MULTIPLE)
+  """
+  Insert `FoodItemFoodCategory` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  foodItemFoodCategory_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [FoodItemFoodCategory_Data!]!
+  ): [FoodItemFoodCategory_KeyOutput!]! @fdc_generated(from: "FoodItemFoodCategory", purpose: INSERT_MULTIPLE)
+  """
+  Insert `Locations` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  locations_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Locations_Data!]!
+  ): [Locations_KeyOutput!]! @fdc_generated(from: "Locations", purpose: INSERT_MULTIPLE)
+  """
+  Insert `Messages` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  messages_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Messages_Data!]!
+  ): [Messages_KeyOutput!]! @fdc_generated(from: "Messages", purpose: INSERT_MULTIPLE)
+  """
+  Insert `Organization` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  organization_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Organization_Data!]!
+  ): [Organization_KeyOutput!]! @fdc_generated(from: "Organization", purpose: INSERT_MULTIPLE)
+  """
+  Insert `OrganizationContactEmail` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  organizationContactEmail_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [OrganizationContactEmail_Data!]!
+  ): [OrganizationContactEmail_KeyOutput!]! @fdc_generated(from: "OrganizationContactEmail", purpose: INSERT_MULTIPLE)
+  """
+  Insert `OrganizationContactPhoneNumber` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  organizationContactPhoneNumber_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [OrganizationContactPhoneNumber_Data!]!
+  ): [OrganizationContactPhoneNumber_KeyOutput!]! @fdc_generated(from: "OrganizationContactPhoneNumber", purpose: INSERT_MULTIPLE)
+  """
+  Insert `PostalCode` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  postalCode_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [PostalCode_Data!]!
+  ): [PostalCode_KeyOutput!]! @fdc_generated(from: "PostalCode", purpose: INSERT_MULTIPLE)
+  """
+  Insert `Posts` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  posts_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Posts_Data!]!
+  ): [Posts_KeyOutput!]! @fdc_generated(from: "Posts", purpose: INSERT_MULTIPLE)
+  """
+  Insert `Tags` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  tags_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Tags_Data!]!
+  ): [Tags_KeyOutput!]! @fdc_generated(from: "Tags", purpose: INSERT_MULTIPLE)
+  """
+  Insert `User` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  user_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [User_Data!]!
+  ): [User_KeyOutput!]! @fdc_generated(from: "User", purpose: INSERT_MULTIPLE)
+  """
+  Insert `UserConversation` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userConversation_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [UserConversation_Data!]!
+  ): [UserConversation_KeyOutput!]! @fdc_generated(from: "UserConversation", purpose: INSERT_MULTIPLE)
+  """
+  Insert `UserDistributionEvent` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userDistributionEvent_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [UserDistributionEvent_Data!]!
+  ): [UserDistributionEvent_KeyOutput!]! @fdc_generated(from: "UserDistributionEvent", purpose: INSERT_MULTIPLE)
+  """
+  Insert `UserOrganization` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userOrganization_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [UserOrganization_Data!]!
+  ): [UserOrganization_KeyOutput!]! @fdc_generated(from: "UserOrganization", purpose: INSERT_MULTIPLE)
+  """
+  Insert `UserPreferenceAllergen` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userPreferenceAllergen_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [UserPreferenceAllergen_Data!]!
+  ): [UserPreferenceAllergen_KeyOutput!]! @fdc_generated(from: "UserPreferenceAllergen", purpose: INSERT_MULTIPLE)
+  """
+  Insert `UserPreferenceFoodCategory` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userPreferenceFoodCategory_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [UserPreferenceFoodCategory_Data!]!
+  ): [UserPreferenceFoodCategory_KeyOutput!]! @fdc_generated(from: "UserPreferenceFoodCategory", purpose: INSERT_MULTIPLE)
+  """
+  Insert `UserPreferences` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userPreferences_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [UserPreferences_Data!]!
+  ): [UserPreferences_KeyOutput!]! @fdc_generated(from: "UserPreferences", purpose: INSERT_MULTIPLE)
+  """
+  Insert or update a single `Allergen` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Allergen`.
+  """
+  allergen_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Allergen_Data!
+  ): Allergen_KeyOutput! @fdc_generated(from: "Allergen", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `Conversations` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Conversations`.
+  """
+  conversations_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Conversations_Data!
+  ): Conversations_KeyOutput! @fdc_generated(from: "Conversations", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `DistributionEvent` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `DistributionEvent`.
+  """
+  distributionEvent_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: DistributionEvent_Data!
+  ): DistributionEvent_KeyOutput! @fdc_generated(from: "DistributionEvent", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `Donation` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Donation`.
+  """
+  donation_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Donation_Data!
+  ): Donation_KeyOutput! @fdc_generated(from: "Donation", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `DonationStatus` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `DonationStatus`.
+  """
+  donationStatus_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: DonationStatus_Data!
+  ): DonationStatus_KeyOutput! @fdc_generated(from: "DonationStatus", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `FoodCategory` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `FoodCategory`.
+  """
+  foodCategory_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: FoodCategory_Data!
+  ): FoodCategory_KeyOutput! @fdc_generated(from: "FoodCategory", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `FoodItem` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `FoodItem`.
+  """
+  foodItem_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: FoodItem_Data!
+  ): FoodItem_KeyOutput! @fdc_generated(from: "FoodItem", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `FoodItemAllergen` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `FoodItemAllergen`.
+  """
+  foodItemAllergen_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: FoodItemAllergen_Data!
+  ): FoodItemAllergen_KeyOutput! @fdc_generated(from: "FoodItemAllergen", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `FoodItemFoodCategory` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `FoodItemFoodCategory`.
+  """
+  foodItemFoodCategory_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: FoodItemFoodCategory_Data!
+  ): FoodItemFoodCategory_KeyOutput! @fdc_generated(from: "FoodItemFoodCategory", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `Locations` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Locations`.
+  """
+  locations_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Locations_Data!
+  ): Locations_KeyOutput! @fdc_generated(from: "Locations", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `Messages` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Messages`.
+  """
+  messages_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Messages_Data!
+  ): Messages_KeyOutput! @fdc_generated(from: "Messages", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `Organization` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Organization`.
+  """
+  organization_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Organization_Data!
+  ): Organization_KeyOutput! @fdc_generated(from: "Organization", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `OrganizationContactEmail` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `OrganizationContactEmail`.
+  """
+  organizationContactEmail_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: OrganizationContactEmail_Data!
+  ): OrganizationContactEmail_KeyOutput! @fdc_generated(from: "OrganizationContactEmail", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `OrganizationContactPhoneNumber` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `OrganizationContactPhoneNumber`.
+  """
+  organizationContactPhoneNumber_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: OrganizationContactPhoneNumber_Data!
+  ): OrganizationContactPhoneNumber_KeyOutput! @fdc_generated(from: "OrganizationContactPhoneNumber", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `PostalCode` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `PostalCode`.
+  """
+  postalCode_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: PostalCode_Data!
+  ): PostalCode_KeyOutput! @fdc_generated(from: "PostalCode", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `Posts` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Posts`.
+  """
+  posts_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Posts_Data!
+  ): Posts_KeyOutput! @fdc_generated(from: "Posts", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `Tags` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Tags`.
+  """
+  tags_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Tags_Data!
+  ): Tags_KeyOutput! @fdc_generated(from: "Tags", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `User` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `User`.
+  """
+  user_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: User_Data!
+  ): User_KeyOutput! @fdc_generated(from: "User", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `UserConversation` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserConversation`.
+  """
+  userConversation_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: UserConversation_Data!
+  ): UserConversation_KeyOutput! @fdc_generated(from: "UserConversation", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `UserDistributionEvent` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserDistributionEvent`.
+  """
+  userDistributionEvent_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: UserDistributionEvent_Data!
+  ): UserDistributionEvent_KeyOutput! @fdc_generated(from: "UserDistributionEvent", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `UserOrganization` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserOrganization`.
+  """
+  userOrganization_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: UserOrganization_Data!
+  ): UserOrganization_KeyOutput! @fdc_generated(from: "UserOrganization", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `UserPreferenceAllergen` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserPreferenceAllergen`.
+  """
+  userPreferenceAllergen_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: UserPreferenceAllergen_Data!
+  ): UserPreferenceAllergen_KeyOutput! @fdc_generated(from: "UserPreferenceAllergen", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `UserPreferenceFoodCategory` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserPreferenceFoodCategory`.
+  """
+  userPreferenceFoodCategory_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: UserPreferenceFoodCategory_Data!
+  ): UserPreferenceFoodCategory_KeyOutput! @fdc_generated(from: "UserPreferenceFoodCategory", purpose: UPSERT_SINGLE)
+  """
+  Insert or update a single `UserPreferences` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserPreferences`.
+  """
+  userPreferences_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: UserPreferences_Data!
+  ): UserPreferences_KeyOutput! @fdc_generated(from: "UserPreferences", purpose: UPSERT_SINGLE)
+  """
+  Insert or update `Allergen` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Allergen`.
+  """
+  allergen_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Allergen_Data!]!
+  ): [Allergen_KeyOutput!]! @fdc_generated(from: "Allergen", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `Conversations` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Conversations`.
+  """
+  conversations_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Conversations_Data!]!
+  ): [Conversations_KeyOutput!]! @fdc_generated(from: "Conversations", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `DistributionEvent` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `DistributionEvent`.
+  """
+  distributionEvent_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [DistributionEvent_Data!]!
+  ): [DistributionEvent_KeyOutput!]! @fdc_generated(from: "DistributionEvent", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `Donation` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Donation`.
+  """
+  donation_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Donation_Data!]!
+  ): [Donation_KeyOutput!]! @fdc_generated(from: "Donation", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `DonationStatus` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `DonationStatus`.
+  """
+  donationStatus_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [DonationStatus_Data!]!
+  ): [DonationStatus_KeyOutput!]! @fdc_generated(from: "DonationStatus", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `FoodCategory` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `FoodCategory`.
+  """
+  foodCategory_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [FoodCategory_Data!]!
+  ): [FoodCategory_KeyOutput!]! @fdc_generated(from: "FoodCategory", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `FoodItem` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `FoodItem`.
+  """
+  foodItem_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [FoodItem_Data!]!
+  ): [FoodItem_KeyOutput!]! @fdc_generated(from: "FoodItem", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `FoodItemAllergen` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `FoodItemAllergen`.
+  """
+  foodItemAllergen_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [FoodItemAllergen_Data!]!
+  ): [FoodItemAllergen_KeyOutput!]! @fdc_generated(from: "FoodItemAllergen", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `FoodItemFoodCategory` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `FoodItemFoodCategory`.
+  """
+  foodItemFoodCategory_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [FoodItemFoodCategory_Data!]!
+  ): [FoodItemFoodCategory_KeyOutput!]! @fdc_generated(from: "FoodItemFoodCategory", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `Locations` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Locations`.
+  """
+  locations_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Locations_Data!]!
+  ): [Locations_KeyOutput!]! @fdc_generated(from: "Locations", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `Messages` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Messages`.
+  """
+  messages_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Messages_Data!]!
+  ): [Messages_KeyOutput!]! @fdc_generated(from: "Messages", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `Organization` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Organization`.
+  """
+  organization_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Organization_Data!]!
+  ): [Organization_KeyOutput!]! @fdc_generated(from: "Organization", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `OrganizationContactEmail` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `OrganizationContactEmail`.
+  """
+  organizationContactEmail_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [OrganizationContactEmail_Data!]!
+  ): [OrganizationContactEmail_KeyOutput!]! @fdc_generated(from: "OrganizationContactEmail", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `OrganizationContactPhoneNumber` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `OrganizationContactPhoneNumber`.
+  """
+  organizationContactPhoneNumber_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [OrganizationContactPhoneNumber_Data!]!
+  ): [OrganizationContactPhoneNumber_KeyOutput!]! @fdc_generated(from: "OrganizationContactPhoneNumber", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `PostalCode` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `PostalCode`.
+  """
+  postalCode_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [PostalCode_Data!]!
+  ): [PostalCode_KeyOutput!]! @fdc_generated(from: "PostalCode", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `Posts` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Posts`.
+  """
+  posts_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Posts_Data!]!
+  ): [Posts_KeyOutput!]! @fdc_generated(from: "Posts", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `Tags` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Tags`.
+  """
+  tags_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Tags_Data!]!
+  ): [Tags_KeyOutput!]! @fdc_generated(from: "Tags", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `User` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `User`.
+  """
+  user_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [User_Data!]!
+  ): [User_KeyOutput!]! @fdc_generated(from: "User", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `UserConversation` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserConversation`.
+  """
+  userConversation_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [UserConversation_Data!]!
+  ): [UserConversation_KeyOutput!]! @fdc_generated(from: "UserConversation", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `UserDistributionEvent` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserDistributionEvent`.
+  """
+  userDistributionEvent_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [UserDistributionEvent_Data!]!
+  ): [UserDistributionEvent_KeyOutput!]! @fdc_generated(from: "UserDistributionEvent", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `UserOrganization` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserOrganization`.
+  """
+  userOrganization_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [UserOrganization_Data!]!
+  ): [UserOrganization_KeyOutput!]! @fdc_generated(from: "UserOrganization", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `UserPreferenceAllergen` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserPreferenceAllergen`.
+  """
+  userPreferenceAllergen_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [UserPreferenceAllergen_Data!]!
+  ): [UserPreferenceAllergen_KeyOutput!]! @fdc_generated(from: "UserPreferenceAllergen", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `UserPreferenceFoodCategory` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserPreferenceFoodCategory`.
+  """
+  userPreferenceFoodCategory_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [UserPreferenceFoodCategory_Data!]!
+  ): [UserPreferenceFoodCategory_KeyOutput!]! @fdc_generated(from: "UserPreferenceFoodCategory", purpose: UPSERT_MULTIPLE)
+  """
+  Insert or update `UserPreferences` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserPreferences`.
+  """
+  userPreferences_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [UserPreferences_Data!]!
+  ): [UserPreferences_KeyOutput!]! @fdc_generated(from: "UserPreferences", purpose: UPSERT_MULTIPLE)
+  """
+  Update a single `Allergen` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Allergen` or `null` if not found.
+  """
+  allergen_update(
+    """
+    The key used to identify the object.
+    """
+    key: Allergen_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Allergen_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Allergen_Data!
+  ): Allergen_KeyOutput @fdc_generated(from: "Allergen", purpose: UPDATE_SINGLE)
+  """
+  Update a single `Conversations` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Conversations` or `null` if not found.
+  """
+  conversations_update(
+    """
+    The key used to identify the object.
+    """
+    key: Conversations_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Conversations_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Conversations_Data!
+  ): Conversations_KeyOutput @fdc_generated(from: "Conversations", purpose: UPDATE_SINGLE)
+  """
+  Update a single `DistributionEvent` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `DistributionEvent` or `null` if not found.
+  """
+  distributionEvent_update(
+    """
+    The key used to identify the object.
+    """
+    key: DistributionEvent_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: DistributionEvent_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: DistributionEvent_Data!
+  ): DistributionEvent_KeyOutput @fdc_generated(from: "DistributionEvent", purpose: UPDATE_SINGLE)
+  """
+  Update a single `Donation` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Donation` or `null` if not found.
+  """
+  donation_update(
+    """
+    The key used to identify the object.
+    """
+    key: Donation_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Donation_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Donation_Data!
+  ): Donation_KeyOutput @fdc_generated(from: "Donation", purpose: UPDATE_SINGLE)
+  """
+  Update a single `DonationStatus` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `DonationStatus` or `null` if not found.
+  """
+  donationStatus_update(
+    """
+    The key used to identify the object.
+    """
+    key: DonationStatus_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: DonationStatus_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: DonationStatus_Data!
+  ): DonationStatus_KeyOutput @fdc_generated(from: "DonationStatus", purpose: UPDATE_SINGLE)
+  """
+  Update a single `FoodCategory` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `FoodCategory` or `null` if not found.
+  """
+  foodCategory_update(
+    """
+    The key used to identify the object.
+    """
+    key: FoodCategory_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: FoodCategory_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: FoodCategory_Data!
+  ): FoodCategory_KeyOutput @fdc_generated(from: "FoodCategory", purpose: UPDATE_SINGLE)
+  """
+  Update a single `FoodItem` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `FoodItem` or `null` if not found.
+  """
+  foodItem_update(
+    """
+    The key used to identify the object.
+    """
+    key: FoodItem_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: FoodItem_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: FoodItem_Data!
+  ): FoodItem_KeyOutput @fdc_generated(from: "FoodItem", purpose: UPDATE_SINGLE)
+  """
+  Update a single `FoodItemAllergen` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `FoodItemAllergen` or `null` if not found.
+  """
+  foodItemAllergen_update(
+    """
+    The key used to identify the object.
+    """
+    key: FoodItemAllergen_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: FoodItemAllergen_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: FoodItemAllergen_Data!
+  ): FoodItemAllergen_KeyOutput @fdc_generated(from: "FoodItemAllergen", purpose: UPDATE_SINGLE)
+  """
+  Update a single `FoodItemFoodCategory` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `FoodItemFoodCategory` or `null` if not found.
+  """
+  foodItemFoodCategory_update(
+    """
+    The key used to identify the object.
+    """
+    key: FoodItemFoodCategory_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: FoodItemFoodCategory_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: FoodItemFoodCategory_Data!
+  ): FoodItemFoodCategory_KeyOutput @fdc_generated(from: "FoodItemFoodCategory", purpose: UPDATE_SINGLE)
+  """
+  Update a single `Locations` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Locations` or `null` if not found.
+  """
+  locations_update(
+    """
+    The key used to identify the object.
+    """
+    key: Locations_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Locations_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Locations_Data!
+  ): Locations_KeyOutput @fdc_generated(from: "Locations", purpose: UPDATE_SINGLE)
+  """
+  Update a single `Messages` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Messages` or `null` if not found.
+  """
+  messages_update(
+    """
+    The key used to identify the object.
+    """
+    key: Messages_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Messages_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Messages_Data!
+  ): Messages_KeyOutput @fdc_generated(from: "Messages", purpose: UPDATE_SINGLE)
+  """
+  Update a single `Organization` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Organization` or `null` if not found.
+  """
+  organization_update(
+    """
+    The key used to identify the object.
+    """
+    key: Organization_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Organization_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Organization_Data!
+  ): Organization_KeyOutput @fdc_generated(from: "Organization", purpose: UPDATE_SINGLE)
+  """
+  Update a single `OrganizationContactEmail` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `OrganizationContactEmail` or `null` if not found.
+  """
+  organizationContactEmail_update(
+    """
+    The key used to identify the object.
+    """
+    key: OrganizationContactEmail_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: OrganizationContactEmail_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: OrganizationContactEmail_Data!
+  ): OrganizationContactEmail_KeyOutput @fdc_generated(from: "OrganizationContactEmail", purpose: UPDATE_SINGLE)
+  """
+  Update a single `OrganizationContactPhoneNumber` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `OrganizationContactPhoneNumber` or `null` if not found.
+  """
+  organizationContactPhoneNumber_update(
+    """
+    The key used to identify the object.
+    """
+    key: OrganizationContactPhoneNumber_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: OrganizationContactPhoneNumber_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: OrganizationContactPhoneNumber_Data!
+  ): OrganizationContactPhoneNumber_KeyOutput @fdc_generated(from: "OrganizationContactPhoneNumber", purpose: UPDATE_SINGLE)
+  """
+  Update a single `PostalCode` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `PostalCode` or `null` if not found.
+  """
+  postalCode_update(
+    """
+    The key used to identify the object.
+    """
+    key: PostalCode_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: PostalCode_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: PostalCode_Data!
+  ): PostalCode_KeyOutput @fdc_generated(from: "PostalCode", purpose: UPDATE_SINGLE)
+  """
+  Update a single `Posts` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Posts` or `null` if not found.
+  """
+  posts_update(
+    """
+    The key used to identify the object.
+    """
+    key: Posts_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Posts_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Posts_Data!
+  ): Posts_KeyOutput @fdc_generated(from: "Posts", purpose: UPDATE_SINGLE)
+  """
+  Update a single `Tags` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Tags` or `null` if not found.
+  """
+  tags_update(
+    """
+    The key used to identify the object.
+    """
+    key: Tags_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Tags_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Tags_Data!
+  ): Tags_KeyOutput @fdc_generated(from: "Tags", purpose: UPDATE_SINGLE)
+  """
+  Update a single `User` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `User` or `null` if not found.
+  """
+  user_update(
+    """
+    The key used to identify the object.
+    """
+    key: User_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: User_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: User_Data!
+  ): User_KeyOutput @fdc_generated(from: "User", purpose: UPDATE_SINGLE)
+  """
+  Update a single `UserConversation` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `UserConversation` or `null` if not found.
+  """
+  userConversation_update(
+    """
+    The key used to identify the object.
+    """
+    key: UserConversation_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserConversation_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: UserConversation_Data!
+  ): UserConversation_KeyOutput @fdc_generated(from: "UserConversation", purpose: UPDATE_SINGLE)
+  """
+  Update a single `UserDistributionEvent` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `UserDistributionEvent` or `null` if not found.
+  """
+  userDistributionEvent_update(
+    """
+    The key used to identify the object.
+    """
+    key: UserDistributionEvent_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserDistributionEvent_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: UserDistributionEvent_Data!
+  ): UserDistributionEvent_KeyOutput @fdc_generated(from: "UserDistributionEvent", purpose: UPDATE_SINGLE)
+  """
+  Update a single `UserOrganization` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `UserOrganization` or `null` if not found.
+  """
+  userOrganization_update(
+    """
+    The key used to identify the object.
+    """
+    key: UserOrganization_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserOrganization_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: UserOrganization_Data!
+  ): UserOrganization_KeyOutput @fdc_generated(from: "UserOrganization", purpose: UPDATE_SINGLE)
+  """
+  Update a single `UserPreferenceAllergen` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `UserPreferenceAllergen` or `null` if not found.
+  """
+  userPreferenceAllergen_update(
+    """
+    The key used to identify the object.
+    """
+    key: UserPreferenceAllergen_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserPreferenceAllergen_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: UserPreferenceAllergen_Data!
+  ): UserPreferenceAllergen_KeyOutput @fdc_generated(from: "UserPreferenceAllergen", purpose: UPDATE_SINGLE)
+  """
+  Update a single `UserPreferenceFoodCategory` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `UserPreferenceFoodCategory` or `null` if not found.
+  """
+  userPreferenceFoodCategory_update(
+    """
+    The key used to identify the object.
+    """
+    key: UserPreferenceFoodCategory_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserPreferenceFoodCategory_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: UserPreferenceFoodCategory_Data!
+  ): UserPreferenceFoodCategory_KeyOutput @fdc_generated(from: "UserPreferenceFoodCategory", purpose: UPDATE_SINGLE)
+  """
+  Update a single `UserPreferences` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `UserPreferences` or `null` if not found.
+  """
+  userPreferences_update(
+    """
+    The key used to identify the object.
+    """
+    key: UserPreferences_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserPreferences_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: UserPreferences_Data!
+  ): UserPreferences_KeyOutput @fdc_generated(from: "UserPreferences", purpose: UPDATE_SINGLE)
+  """
+  Update `Allergen` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  allergen_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Allergen_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Allergen_Data!
+  ): Int! @fdc_generated(from: "Allergen", purpose: UPDATE_MULTIPLE)
+  """
+  Update `Conversations` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  conversations_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Conversations_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Conversations_Data!
+  ): Int! @fdc_generated(from: "Conversations", purpose: UPDATE_MULTIPLE)
+  """
+  Update `DistributionEvent` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  distributionEvent_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: DistributionEvent_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: DistributionEvent_Data!
+  ): Int! @fdc_generated(from: "DistributionEvent", purpose: UPDATE_MULTIPLE)
+  """
+  Update `Donation` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  donation_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Donation_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Donation_Data!
+  ): Int! @fdc_generated(from: "Donation", purpose: UPDATE_MULTIPLE)
+  """
+  Update `DonationStatus` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  donationStatus_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: DonationStatus_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: DonationStatus_Data!
+  ): Int! @fdc_generated(from: "DonationStatus", purpose: UPDATE_MULTIPLE)
+  """
+  Update `FoodCategory` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  foodCategory_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: FoodCategory_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: FoodCategory_Data!
+  ): Int! @fdc_generated(from: "FoodCategory", purpose: UPDATE_MULTIPLE)
+  """
+  Update `FoodItem` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  foodItem_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: FoodItem_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: FoodItem_Data!
+  ): Int! @fdc_generated(from: "FoodItem", purpose: UPDATE_MULTIPLE)
+  """
+  Update `FoodItemAllergen` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  foodItemAllergen_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: FoodItemAllergen_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: FoodItemAllergen_Data!
+  ): Int! @fdc_generated(from: "FoodItemAllergen", purpose: UPDATE_MULTIPLE)
+  """
+  Update `FoodItemFoodCategory` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  foodItemFoodCategory_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: FoodItemFoodCategory_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: FoodItemFoodCategory_Data!
+  ): Int! @fdc_generated(from: "FoodItemFoodCategory", purpose: UPDATE_MULTIPLE)
+  """
+  Update `Locations` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  locations_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Locations_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Locations_Data!
+  ): Int! @fdc_generated(from: "Locations", purpose: UPDATE_MULTIPLE)
+  """
+  Update `Messages` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  messages_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Messages_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Messages_Data!
+  ): Int! @fdc_generated(from: "Messages", purpose: UPDATE_MULTIPLE)
+  """
+  Update `Organization` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  organization_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Organization_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Organization_Data!
+  ): Int! @fdc_generated(from: "Organization", purpose: UPDATE_MULTIPLE)
+  """
+  Update `OrganizationContactEmail` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  organizationContactEmail_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: OrganizationContactEmail_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: OrganizationContactEmail_Data!
+  ): Int! @fdc_generated(from: "OrganizationContactEmail", purpose: UPDATE_MULTIPLE)
+  """
+  Update `OrganizationContactPhoneNumber` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  organizationContactPhoneNumber_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: OrganizationContactPhoneNumber_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: OrganizationContactPhoneNumber_Data!
+  ): Int! @fdc_generated(from: "OrganizationContactPhoneNumber", purpose: UPDATE_MULTIPLE)
+  """
+  Update `PostalCode` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  postalCode_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: PostalCode_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: PostalCode_Data!
+  ): Int! @fdc_generated(from: "PostalCode", purpose: UPDATE_MULTIPLE)
+  """
+  Update `Posts` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  posts_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Posts_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Posts_Data!
+  ): Int! @fdc_generated(from: "Posts", purpose: UPDATE_MULTIPLE)
+  """
+  Update `Tags` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  tags_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Tags_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Tags_Data!
+  ): Int! @fdc_generated(from: "Tags", purpose: UPDATE_MULTIPLE)
+  """
+  Update `User` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  user_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: User_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: User_Data!
+  ): Int! @fdc_generated(from: "User", purpose: UPDATE_MULTIPLE)
+  """
+  Update `UserConversation` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  userConversation_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: UserConversation_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: UserConversation_Data!
+  ): Int! @fdc_generated(from: "UserConversation", purpose: UPDATE_MULTIPLE)
+  """
+  Update `UserDistributionEvent` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  userDistributionEvent_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: UserDistributionEvent_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: UserDistributionEvent_Data!
+  ): Int! @fdc_generated(from: "UserDistributionEvent", purpose: UPDATE_MULTIPLE)
+  """
+  Update `UserOrganization` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  userOrganization_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: UserOrganization_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: UserOrganization_Data!
+  ): Int! @fdc_generated(from: "UserOrganization", purpose: UPDATE_MULTIPLE)
+  """
+  Update `UserPreferenceAllergen` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  userPreferenceAllergen_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: UserPreferenceAllergen_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: UserPreferenceAllergen_Data!
+  ): Int! @fdc_generated(from: "UserPreferenceAllergen", purpose: UPDATE_MULTIPLE)
+  """
+  Update `UserPreferenceFoodCategory` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  userPreferenceFoodCategory_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: UserPreferenceFoodCategory_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: UserPreferenceFoodCategory_Data!
+  ): Int! @fdc_generated(from: "UserPreferenceFoodCategory", purpose: UPDATE_MULTIPLE)
+  """
+  Update `UserPreferences` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  userPreferences_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: UserPreferences_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: UserPreferences_Data!
+  ): Int! @fdc_generated(from: "UserPreferences", purpose: UPDATE_MULTIPLE)
+  """
+  Delete a single `Allergen` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  allergen_delete(
+    """
+    The key used to identify the object.
+    """
+    key: Allergen_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Allergen_FirstRow
+  ): Allergen_KeyOutput @fdc_generated(from: "Allergen", purpose: DELETE_SINGLE)
+  """
+  Delete a single `Conversations` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  conversations_delete(
+    """
+    The key used to identify the object.
+    """
+    key: Conversations_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Conversations_FirstRow
+  ): Conversations_KeyOutput @fdc_generated(from: "Conversations", purpose: DELETE_SINGLE)
+  """
+  Delete a single `DistributionEvent` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  distributionEvent_delete(
+    """
+    The key used to identify the object.
+    """
+    key: DistributionEvent_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: DistributionEvent_FirstRow
+  ): DistributionEvent_KeyOutput @fdc_generated(from: "DistributionEvent", purpose: DELETE_SINGLE)
+  """
+  Delete a single `Donation` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  donation_delete(
+    """
+    The key used to identify the object.
+    """
+    key: Donation_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Donation_FirstRow
+  ): Donation_KeyOutput @fdc_generated(from: "Donation", purpose: DELETE_SINGLE)
+  """
+  Delete a single `DonationStatus` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  donationStatus_delete(
+    """
+    The key used to identify the object.
+    """
+    key: DonationStatus_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: DonationStatus_FirstRow
+  ): DonationStatus_KeyOutput @fdc_generated(from: "DonationStatus", purpose: DELETE_SINGLE)
+  """
+  Delete a single `FoodCategory` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  foodCategory_delete(
+    """
+    The key used to identify the object.
+    """
+    key: FoodCategory_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: FoodCategory_FirstRow
+  ): FoodCategory_KeyOutput @fdc_generated(from: "FoodCategory", purpose: DELETE_SINGLE)
+  """
+  Delete a single `FoodItem` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  foodItem_delete(
+    """
+    The key used to identify the object.
+    """
+    key: FoodItem_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: FoodItem_FirstRow
+  ): FoodItem_KeyOutput @fdc_generated(from: "FoodItem", purpose: DELETE_SINGLE)
+  """
+  Delete a single `FoodItemAllergen` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  foodItemAllergen_delete(
+    """
+    The key used to identify the object.
+    """
+    key: FoodItemAllergen_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: FoodItemAllergen_FirstRow
+  ): FoodItemAllergen_KeyOutput @fdc_generated(from: "FoodItemAllergen", purpose: DELETE_SINGLE)
+  """
+  Delete a single `FoodItemFoodCategory` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  foodItemFoodCategory_delete(
+    """
+    The key used to identify the object.
+    """
+    key: FoodItemFoodCategory_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: FoodItemFoodCategory_FirstRow
+  ): FoodItemFoodCategory_KeyOutput @fdc_generated(from: "FoodItemFoodCategory", purpose: DELETE_SINGLE)
+  """
+  Delete a single `Locations` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  locations_delete(
+    """
+    The key used to identify the object.
+    """
+    key: Locations_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Locations_FirstRow
+  ): Locations_KeyOutput @fdc_generated(from: "Locations", purpose: DELETE_SINGLE)
+  """
+  Delete a single `Messages` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  messages_delete(
+    """
+    The key used to identify the object.
+    """
+    key: Messages_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Messages_FirstRow
+  ): Messages_KeyOutput @fdc_generated(from: "Messages", purpose: DELETE_SINGLE)
+  """
+  Delete a single `Organization` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  organization_delete(
+    """
+    The key used to identify the object.
+    """
+    key: Organization_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Organization_FirstRow
+  ): Organization_KeyOutput @fdc_generated(from: "Organization", purpose: DELETE_SINGLE)
+  """
+  Delete a single `OrganizationContactEmail` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  organizationContactEmail_delete(
+    """
+    The key used to identify the object.
+    """
+    key: OrganizationContactEmail_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: OrganizationContactEmail_FirstRow
+  ): OrganizationContactEmail_KeyOutput @fdc_generated(from: "OrganizationContactEmail", purpose: DELETE_SINGLE)
+  """
+  Delete a single `OrganizationContactPhoneNumber` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  organizationContactPhoneNumber_delete(
+    """
+    The key used to identify the object.
+    """
+    key: OrganizationContactPhoneNumber_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: OrganizationContactPhoneNumber_FirstRow
+  ): OrganizationContactPhoneNumber_KeyOutput @fdc_generated(from: "OrganizationContactPhoneNumber", purpose: DELETE_SINGLE)
+  """
+  Delete a single `PostalCode` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  postalCode_delete(
+    """
+    The key used to identify the object.
+    """
+    key: PostalCode_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: PostalCode_FirstRow
+  ): PostalCode_KeyOutput @fdc_generated(from: "PostalCode", purpose: DELETE_SINGLE)
+  """
+  Delete a single `Posts` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  posts_delete(
+    """
+    The key used to identify the object.
+    """
+    key: Posts_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Posts_FirstRow
+  ): Posts_KeyOutput @fdc_generated(from: "Posts", purpose: DELETE_SINGLE)
+  """
+  Delete a single `Tags` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  tags_delete(
+    """
+    The key used to identify the object.
+    """
+    key: Tags_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Tags_FirstRow
+  ): Tags_KeyOutput @fdc_generated(from: "Tags", purpose: DELETE_SINGLE)
+  """
+  Delete a single `User` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  user_delete(
+    """
+    The key used to identify the object.
+    """
+    key: User_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: User_FirstRow
+  ): User_KeyOutput @fdc_generated(from: "User", purpose: DELETE_SINGLE)
+  """
+  Delete a single `UserConversation` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  userConversation_delete(
+    """
+    The key used to identify the object.
+    """
+    key: UserConversation_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserConversation_FirstRow
+  ): UserConversation_KeyOutput @fdc_generated(from: "UserConversation", purpose: DELETE_SINGLE)
+  """
+  Delete a single `UserDistributionEvent` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  userDistributionEvent_delete(
+    """
+    The key used to identify the object.
+    """
+    key: UserDistributionEvent_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserDistributionEvent_FirstRow
+  ): UserDistributionEvent_KeyOutput @fdc_generated(from: "UserDistributionEvent", purpose: DELETE_SINGLE)
+  """
+  Delete a single `UserOrganization` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  userOrganization_delete(
+    """
+    The key used to identify the object.
+    """
+    key: UserOrganization_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserOrganization_FirstRow
+  ): UserOrganization_KeyOutput @fdc_generated(from: "UserOrganization", purpose: DELETE_SINGLE)
+  """
+  Delete a single `UserPreferenceAllergen` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  userPreferenceAllergen_delete(
+    """
+    The key used to identify the object.
+    """
+    key: UserPreferenceAllergen_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserPreferenceAllergen_FirstRow
+  ): UserPreferenceAllergen_KeyOutput @fdc_generated(from: "UserPreferenceAllergen", purpose: DELETE_SINGLE)
+  """
+  Delete a single `UserPreferenceFoodCategory` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  userPreferenceFoodCategory_delete(
+    """
+    The key used to identify the object.
+    """
+    key: UserPreferenceFoodCategory_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserPreferenceFoodCategory_FirstRow
+  ): UserPreferenceFoodCategory_KeyOutput @fdc_generated(from: "UserPreferenceFoodCategory", purpose: DELETE_SINGLE)
+  """
+  Delete a single `UserPreferences` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  userPreferences_delete(
+    """
+    The key used to identify the object.
+    """
+    key: UserPreferences_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserPreferences_FirstRow
+  ): UserPreferences_KeyOutput @fdc_generated(from: "UserPreferences", purpose: DELETE_SINGLE)
+  """
+  Delete `Allergen` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  allergen_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Allergen_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Allergen", purpose: DELETE_MULTIPLE)
+  """
+  Delete `Conversations` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  conversations_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Conversations_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Conversations", purpose: DELETE_MULTIPLE)
+  """
+  Delete `DistributionEvent` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  distributionEvent_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: DistributionEvent_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "DistributionEvent", purpose: DELETE_MULTIPLE)
+  """
+  Delete `Donation` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  donation_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Donation_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Donation", purpose: DELETE_MULTIPLE)
+  """
+  Delete `DonationStatus` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  donationStatus_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: DonationStatus_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "DonationStatus", purpose: DELETE_MULTIPLE)
+  """
+  Delete `FoodCategory` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  foodCategory_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: FoodCategory_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "FoodCategory", purpose: DELETE_MULTIPLE)
+  """
+  Delete `FoodItem` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  foodItem_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: FoodItem_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "FoodItem", purpose: DELETE_MULTIPLE)
+  """
+  Delete `FoodItemAllergen` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  foodItemAllergen_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: FoodItemAllergen_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "FoodItemAllergen", purpose: DELETE_MULTIPLE)
+  """
+  Delete `FoodItemFoodCategory` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  foodItemFoodCategory_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: FoodItemFoodCategory_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "FoodItemFoodCategory", purpose: DELETE_MULTIPLE)
+  """
+  Delete `Locations` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  locations_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Locations_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Locations", purpose: DELETE_MULTIPLE)
+  """
+  Delete `Messages` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  messages_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Messages_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Messages", purpose: DELETE_MULTIPLE)
+  """
+  Delete `Organization` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  organization_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Organization_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Organization", purpose: DELETE_MULTIPLE)
+  """
+  Delete `OrganizationContactEmail` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  organizationContactEmail_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: OrganizationContactEmail_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "OrganizationContactEmail", purpose: DELETE_MULTIPLE)
+  """
+  Delete `OrganizationContactPhoneNumber` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  organizationContactPhoneNumber_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: OrganizationContactPhoneNumber_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "OrganizationContactPhoneNumber", purpose: DELETE_MULTIPLE)
+  """
+  Delete `PostalCode` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  postalCode_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: PostalCode_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "PostalCode", purpose: DELETE_MULTIPLE)
+  """
+  Delete `Posts` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  posts_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Posts_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Posts", purpose: DELETE_MULTIPLE)
+  """
+  Delete `Tags` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  tags_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Tags_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Tags", purpose: DELETE_MULTIPLE)
+  """
+  Delete `User` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  user_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: User_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "User", purpose: DELETE_MULTIPLE)
+  """
+  Delete `UserConversation` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  userConversation_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: UserConversation_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "UserConversation", purpose: DELETE_MULTIPLE)
+  """
+  Delete `UserDistributionEvent` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  userDistributionEvent_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: UserDistributionEvent_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "UserDistributionEvent", purpose: DELETE_MULTIPLE)
+  """
+  Delete `UserOrganization` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  userOrganization_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: UserOrganization_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "UserOrganization", purpose: DELETE_MULTIPLE)
+  """
+  Delete `UserPreferenceAllergen` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  userPreferenceAllergen_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: UserPreferenceAllergen_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "UserPreferenceAllergen", purpose: DELETE_MULTIPLE)
+  """
+  Delete `UserPreferenceFoodCategory` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  userPreferenceFoodCategory_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: UserPreferenceFoodCategory_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "UserPreferenceFoodCategory", purpose: DELETE_MULTIPLE)
+  """
+  Delete `UserPreferences` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  userPreferences_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: UserPreferences_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "UserPreferences", purpose: DELETE_MULTIPLE)
+}

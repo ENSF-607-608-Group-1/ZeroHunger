@@ -30,7 +30,9 @@ import {
   ClaimResult,
   FOOD_CATEGORIES,
   ItemInput,
+  PostDistribution,
   PostFood,
+  SendMessage,
   UpdateQuantity,
 } from "../events/types";
 import {Claimant, ClaimProcessor, ClaimRefused} from "../processors/claim";
@@ -52,12 +54,33 @@ export type UpdateQuantityRequest = Omit<UpdateQuantity, "donorId">;
 // cancelOrRescheduleDonation: CancelOrRescheduleDonation without donorId.
 export type CancelOrRescheduleRequest = Omit<CancelOrRescheduleDonation, "donorId">;
 
+// sendMessage: the app sends the chat and the text, the API fills in the rest
+export type SendMessageRequest = Omit<SendMessage, "messageId" | "senderId" | "senderIsGuest">;
+
+// postDistribution: the app sends the event's details, the API adds distributionId and hostId
+export type PostDistributionRequest = Omit<PostDistribution, "distributionId" | "hostId">;
+
 // What every method answers.
 export interface Submitted {
   donationId: string;     // the donation this is about (a new one for postFood)
   correlationId: string;  // search the logs for this to follow what happened next
   itemIds?: string[];     // postFood only: the new item IDs, in the order the items were sent
 }
+
+// What sendMessage answers
+export interface MessageSubmitted {
+  messageId: string;      // the new message's ID
+  correlationId: string;  // search the logs for this to follow what happened next
+}
+
+// What postDistribution answers
+export interface DistributionSubmitted {
+  distributionId: string;  // the new event's ID
+  correlationId: string;   // search the logs for this to follow what happened next
+}
+
+// The longest message we accept, in characters
+const MAX_MESSAGE_LENGTH = 1000;
 
 
 // The API. index.ts turns each method into its own callable Cloud Function.
@@ -164,6 +187,61 @@ export class ZeroHungerApi {
       if (err instanceof ClaimRefused) throw new HttpsError(err.code, err.message);
       throw err; // anything else: the app gets "internal" and can try again
     }
+  }
+
+  // api-sendMessage: someone sends a message in a chat
+  // Guests can too, but only in their own pickup chat (the Messaging processor checks that)
+  // Sends SendMessage to send-message → MessagingProcessor.onSendMessage
+  async sendMessage(request: CallableRequest<SendMessageRequest>): Promise<MessageSubmitted> {
+    const senderId = signedInUser(request); // guests included, so not accountHolder
+    const d: Partial<SendMessageRequest> = request.data ?? {};
+
+    const text = needText(d.text, "text");
+    if (text.length > MAX_MESSAGE_LENGTH) {
+      throw invalid(`text is too long (${MAX_MESSAGE_LENGTH} characters at most)`);
+    }
+
+    const message: SendMessage = {
+      messageId: randomUUID(), // a new ID for this message
+      conversationId: needText(d.conversationId, "conversationId"),
+      senderId,
+      senderIsGuest: request.auth?.token.firebase.sign_in_provider === "anonymous",
+      text,
+    };
+    const event = createEvent("SendMessage", message);
+    await this.publish(Topics.sendMessage, event);
+    return {messageId: message.messageId, correlationId: event.correlationId};
+  }
+
+  // api-postDistribution: an organization or donor posts a distribution or a donation event
+  // Guests can't (Table 2), so they get "permission-denied" like postFood
+  // Sends PostDistribution to post-distribution → DistributionProcessor.onPostDistribution
+  async postDistribution(request: CallableRequest<PostDistributionRequest>): Promise<DistributionSubmitted> {
+    const hostId = accountHolder(request); // guests can't do this
+    const d: Partial<PostDistributionRequest> = request.data ?? {};
+
+    if (d.kind !== "DISTRIBUTION" && d.kind !== "DONATION_EVENT") {
+      throw invalid("kind must be DISTRIBUTION or DONATION_EVENT");
+    }
+    const organizationId = optionalText(d.organizationId, "organizationId") || undefined; // left out if empty
+
+    // TODO: Review when database is complete. If organizationId is set, check the user is a member
+    //   of that organization (User_Organization) and stop them with "permission-denied" if not
+
+    const post: PostDistribution = {
+      distributionId: randomUUID(), // a new ID for this event
+      hostId,
+      organizationId,
+      kind: d.kind,
+      title: needText(d.title, "title"),
+      comments: optionalText(d.comments, "comments"),
+      address: checkAddress(d.address),
+      startTime: needText(d.startTime, "startTime"),
+      endTime: needText(d.endTime, "endTime"),
+    };
+    const event = createEvent("PostDistribution", post);
+    await this.publish(Topics.postDistribution, event);
+    return {distributionId: post.distributionId, correlationId: event.correlationId};
   }
 
   // Publishes the event, then tells the app it was accepted
