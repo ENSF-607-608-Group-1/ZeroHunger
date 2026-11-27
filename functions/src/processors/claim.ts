@@ -37,7 +37,7 @@ export class ClaimRefused extends Error {
 // Who is claiming.
 export interface Claimant {
   userId: string;
-  isGuest: boolean;  // guests can have one active claim at a time
+  isGuest: boolean;  // guests can claim from each donation only once
 }
 
 // The parts of a saved FoodReservation that the event handlers below need.
@@ -60,8 +60,8 @@ export class ClaimProcessor extends EventProcessor {
     // Add up what was asked for, e.g. 2 + 1 = 3.
     const total = request.items.reduce((sum, item) => sum + item.quantity, 0);
 
-    // TODO: Review when database is complete. If who.isGuest and they already have an ACTIVE
-    //   reservation, refuse: failed-precondition, "guests can have one claim at a time".
+    // TODO: Review when database is complete. If who.isGuest and they have already claimed from
+    //   this donation, refuse: failed-precondition, "guests can claim from each donation only once"
 
     // TODO: Review when database is complete. Load the Donation and its DonationItems, then refuse:
     //   - not-found if the donation or one of the items doesn't exist
@@ -189,3 +189,4 @@ function checkClaim(request: ClaimFoodRequest): void {
 function out(topic: Topic, event: EventEnvelope): Outgoing {
   return {topic, event};
 }
+

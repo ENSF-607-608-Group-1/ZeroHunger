@@ -80,7 +80,7 @@ export class NotificationProcessor extends EventProcessor {
   // food-available: tell people nearby about new food
   async onFoodAvailable(e: EventEnvelope<FoodAvailable>): Promise<void> {
     await this.handle(e, async () => {
-      const f = e.data;
+      const f = need(e, "gridCell", "title", "pickupStart", "pickupEnd", "donationId");
       // TODO: Review when database is complete. Only tell people whose preferences match (FR12):
       //   food in their categories, and none of their allergens in f.allergens
       return [notify(e, {
@@ -96,7 +96,7 @@ export class NotificationProcessor extends EventProcessor {
   // food-claimed: tell the donor someone claimed their food
   async onFoodClaimed(e: EventEnvelope<FoodClaimed>): Promise<void> {
     await this.handle(e, async () => {
-      const c = e.data;
+      const c = need(e, "donorId", "quantityClaimed", "remainingQuantity", "donationId", "reservationId");
       return [notify(e, {
         kind: "FOOD_CLAIMED",
         fcmTopics: [fcmTopic("user", c.donorId)],
@@ -112,7 +112,7 @@ export class NotificationProcessor extends EventProcessor {
   // quantity-updated: tell the donation's followers how much is left
   async onQuantityUpdated(e: EventEnvelope<QuantityUpdated>): Promise<void> {
     await this.handle(e, async () => {
-      const q = e.data;
+      const q = need(e, "donationId", "remainingQuantity");
       return [notify(e, {
         kind: "QUANTITY_UPDATED",
         fcmTopics: [fcmTopic("donation", q.donationId)],
@@ -126,7 +126,7 @@ export class NotificationProcessor extends EventProcessor {
   // donation-status-changed: tell the donation's followers its new status
   async onDonationStatusChanged(e: EventEnvelope<DonationStatusChanged>): Promise<void> {
     await this.handle(e, async () => {
-      const s = e.data;
+      const s = need(e, "donationId", "to");
       const words = STATUS_WORDS[s.to];
       if (!words) throw new InvalidEvent(`"${s.to}" is not a donation state`);
       return [notify(e, {
@@ -142,7 +142,7 @@ export class NotificationProcessor extends EventProcessor {
   // donation-cancelled: tell the donation's followers, which includes everyone who claimed it
   async onDonationCancelled(e: EventEnvelope<DonationCancelled>): Promise<void> {
     await this.handle(e, async () => {
-      const c = e.data;
+      const c = need(e, "donationId");
       return [notify(e, {
         kind: "DONATION_CANCELLED",
         fcmTopics: [fcmTopic("donation", c.donationId)],
@@ -156,7 +156,7 @@ export class NotificationProcessor extends EventProcessor {
   // donation-rescheduled: tell the donation's followers the new pickup time
   async onDonationRescheduled(e: EventEnvelope<DonationRescheduled>): Promise<void> {
     await this.handle(e, async () => {
-      const r = e.data;
+      const r = need(e, "donationId", "pickupStart", "pickupEnd");
       return [notify(e, {
         kind: "DONATION_RESCHEDULED",
         fcmTopics: [fcmTopic("donation", r.donationId)],
@@ -170,7 +170,7 @@ export class NotificationProcessor extends EventProcessor {
   // distribution-scheduled: tell people nearby, and the organization's followers if there is one
   async onDistributionScheduled(e: EventEnvelope<DistributionScheduled>): Promise<void> {
     await this.handle(e, async () => {
-      const d = e.data;
+      const d = need(e, "gridCell", "kind", "title", "address", "startTime", "endTime", "distributionId");
       const fcmTopics = [fcmTopic("area", d.gridCell)];
       if (d.organizationId) fcmTopics.push(fcmTopic("org", d.organizationId));
       return [notify(e, {
@@ -186,7 +186,7 @@ export class NotificationProcessor extends EventProcessor {
   // message-sent: push the message to the people it's for
   async onMessageSent(e: EventEnvelope<MessageSent>): Promise<void> {
     await this.handle(e, async () => {
-      const m = e.data;
+      const m = need(e, "text", "conversationId", "messageId", "donationId");
       if (!Array.isArray(m.receiverIds) || m.receiverIds.length === 0) return []; // nobody to tell
       return [notify(e, {
         kind: "NEW_MESSAGE",
@@ -201,7 +201,7 @@ export class NotificationProcessor extends EventProcessor {
   // donation-due-date: remind a donor it's time to donate again
   async onDonationDueDate(e: EventEnvelope<DonationDueDate>): Promise<void> {
     await this.handle(e, async () => {
-      const d = e.data;
+      const d = need(e, "donorId");
       return [notify(e, {
         kind: "DONATION_DUE",
         fcmTopics: [fcmTopic("user", d.donorId)],
@@ -255,6 +255,7 @@ async function sendPush(n: UsersNotified): Promise<string[]> {
 // An FCM topic name, e.g. fcmTopic("area", "T2N") gives "area-T2N"
 // FCM only allows letters, numbers and - _ . ~ % in a name, so anything else becomes _
 function fcmTopic(group: "area" | "org" | "donation" | "user", id: string): string {
+  if (typeof id !== "string" || id.trim() === "") throw new InvalidEvent(`no ID for the ${group} FCM topic`);
   return `${group}-${id.replace(/[^A-Za-z0-9\-_.~%]/g, "_")}`;
 }
 
@@ -287,4 +288,17 @@ const STATUS_WORDS: Record<DonationState, string> = {
 // The start of a long message, so the push stays short on the phone
 function preview(text: string): string {
   return text.length > 120 ? `${text.slice(0, 117)}...` : text;
+}
+
+// Checks the fields a handler needs are there before it uses them. A missing one is bad data,
+// so it goes to Workflow like Activity does, instead of crashing and being tried 5 times
+function need<T>(e: EventEnvelope<T>, ...fields: (keyof T & string)[]): T {
+  const data = (e.data ?? {}) as T;
+  const missing = fields.filter((f) => data[f] === undefined || data[f] === null || data[f] === "");
+  if (missing.length === 1) throw new InvalidEvent(`${missing[0]} is missing, so nobody can be told`);
+  if (missing.length > 1) {
+    const list = `${missing.slice(0, -1).join(", ")} and ${missing[missing.length - 1]}`; // e.g. "title, gridCell and kind"
+    throw new InvalidEvent(`${list} are missing, so nobody can be told`);
+  }
+  return data;
 }
