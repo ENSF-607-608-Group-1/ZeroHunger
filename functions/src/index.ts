@@ -59,6 +59,7 @@ import {
   MessageSent,
   PostDistribution,
   PostFood,
+  ProcessingError,
   QuantityUpdated,
   SendMessage,
   UpdateQuantity,
@@ -68,6 +69,8 @@ import {ClaimProcessor} from "./processors/claim";
 import {MessagingProcessor} from "./processors/messaging";
 import {DistributionProcessor} from "./processors/distribution";
 import {NotificationProcessor} from "./processors/notification";
+import {ActivityProcessor} from "./processors/activity";
+import {WorkflowProcessor} from "./processors/workflow";
 import {ExpiryScheduler, ReminderScheduler} from "./schedulers/schedulers";
 import {onCall} from "firebase-functions/https";
 import {CancelOrRescheduleRequest, PostDistributionRequest, PostFoodRequest, SendMessageRequest, UpdateQuantityRequest, ZeroHungerApi} from "./api/zeroHungerApi";
@@ -155,6 +158,35 @@ export const notification = {
   onMessageSent: subscribe<MessageSent>(Topics.messageSent, (e) => notificationProcessor.onMessageSent(e)),
   onDonationDueDate: subscribe<DonationDueDate>(
     Topics.donationDueDate, (e) => notificationProcessor.onDonationDueDate(e)),
+};
+
+
+
+// Activity processor: one function per topic (Table 2), like activity-onFoodAvailable
+// food-claimed has four listeners now: Listing, Messaging, Notification and Activity
+// Deploy: firebase.cmd deploy --only functions:activity
+const activityProcessor = new ActivityProcessor();
+
+export const activity = {
+  onFoodAvailable: subscribe<FoodAvailable>(Topics.foodAvailable, (e) => activityProcessor.onFoodAvailable(e)),
+  onFoodClaimed: subscribe<FoodClaimed>(Topics.foodClaimed, (e) => activityProcessor.onFoodClaimed(e)),
+  onDonationStatusChanged: subscribe<DonationStatusChanged>(
+    Topics.donationStatusChanged, (e) => activityProcessor.onDonationStatusChanged(e)),
+  onDistributionScheduled: subscribe<DistributionScheduled>(
+    Topics.distributionScheduled, (e) => activityProcessor.onDistributionScheduled(e)),
+};
+
+
+
+// Workflow processor: fixes events other processors couldn't use, like workflow-onProcessingError
+// Deploy: firebase.cmd deploy --only functions:workflow
+const workflowProcessor = new WorkflowProcessor();
+
+export const workflow = {
+  onProcessingError: subscribe<ProcessingError>(
+    Topics.workflowErrors, (e) => workflowProcessor.onProcessingError(e)),
+  // events Pub/Sub gave up on after 5 failed deliveries, which can be any kind of event
+  onDeadLetter: subscribe(Topics.deadLetter, (e) => workflowProcessor.onDeadLetter(e)),
 };
 
 

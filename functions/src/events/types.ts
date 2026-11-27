@@ -7,6 +7,8 @@
 //"A" | "B" means the value can only be one of those words.
 //"?" after a field name means the field is optional.
 
+import {EventEnvelope} from "./envelope";
+
 
 
 // Values used inside events
@@ -26,6 +28,8 @@ export type DistributionKind = "DISTRIBUTION" | "DONATION_EVENT";
 export type NotificationKind =
   "FOOD_AVAILABLE" | "FOOD_CLAIMED" | "QUANTITY_UPDATED" | "STATUS_CHANGED" | "DONATION_CANCELLED" |
   "DONATION_RESCHEDULED" | "DISTRIBUTION_SCHEDULED" | "NEW_MESSAGE" | "DONATION_DUE";
+// What went in someone's history (FR13)
+export type ActivityKind = "FOOD_POSTED" | "FOOD_CLAIMED" | "STATUS_CHANGED" | "EVENT_POSTED";
 
 
 //Food categories
@@ -296,4 +300,26 @@ export interface UsersNotified {
   body: string;
   data: Record<string, string>;  // the IDs the app needs to open the right screen (FCM only takes text)
   sentAt: string;
+}
+
+// ActivityRecorded: something went in one or more people's history
+// ActivityProcessor (every handler) → no listeners yet (Table 2), a future impact dashboard could use it
+export interface ActivityRecorded {
+  activityId: string;       // made by Activity
+  kind: ActivityKind;
+  userIds: string[];        // whose history it goes in, e.g. the donor and the recipient for a claim
+  donationId?: string;      // the donation it's about, if any
+  distributionId?: string;  // the event it's about, if any
+  organizationId?: string;  // the organization an event was posted for, if any
+  quantity?: number;        // how much food, if any
+  status?: DonationState;   // the donation's new state, for STATUS_CHANGED
+  recordedAt: string;
+}
+
+// ProcessingError: a processor couldn't use an event's data, so it hands the event to Workflow
+// Any processor's reportError → WorkflowProcessor.onProcessingError (the workflow event pattern)
+export interface ProcessingError {
+  failedEvent: EventEnvelope;  // the whole event that failed, so Workflow can fix it and send it again
+  processor: string;           // where it failed, e.g. "listing"
+  reason: string;              // what was wrong, e.g. a postal code typed as "t2n1n4"
 }
