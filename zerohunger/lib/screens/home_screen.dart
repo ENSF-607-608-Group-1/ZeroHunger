@@ -11,6 +11,7 @@ import '../theme/app_theme.dart';
 import '../widgets/account_button.dart';
 import 'donate_food_screen.dart';
 import 'find_food_screen.dart';
+import 'my_donations_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -75,6 +76,16 @@ class HomeScreen extends StatelessWidget {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const DonateFoodScreen()),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _ActionCard(
+                title: 'My donations',
+                subtitle: 'Manage food you’ve posted',
+                tag: isGuest ? 'Account needed' : null,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyDonationsScreen()),
                 ),
               ),
             ],

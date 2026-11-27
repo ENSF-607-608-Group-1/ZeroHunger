@@ -59,6 +59,84 @@ class Donation {
   Set<String> get allergens => {for (final item in items) ...item.allergens};
 }
 
+// Where a donation is in its life (matches DonationState in functions/src/events/types.ts).
+enum DonationStatus {
+  available,
+  claimed,
+  completed,
+  cancelled,
+  expired;
+
+  String get label => switch (this) {
+        DonationStatus.available => 'Available',
+        DonationStatus.claimed => 'Claimed',
+        DonationStatus.completed => 'Completed',
+        DonationStatus.cancelled => 'Cancelled',
+        DonationStatus.expired => 'Expired',
+      };
+}
+
+// One pickup chat linked to a donor's donation (placeholder until MessagingService is built).
+class PickupChatSummary {
+  final String chatId;
+  final String recipientLabel;
+  final String lastMessage;
+  final DateTime updatedAt;
+
+  const PickupChatSummary({
+    required this.chatId,
+    required this.recipientLabel,
+    required this.lastMessage,
+    required this.updatedAt,
+  });
+}
+
+// A donation as its donor sees and manages it on the My donations screen.
+class DonorDonation {
+  final String donationId;
+  final String title;
+  final DonationStatus status;
+  final int amountLeft;
+  final String unit;
+  final DateTime pickupStart;
+  final DateTime pickupEnd;
+  final String? cancelReason;
+  final List<PickupChatSummary> pickupChats;
+
+  const DonorDonation({
+    required this.donationId,
+    required this.title,
+    required this.status,
+    required this.amountLeft,
+    required this.unit,
+    required this.pickupStart,
+    required this.pickupEnd,
+    this.cancelReason,
+    this.pickupChats = const [],
+  });
+
+  DonorDonation copyWith({
+    DonationStatus? status,
+    int? amountLeft,
+    DateTime? pickupStart,
+    DateTime? pickupEnd,
+    String? cancelReason,
+    List<PickupChatSummary>? pickupChats,
+  }) {
+    return DonorDonation(
+      donationId: donationId,
+      title: title,
+      status: status ?? this.status,
+      amountLeft: amountLeft ?? this.amountLeft,
+      unit: unit,
+      pickupStart: pickupStart ?? this.pickupStart,
+      pickupEnd: pickupEnd ?? this.pickupEnd,
+      cancelReason: cancelReason ?? this.cancelReason,
+      pickupChats: pickupChats ?? this.pickupChats,
+    );
+  }
+}
+
 class QueryService {
   // The donations that can be claimed now.
   // TODO: Review when database is complete. Ask the cloud QueryService for AVAILABLE donations
@@ -67,6 +145,89 @@ class QueryService {
     await Future<void>.delayed(const Duration(milliseconds: 400)); // like a real network call
     return _sampleDonations();
   }
+
+  // The donations posted by the signed-in donor.
+  // TODO: Review when database is complete. Ask the cloud QueryService for this donor's
+  //   donations, their remaining quantities, status, and linked pickup chats.
+  Future<List<DonorDonation>> myDonations() async {
+    await Future<void>.delayed(const Duration(milliseconds: 400)); // like a real network call
+    return _sampleMyDonations();
+  }
+}
+
+// Made-up donor donations for building and testing the My donations screen.
+List<DonorDonation> _sampleMyDonations() {
+  final now = DateTime.now();
+  DateTime at(int days, int hour, [int minute = 0]) => DateTime(now.year, now.month, now.day + days, hour, minute);
+
+  return [
+    DonorDonation(
+      donationId: 'sample-rice-and-stew',
+      title: 'Rice and stew',
+      status: DonationStatus.available,
+      amountLeft: 10,
+      unit: 'portions',
+      pickupStart: at(0, 17),
+      pickupEnd: at(0, 19),
+      pickupChats: [
+        PickupChatSummary(
+          chatId: 'chat-101',
+          recipientLabel: 'Recipient #1043',
+          lastMessage: 'Pickup chat opened. Hi, I can arrive around 5:30 pm.',
+          updatedAt: now.subtract(const Duration(minutes: 18)),
+        ),
+        PickupChatSummary(
+          chatId: 'chat-102',
+          recipientLabel: 'Recipient #1049',
+          lastMessage: 'Pickup chat opened.',
+          updatedAt: now.subtract(const Duration(minutes: 5)),
+        ),
+      ],
+    ),
+    DonorDonation(
+      donationId: 'sample-bagels-and-bread',
+      title: 'Fresh bagels and bread',
+      status: DonationStatus.claimed,
+      amountLeft: 0,
+      unit: 'items',
+      pickupStart: at(0, 18),
+      pickupEnd: at(0, 20, 30),
+      pickupChats: [
+        PickupChatSummary(
+          chatId: 'chat-201',
+          recipientLabel: 'Recipient #1052',
+          lastMessage: 'On my way to pick up the bagels!',
+          updatedAt: now.subtract(const Duration(minutes: 42)),
+        ),
+      ],
+    ),
+    DonorDonation(
+      donationId: 'sample-biryani-and-raita',
+      title: 'Vegetable biryani and raita',
+      status: DonationStatus.available,
+      amountLeft: 10,
+      unit: 'portions',
+      pickupStart: at(1, 12),
+      pickupEnd: at(1, 14),
+    ),
+    DonorDonation(
+      donationId: 'sample-pasta-trays',
+      title: 'Baked vegetable pasta',
+      status: DonationStatus.completed,
+      amountLeft: 0,
+      unit: 'portions',
+      pickupStart: at(-1, 16),
+      pickupEnd: at(-1, 18),
+      pickupChats: [
+        PickupChatSummary(
+          chatId: 'chat-301',
+          recipientLabel: 'Recipient #1012',
+          lastMessage: 'Picked up, thank you so much!',
+          updatedAt: now.subtract(const Duration(hours: 22)),
+        ),
+      ],
+    ),
+  ];
 }
 
 // Made-up donations for building and testing the screens.
