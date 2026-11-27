@@ -4,9 +4,10 @@
 // We'll add the others as we build each processor.
 //
 // How to read  file
-//Dates are text in ISO 8601 format, e.g. "2026-11-06T17:00:00-07:00".
 //"A" | "B" means the value can only be one of those words.
 //"?" after a field name means the field is optional.
+
+import {EventEnvelope} from "./envelope";
 
 
 
@@ -19,8 +20,19 @@ export type DonationState = "AVAILABLE" | "CLAIMED" | "COMPLETED" | "CANCELLED" 
 
 // Where a reservation is in its life (ReservationStatus in the class diagram).
 export type ReservationStatus = "ACTIVE" | "RESCHEDULED" | "PICKED_UP" | "CANCELLED" | "EXPIRED";
+// Who wrote a message: a person (USER) or the app itself (SYSTEM), like "Pickup chat opened"
+export type MessageKind = "USER" | "SYSTEM";
+// What's being posted: a food distribution (FR16) or a donation event someone hosts (FR15)
+export type DistributionKind = "DISTRIBUTION" | "DONATION_EVENT";
+// What a notification is about, so the app knows which screen to open when it's tapped
+export type NotificationKind =
+  "FOOD_AVAILABLE" | "FOOD_CLAIMED" | "QUANTITY_UPDATED" | "STATUS_CHANGED" | "DONATION_CANCELLED" |
+  "DONATION_RESCHEDULED" | "DISTRIBUTION_SCHEDULED" | "NEW_MESSAGE" | "DONATION_DUE";
+// What went in someone's history (FR13)
+export type ActivityKind = "FOOD_POSTED" | "FOOD_CLAIMED" | "STATUS_CHANGED" | "EVENT_POSTED";
 
-//Food categories (FR9, FR11).
+
+//Food categories
 //Types disappear when TypeScript turns into JavaScript, so the running code can't
 //check a value against a type. It can check against a real list, so we keep one:
 //FOOD_CATEGORIES : the list, used by the API to check what the app sends
@@ -100,6 +112,37 @@ export interface CancelOrRescheduleDonation {
 // ExpiryScheduler.run → ListingProcessor.onExpiryCheck
 export interface ExpiryCheck {
   asOf: string;  // expire listings whose pickup ended before this time
+}
+
+// DonationDueDate: the reminder scheduler says it's time to remind a donor to donate again
+// ReminderScheduler.run → NotificationProcessor.onDonationDueDate
+export interface DonationDueDate {
+  donorId: string;
+  dueAt: string;  // when the donor meant to donate next
+}
+
+// SendMessage: someone sends a message in a chat
+// ZeroHungerApi.sendMessage → MessagingProcessor.onSendMessage
+export interface SendMessage {
+  messageId: string;       // made by the API, so a repeat isn't saved twice
+  conversationId: string;  // the chat it goes in (a pickup chat uses the reservation's ID)
+  senderId: string;        // whoever is signed in
+  senderIsGuest: boolean;  // guests can only write in their own pickup chat
+  text: string;
+}
+
+// PostDistribution: an organization or donor posts a distribution or a donation event
+// ZeroHungerApi.postDistribution → DistributionProcessor.onPostDistribution
+export interface PostDistribution {
+  distributionId: string;   // made by the API, so a repeat can't create a second event
+  hostId: string;           // the signed-in user posting it
+  organizationId?: string;  // the organization it's posted for, if any
+  kind: DistributionKind;
+  title: string;            // e.g. "Saturday hamper day"
+  comments: string;         // anything people should know, or "" (FR24)
+  address: Address;         // where it happens
+  startTime: string;        // when it starts (FR23)
+  endTime: string;          // when it ends
 }
 
 
@@ -217,4 +260,66 @@ export interface ReservationUpdated {
   pickupStart: string;        // the pickup times now
   pickupEnd: string;
   reason?: string;            // the donor's reason, if they gave one
+}
+
+// MessageSent: a message was saved in a chat
+// MessagingProcessor.onSendMessage and onFoodClaimed → NotificationProcessor.onMessageSent
+export interface MessageSent {
+  messageId: string;
+  conversationId: string;
+  donationId: string;     // the donation the chat is about
+  senderId: string;       // "system" when the app wrote it
+  receiverIds: string[];  // who should be told about it
+  kind: MessageKind;
+  text: string;
+  sentAt: string;
+}
+
+// DistributionScheduled: a distribution or donation event was saved and is on
+// DistributionProcessor.onPostDistribution → NotificationProcessor.onDistributionScheduled, ActivityProcessor.onDistributionScheduled
+export interface DistributionScheduled {
+  distributionId: string;
+  hostId: string;
+  organizationId?: string;  // so Notification can tell the organization's followers
+  kind: DistributionKind;
+  title: string;
+  address: Address;         // so the notification can say where
+  startTime: string;
+  endTime: string;
+  locationId: string;
+  gridCell: string;         // the area, used to notify users nearby
+}
+
+// UsersNotified: a notification was made and sent to phones
+// NotificationProcessor (every handler) → no listeners yet (Table 2)
+export interface UsersNotified {
+  notificationId: string;        // made by Notification
+  kind: NotificationKind;
+  fcmTopics: string[];           // who it went to, e.g. ["area-T2N"] or ["user-abc123"]
+  title: string;                 // what the phone shows, e.g. "Your food was claimed"
+  body: string;
+  data: Record<string, string>;  // the IDs the app needs to open the right screen (FCM only takes text)
+  sentAt: string;
+}
+
+// ActivityRecorded: something went in one or more people's history
+// ActivityProcessor (every handler) → no listeners yet (Table 2), a future impact dashboard could use it
+export interface ActivityRecorded {
+  activityId: string;       // made by Activity
+  kind: ActivityKind;
+  userIds: string[];        // whose history it goes in, e.g. the donor and the recipient for a claim
+  donationId?: string;      // the donation it's about, if any
+  distributionId?: string;  // the event it's about, if any
+  organizationId?: string;  // the organization an event was posted for, if any
+  quantity?: number;        // how much food, if any
+  status?: DonationState;   // the donation's new state, for STATUS_CHANGED
+  recordedAt: string;
+}
+
+// ProcessingError: a processor couldn't use an event's data, so it hands the event to Workflow
+// Any processor's reportError → WorkflowProcessor.onProcessingError (the workflow event pattern)
+export interface ProcessingError {
+  failedEvent: EventEnvelope;  // the whole event that failed, so Workflow can fix it and send it again
+  processor: string;           // where it failed, e.g. "listing"
+  reason: string;              // what was wrong, e.g. a postal code typed as "t2n1n4"
 }

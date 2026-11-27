@@ -129,6 +129,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
+          ),
               const SizedBox(height: 16),
               _ActionCard(
                 title: 'My donations',
@@ -167,8 +168,7 @@ class HomeScreen extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const OrganizationsScreen()),
                 ),
               ),
-            ],
-          ),
+            
         ],
       ),
       floatingActionButton: FloatingActionButton(
