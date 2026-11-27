@@ -2,10 +2,12 @@
 // import 'package:firebase_core/firebase_core.dart';
 // import 'firebase_options.dart';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'services/auth_service.dart';
+import 'generated/zerohunger.dart';
 //import 'screens/backend_test_screen.dart';
 //import 'screens/donate_food_screen.dart';
 import 'theme/app_theme.dart';
@@ -17,6 +19,13 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  if (kDebugMode) {
+    ZerohungerConnector.instance.dataConnect.useDataConnectEmulator(
+      defaultTargetPlatform == TargetPlatform.android ? '10.0.2.2' : 'localhost',
+      9399,
+    );
+  }
 
   // No one signed in yet? Sign in as a guest: no screen, no form.
   // Firebase remembers the user on the phone, so this only happens on first launch

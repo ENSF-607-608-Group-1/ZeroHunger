@@ -3,7 +3,7 @@ import 'package:firebase_data_connect/firebase_data_connect.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
 
-part 'list_donations_by_status.dart';
+part 'list_available_donations.dart';
 
 part 'list_organizations.dart';
 
@@ -32,8 +32,8 @@ BigInt bigIntFromJson(dynamic value) {
 class ZerohungerConnector {
   
   
-  ListDonationsByStatusVariablesBuilder listDonationsByStatus ({required BigInt statusId, }) {
-    return ListDonationsByStatusVariablesBuilder(dataConnect, statusId: statusId,);
+  ListAvailableDonationsVariablesBuilder listAvailableDonations () {
+    return ListAvailableDonationsVariablesBuilder(dataConnect, );
   }
   
   

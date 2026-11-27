@@ -1,7 +1,7 @@
 # Basic Usage
 
 ```dart
-ZerohungerConnector.instance.ListDonationsByStatus(listDonationsByStatusVariables).execute();
+ZerohungerConnector.instance.ListAvailableDonations().execute();
 ZerohungerConnector.instance.ListOrganizations().execute();
 ZerohungerConnector.instance.ListFoodCategories().execute();
 ZerohungerConnector.instance.ListAllergens().execute();

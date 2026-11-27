@@ -1,10 +1,7 @@
 // find_food_screen.dart
 // The food anyone can claim, guests included.
 //
-//QueryService.availableDonations() -> a card per donation -> tap one -> Food details (FoodDetailsScreen done) 
-//TODO:Still needs database inplementation
-//
-// Until the database exists the list is the sample donations in query_service.dart.
+// QueryService.availableDonations() -> a card per available donation -> tap one -> Food details.
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -176,13 +173,27 @@ class _DonationCard extends StatelessWidget {
             children: [
               Text(d.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: ZhColors.text)),
               const SizedBox(height: 4),
-              Text(itemsSummary(d.items), style: const TextStyle(fontSize: 14, color: ZhColors.textSecondary)),
-              const SizedBox(height: 12),
-              IconLine(icon: Icons.schedule_rounded, text: pickupWindowText(d.pickupStart, d.pickupEnd)),
-              const SizedBox(height: 8),
-              IconLine(icon: Icons.place_outlined, text: '${d.area}, ${d.address.city}'),
-              const SizedBox(height: 12),
-              TagChips(categories: d.categories, allergens: d.allergens),
+              Text(
+                d.items.isEmpty
+                    ? (d.totalQuantity == null ? 'Item details unavailable' : 'Quantity: ${d.totalQuantity}')
+                    : itemsSummary(d.items),
+                style: const TextStyle(fontSize: 14, color: ZhColors.textSecondary),
+              ),
+              if (d.pickupStart != null && d.pickupEnd != null) ...[
+                const SizedBox(height: 12),
+                IconLine(icon: Icons.schedule_rounded, text: pickupWindowText(d.pickupStart!, d.pickupEnd!)),
+              ] else if (d.pickupTime != null) ...[
+                const SizedBox(height: 12),
+                IconLine(icon: Icons.schedule_rounded, text: 'Pickup time: ${d.pickupTime}'),
+              ],
+              if (d.area != null && d.address != null) ...[
+                const SizedBox(height: 8),
+                IconLine(icon: Icons.place_outlined, text: '${d.area}, ${d.address!.city}'),
+              ],
+              if (d.categories.isNotEmpty || d.allergens.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                TagChips(categories: d.categories, allergens: d.allergens),
+              ],
               const SizedBox(height: 16),
               Align(
                 alignment: Alignment.centerRight,
@@ -195,7 +206,11 @@ class _DonationCard extends StatelessWidget {
                   onPressed: onOpen,
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: [Text('Claim food'), SizedBox(width: 4), Icon(Icons.chevron_right_rounded, size: 20)],
+                    children: [
+                      Text(d.items.isEmpty ? 'View listing' : 'Claim food'),
+                      SizedBox(width: 4),
+                      Icon(Icons.chevron_right_rounded, size: 20),
+                    ],
                   ),
                 ),
               ),

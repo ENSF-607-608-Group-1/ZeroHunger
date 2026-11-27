@@ -120,19 +120,25 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
           const SizedBox(height: 16),
           _Panel(
             children: [
-              Text(
-                '${d.area}, ${d.address.city}',
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: ZhColors.text),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Pickup: ${pickupWindowText(d.pickupStart, d.pickupEnd)}',
-                style: const TextStyle(fontSize: 15, color: ZhColors.text),
-              ),
+              if (d.area != null && d.address != null)
+                Text(
+                  '${d.area}, ${d.address!.city}',
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: ZhColors.text),
+                ),
+              if (d.pickupStart != null && d.pickupEnd != null)
+                Text(
+                  'Pickup: ${pickupWindowText(d.pickupStart!, d.pickupEnd!)}',
+                  style: const TextStyle(fontSize: 15, color: ZhColors.text),
+                )
+              else if (d.pickupTime != null)
+                Text(
+                  'Pickup time: ${d.pickupTime}',
+                  style: const TextStyle(fontSize: 15, color: ZhColors.text),
+                ),
               const SizedBox(height: 8),
-              const Text(
-                'The exact address shows once you claim.',
-                style: TextStyle(fontSize: 13, color: ZhColors.textSecondary),
+              Text(
+                d.address == null ? 'Pickup location details are not available.' : 'The exact address shows once you claim.',
+                style: const TextStyle(fontSize: 13, color: ZhColors.textSecondary),
               ),
             ],
           ),
@@ -147,6 +153,11 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
           ],
           const SizedBox(height: 24),
           const SectionHeading('Items'),
+          if (d.items.isEmpty)
+            const Text(
+              'Individual food items are not available yet, so this listing cannot be claimed in the app.',
+              style: TextStyle(fontSize: 15, color: ZhColors.textSecondary),
+            ),
           for (final item in d.items) ...[
             _ItemCard(
               item: item,
@@ -163,7 +174,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
           ],
         ],
       ),
-      bottomNavigationBar: _bottomBar(),
+      bottomNavigationBar: d.items.isEmpty ? null : _bottomBar(),
     );
   }
 

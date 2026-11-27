@@ -21,19 +21,17 @@ ZerohungerConnector.instance.dataConnect.useDataConnectEmulator(host, port);
 You can also call queries and mutations by using the connector class.
 ## Queries
 
-### ListDonationsByStatus
+### ListAvailableDonations
 #### Required Arguments
 ```dart
-BigInt statusId = ...;
-ZerohungerConnector.instance.listDonationsByStatus(
-  statusId: statusId,
-).execute();
+// No required arguments
+ZerohungerConnector.instance.listAvailableDonations().execute();
 ```
 
 
 
 #### Return Type
-`execute()` returns a `QueryResult<ListDonationsByStatusData, ListDonationsByStatusVariables>`
+`execute()` returns a `QueryResult<ListAvailableDonationsData, void>`
 ```dart
 /// Result of an Operation Request (query/mutation).
 class OperationResult<Data, Variables> {
@@ -48,10 +46,8 @@ class QueryResult<Data, Variables> extends OperationResult<Data, Variables> {
   QueryResult(super.dataConnect, super.data, super.ref);
 }
 
-final result = await ZerohungerConnector.instance.listDonationsByStatus(
-  statusId: statusId,
-);
-ListDonationsByStatusData data = result.data;
+final result = await ZerohungerConnector.instance.listAvailableDonations();
+ListAvailableDonationsData data = result.data;
 final ref = result.ref;
 ```
 
@@ -59,11 +55,7 @@ final ref = result.ref;
 Each builder returns an `execute` function, which is a helper function that creates a `Ref` object, and executes the underlying operation.
 An example of how to use the `Ref` object is shown below:
 ```dart
-BigInt statusId = ...;
-
-final ref = ZerohungerConnector.instance.listDonationsByStatus(
-  statusId: statusId,
-).ref();
+final ref = ZerohungerConnector.instance.listAvailableDonations().ref();
 ref.execute();
 
 ref.subscribe(...);

@@ -1,19 +1,9 @@
-query ListDonationsByStatus($statusId: Int64!) @auth(level: USER_ANON) {
-  donations(where: { statusId: { eq: $statusId } }) {
+query ListAvailableDonations @auth(level: USER_ANON) {
+  donations(where: { status: { name: { eq: "AVAILABLE" } } }) {
     donationId
     donationTitle
     pickupTime
     itemQuantities
-    updatedAt
-    status {
-      name
-    }
-    event {
-      eventId
-      eventType
-      timeStart
-      timeEnd
-    }
   }
 }
 
