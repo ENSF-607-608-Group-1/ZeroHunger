@@ -10,7 +10,11 @@ import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/account_button.dart';
 import 'donate_food_screen.dart';
+import 'events_screen.dart';
 import 'find_food_screen.dart';
+import 'my_donations_screen.dart';
+import 'organizations_screen.dart';
+import 'post_event_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -75,6 +79,44 @@ class HomeScreen extends StatelessWidget {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const DonateFoodScreen()),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _ActionCard(
+                title: 'My donations',
+                subtitle: 'Manage food you’ve posted',
+                tag: isGuest ? 'Account needed' : null,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyDonationsScreen()),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _ActionCard(
+                title: 'Events',
+                subtitle: 'Browse food distributions and donation events',
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const EventsScreen()),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _ActionCard(
+                title: 'Post an event',
+                subtitle: 'Announce a food distribution or donation event',
+                tag: isGuest ? 'Account needed' : null,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PostEventScreen()),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _ActionCard(
+                title: 'Organizations',
+                subtitle: 'Find local food banks and groups to follow',
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const OrganizationsScreen()),
                 ),
               ),
             ],
