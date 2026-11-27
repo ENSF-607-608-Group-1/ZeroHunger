@@ -12,6 +12,7 @@ import '../services/auth_service.dart';
 import '../services/zero_hunger_api.dart';
 import '../theme/app_theme.dart';
 import '../widgets/form_parts.dart';
+import '../widgets/notification_button.dart';
 import 'sign_in_sheet.dart';
 
 // The choices in the dropdowns
@@ -272,7 +273,7 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
               'Donate food',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500, color: ZhColors.text),
             ),
-            actions: [_AccountButton(user: user), const SizedBox(width: 8)],
+            actions: [const NotificationButton(), _AccountButton(user: user), const SizedBox(width: 8)],
           ),
           body: signedIn ? _form() : _GuestNotice(onSignIn: () => showSignInSheet(context)),
           bottomNavigationBar: signedIn ? _bottomBar() : null,

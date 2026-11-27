@@ -16,6 +16,7 @@ import '../theme/app_theme.dart';
 import '../widgets/account_button.dart';
 import '../widgets/food_parts.dart';
 import '../widgets/form_parts.dart';
+import '../widgets/notification_button.dart';
 import 'pickup_chat_screen.dart';
 
 class MyReservationsScreen extends StatefulWidget {
@@ -104,6 +105,11 @@ class _MyReservationsScreenState extends State<MyReservationsScreen> {
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500, color: ZhColors.text),
         ),
         actions: [
+          NotificationButton(
+            queryService: widget.queryService,
+            chatService: widget.chatService,
+            accountAction: widget.accountAction,
+          ),
           if (widget.accountAction != null)
             widget.accountAction!
           else

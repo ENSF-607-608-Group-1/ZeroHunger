@@ -14,6 +14,7 @@ import '../services/query_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/account_button.dart';
 import '../widgets/form_parts.dart';
+import '../widgets/notification_button.dart';
 import 'pickup_chat_screen.dart';
 
 enum _ChatFilter { all, claims, donations }
@@ -101,6 +102,10 @@ class _PickupChatsScreenState extends State<PickupChatsScreen> {
           ],
         ),
         actions: [
+          NotificationButton(
+            chatService: widget.chatService,
+            accountAction: widget.accountAction,
+          ),
           if (widget.accountAction != null)
             widget.accountAction!
           else

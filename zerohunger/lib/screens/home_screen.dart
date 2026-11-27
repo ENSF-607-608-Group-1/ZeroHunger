@@ -8,8 +8,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../services/chat_service.dart';
+import '../services/notification_service.dart';
+import '../services/query_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/account_button.dart';
+import '../widgets/notification_button.dart';
 import 'donate_food_screen.dart';
 import 'find_food_screen.dart';
 import 'my_reservations_screen.dart';
@@ -19,10 +22,14 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({
     super.key,
     this.chatService,
+    this.notificationService,
+    this.queryService,
     this.accountAction,
   });
 
   final ChatService? chatService;
+  final NotificationService? notificationService;
+  final QueryService? queryService;
   final Widget? accountAction;
 
   @override
@@ -62,7 +69,16 @@ class HomeScreen extends StatelessWidget {
             Text('Home', style: TextStyle(fontSize: 12, color: ZhColors.textSecondary)),
           ],
         ),
-        actions: [accountAction ?? AccountButton(user: user), const SizedBox(width: 8)],
+        actions: [
+          NotificationButton(
+            notificationService: notificationService,
+            queryService: queryService,
+            chatService: chatService,
+            accountAction: accountAction,
+          ),
+          accountAction ?? AccountButton(user: user),
+          const SizedBox(width: 8),
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 88),
