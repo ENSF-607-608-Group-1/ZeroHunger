@@ -1,0 +1,50 @@
+# cloud-pipeline-tests.yml
+# Runs the cloud pipeline tests (functions/test/cloud) against the live zerohunger-bbd36 project:
+# every day at 9:00 Calgary time, on every push to main, and from the Run workflow button
+# They test what's deployed, not the code in the push
+name: Cloud pipeline tests
+
+on:
+  schedule:
+    - cron: "0 9 * * *"
+      timezone: "America/Edmonton"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# One run at a time, since every run clears and reads the same -sub subscriptions
+concurrency:
+  group: cloud-pipeline-tests
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write # lets the run sign in to Google Cloud without a stored key
+
+jobs:
+  claim-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: functions
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: functions/package-lock.json
+
+      # Signs in as the test service account, which can only read the -sub subscriptions
+      - uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_TEST_SERVICE_ACCOUNT }}
+
+      - run: npm ci
+
+      - run: npm run test:cloud
+        env:
+          ZH_API_KEY: ${{ secrets.ZH_API_KEY }}
