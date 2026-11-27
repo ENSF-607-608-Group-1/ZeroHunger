@@ -137,6 +137,83 @@ class DonorDonation {
   }
 }
 
+// The two kinds of community events a donor or organization can announce.
+enum EventKind {
+  foodDistribution,
+  donationEvent;
+
+  String get label => switch (this) {
+        EventKind.foodDistribution => 'Food distribution',
+        EventKind.donationEvent => 'Donation event',
+      };
+
+  String get apiValue => switch (this) {
+        EventKind.foodDistribution => 'FOOD_DISTRIBUTION',
+        EventKind.donationEvent => 'DONATION_EVENT',
+      };
+
+  String get description => switch (this) {
+        EventKind.foodDistribution => 'Announce scheduled free food pickup for people nearby.',
+        EventKind.donationEvent => 'Invite donors to bring and pool food at a scheduled time.',
+      };
+}
+
+// An upcoming food distribution or donation event shown on the Events screen.
+class CommunityEvent {
+  final String eventId;
+  final String title;
+  final EventKind kind;
+  final DateTime startTime;
+  final DateTime endTime;
+  final PickupAddress address;
+  final String? organization;
+  final String comments;
+  final bool isHost;
+  final bool endedEarly;
+  final bool rsvped;
+  final bool followingOrganization;
+  final int rsvpCount;
+
+  const CommunityEvent({
+    required this.eventId,
+    required this.title,
+    required this.kind,
+    required this.startTime,
+    required this.endTime,
+    required this.address,
+    this.organization,
+    this.comments = '',
+    this.isHost = false,
+    this.endedEarly = false,
+    this.rsvped = false,
+    this.followingOrganization = false,
+    this.rsvpCount = 0,
+  });
+
+  CommunityEvent copyWith({
+    bool? endedEarly,
+    bool? rsvped,
+    bool? followingOrganization,
+    int? rsvpCount,
+  }) {
+    return CommunityEvent(
+      eventId: eventId,
+      title: title,
+      kind: kind,
+      startTime: startTime,
+      endTime: endTime,
+      address: address,
+      organization: organization,
+      comments: comments,
+      isHost: isHost,
+      endedEarly: endedEarly ?? this.endedEarly,
+      rsvped: rsvped ?? this.rsvped,
+      followingOrganization: followingOrganization ?? this.followingOrganization,
+      rsvpCount: rsvpCount ?? this.rsvpCount,
+    );
+  }
+}
+
 class QueryService {
   // The donations that can be claimed now.
   // TODO: Review when database is complete. Ask the cloud QueryService for AVAILABLE donations
@@ -153,6 +230,88 @@ class QueryService {
     await Future<void>.delayed(const Duration(milliseconds: 400)); // like a real network call
     return _sampleMyDonations();
   }
+
+  // Upcoming food distributions and donation events nearby.
+  // TODO: Review when database is complete. Ask the cloud QueryService for upcoming
+  //   DistributionEvent rows near the user, along with follow/RSVP status.
+  Future<List<CommunityEvent>> upcomingEvents() async {
+    await Future<void>.delayed(const Duration(milliseconds: 400)); // like a real network call
+    return _sampleEvents();
+  }
+}
+
+// Made-up upcoming events for building and testing the Events screen.
+List<CommunityEvent> _sampleEvents() {
+  final now = DateTime.now();
+  DateTime at(int days, int hour, [int minute = 0]) => DateTime(now.year, now.month, now.day + days, hour, minute);
+
+  return [
+    CommunityEvent(
+      eventId: 'evt-calgary-food-bank-1',
+      title: 'Saturday Community Food Distribution',
+      kind: EventKind.foodDistribution,
+      startTime: at(0, 14),
+      endTime: at(0, 17),
+      address: const PickupAddress(
+        line1: '5000 11 St SE',
+        city: 'Calgary',
+        province: 'AB',
+        postalCode: 'T2H 2Y5',
+      ),
+      organization: 'Calgary Food Bank',
+      comments: 'Fresh produce, bread, and pantry staples available while supplies last. Please bring reusable bags and photo ID.',
+      rsvpCount: 24,
+    ),
+    CommunityEvent(
+      eventId: 'evt-community-fridge-drive',
+      title: 'Beltline Community Donation Drive',
+      kind: EventKind.donationEvent,
+      startTime: at(1, 11),
+      endTime: at(1, 14, 30),
+      address: const PickupAddress(
+        line1: '227 11 Ave SW',
+        city: 'Calgary',
+        province: 'AB',
+        postalCode: 'T2R 1B9',
+      ),
+      organization: 'Community Fridge YYC',
+      comments: 'Collecting sealed dry goods, fresh fruit, and halal-certified meals to stock the community fridge for the week.',
+      isHost: true,
+      rsvpCount: 11,
+    ),
+    CommunityEvent(
+      eventId: 'evt-ucalgary-pantry',
+      title: 'Campus Weekly Pantry Pickup',
+      kind: EventKind.foodDistribution,
+      startTime: at(2, 12),
+      endTime: at(2, 15),
+      address: const PickupAddress(
+        line1: '2500 University Dr NW',
+        city: 'Calgary',
+        province: 'AB',
+        postalCode: 'T2N 1N4',
+      ),
+      organization: 'UCalgary Food Pantry',
+      comments: 'Open to students and local families. Enter through MacEwan Student Centre main doors.',
+      followingOrganization: true,
+      rsvpCount: 38,
+    ),
+    CommunityEvent(
+      eventId: 'evt-neighbourhood-cookout',
+      title: 'Bridgeland Neighbours Pantry Share',
+      kind: EventKind.donationEvent,
+      startTime: at(3, 16),
+      endTime: at(3, 18, 30),
+      address: const PickupAddress(
+        line1: '917 Centre Ave NE',
+        city: 'Calgary',
+        province: 'AB',
+        postalCode: 'T2E 0C6',
+      ),
+      comments: 'Drop off extra unopened groceries or baked goods to share with neighbours in Bridgeland.',
+      rsvpCount: 7,
+    ),
+  ];
 }
 
 // Made-up donor donations for building and testing the My donations screen.

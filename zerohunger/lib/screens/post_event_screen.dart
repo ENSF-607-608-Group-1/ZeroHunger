@@ -11,11 +11,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
+import '../services/query_service.dart';
 import '../services/zero_hunger_api.dart';
 import '../theme/app_theme.dart';
 import '../widgets/account_button.dart';
 import '../widgets/form_parts.dart';
 import 'sign_in_sheet.dart';
+
+export '../services/query_service.dart' show EventKind;
 
 // The 13 Canadian provinces and territories (same list as DonateFoodScreen).
 const _provinces = ['AB', 'BC', 'MB', 'NB', 'NL', 'NS', 'NT', 'NU', 'ON', 'PE', 'QC', 'SK', 'YT'];
@@ -29,27 +32,6 @@ const _defaultOrganizations = [
   'Community Fridge YYC',
   'UCalgary Food Pantry',
 ];
-
-// The two kinds of events a donor or organization can announce.
-enum EventKind {
-  foodDistribution,
-  donationEvent;
-
-  String get label => switch (this) {
-        EventKind.foodDistribution => 'Food distribution',
-        EventKind.donationEvent => 'Donation event',
-      };
-
-  String get apiValue => switch (this) {
-        EventKind.foodDistribution => 'FOOD_DISTRIBUTION',
-        EventKind.donationEvent => 'DONATION_EVENT',
-      };
-
-  String get description => switch (this) {
-        EventKind.foodDistribution => 'Announce scheduled free food pickup for people nearby.',
-        EventKind.donationEvent => 'Invite donors to bring and pool food at a scheduled time.',
-      };
-}
 
 // Form data sent when posting an event.
 class PostEventData {

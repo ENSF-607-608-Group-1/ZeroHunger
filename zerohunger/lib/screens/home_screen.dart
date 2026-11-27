@@ -10,6 +10,7 @@ import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/account_button.dart';
 import 'donate_food_screen.dart';
+import 'events_screen.dart';
 import 'find_food_screen.dart';
 import 'my_donations_screen.dart';
 import 'post_event_screen.dart';
@@ -87,6 +88,15 @@ class HomeScreen extends StatelessWidget {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const MyDonationsScreen()),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _ActionCard(
+                title: 'Events',
+                subtitle: 'Browse food distributions and donation events',
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const EventsScreen()),
                 ),
               ),
               const SizedBox(height: 16),
