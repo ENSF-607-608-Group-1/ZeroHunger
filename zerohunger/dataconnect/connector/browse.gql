@@ -1,0 +1,48 @@
+query ListDonationsByStatus($statusId: Int64!) @auth(level: USER_ANON) {
+  donations(where: { statusId: { eq: $statusId } }) {
+    donationId
+    donationTitle
+    pickupTime
+    itemQuantities
+    updatedAt
+    status {
+      name
+    }
+    event {
+      eventId
+      eventType
+      timeStart
+      timeEnd
+    }
+  }
+}
+
+query ListOrganizations @auth(level: USER_ANON) {
+  organizations {
+    orgId
+    orgName
+    orgPrimaryEmail
+    street
+    postalCode {
+      code
+      city
+      province
+    }
+  }
+}
+
+query ListFoodCategories @auth(level: USER_ANON) {
+  foodCategories {
+    categoryId
+    categoryName
+    description
+  }
+}
+
+query ListAllergens @auth(level: USER_ANON) {
+  allergens {
+    allergenId
+    name
+    description
+  }
+}
