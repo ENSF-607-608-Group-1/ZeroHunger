@@ -10,21 +10,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../services/auth_service.dart';
+import '../services/chat_service.dart';
 import '../services/query_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/account_button.dart';
 import '../widgets/food_parts.dart';
 import '../widgets/form_parts.dart';
+import 'pickup_chat_screen.dart';
 
 class MyReservationsScreen extends StatefulWidget {
   const MyReservationsScreen({
     super.key,
     this.queryService,
+    this.chatService,
     this.accountAction,
     this.onOpenChat,
   });
 
   final QueryService? queryService;
+  final ChatService? chatService;
   final Widget? accountAction;
   final ValueChanged<Reservation>? onOpenChat;
 
@@ -75,8 +79,15 @@ class _MyReservationsScreenState extends State<MyReservationsScreen> {
       handler(reservation);
       return;
     }
-    // Next step: open PickupChatScreen(conversationId: reservation.reservationId, ...) here.
-    showZhMessage(context, 'Pickup chat is coming soon.');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PickupChatScreen.fromReservation(
+          reservation,
+          chatService: widget.chatService,
+        ),
+      ),
+    );
   }
 
   @override

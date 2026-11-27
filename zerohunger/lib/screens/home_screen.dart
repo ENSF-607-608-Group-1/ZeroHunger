@@ -7,17 +7,30 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import '../services/chat_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/account_button.dart';
 import 'donate_food_screen.dart';
 import 'find_food_screen.dart';
 import 'my_reservations_screen.dart';
+import 'pickup_chats_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({
+    super.key,
+    this.chatService,
+    this.accountAction,
+  });
+
+  final ChatService? chatService;
+  final Widget? accountAction;
 
   @override
   Widget build(BuildContext context) {
+    if (accountAction != null) {
+      return _buildScaffold(context, user: null, isGuest: true);
+    }
+
     final auth = AuthService();
 
     // Redraws when the user changes, e.g. a guest signs in.
@@ -27,70 +40,93 @@ class HomeScreen extends StatelessWidget {
       builder: (context, snapshot) {
         final user = snapshot.data;
         final isGuest = user == null || user.isAnonymous;
-
-        return Scaffold(
-          appBar: AppBar(
-            backgroundColor: ZhColors.background,
-            foregroundColor: ZhColors.text,
-            elevation: 0,
-            scrolledUnderElevation: 0,
-            toolbarHeight: 64,
-            titleSpacing: 16,
-            title: const Column(
-              mainAxisSize: MainAxisSize.min, // only as tall as the two lines, so the bar centres them
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Zero Hunger', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ZhColors.text)),
-                Text('Home', style: TextStyle(fontSize: 12, color: ZhColors.textSecondary)),
-              ],
-            ),
-            actions: [AccountButton(user: user), const SizedBox(width: 8)],
-          ),
-          body: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-            children: [
-              const Text(
-                'Free food from people near you',
-                style: TextStyle(fontSize: 28, height: 36 / 28, fontWeight: FontWeight.w600, color: ZhColors.text),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Help reduce food waste and share meals with your neighbours in Calgary.',
-                style: TextStyle(fontSize: 14, height: 20 / 14, color: ZhColors.textSecondary),
-              ),
-              const SizedBox(height: 24),
-              _ActionCard(
-                title: 'Find food',
-                subtitle: 'Browse food you can claim',
-                // Next step: open the Find food screen here.
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const FindFoodScreen()),
-                ),
-              ),
-              const SizedBox(height: 16),
-              _ActionCard(
-                title: 'Donate food',
-                subtitle: 'Post food you have',
-                tag: isGuest ? 'Account needed' : null,
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const DonateFoodScreen()),
-                ),
-              ),
-              const SizedBox(height: 16),
-              _ActionCard(
-                title: 'My reservations',
-                subtitle: 'View your claims and pickup codes',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MyReservationsScreen()),
-                ),
-              ),
-            ],
-          ),
-        );
+        return _buildScaffold(context, user: user, isGuest: isGuest);
       },
+    );
+  }
+
+  Widget _buildScaffold(BuildContext context, {required User? user, required bool isGuest}) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: ZhColors.background,
+        foregroundColor: ZhColors.text,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        toolbarHeight: 64,
+        titleSpacing: 16,
+        title: const Column(
+          mainAxisSize: MainAxisSize.min, // only as tall as the two lines, so the bar centres them
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Zero Hunger', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ZhColors.text)),
+            Text('Home', style: TextStyle(fontSize: 12, color: ZhColors.textSecondary)),
+          ],
+        ),
+        actions: [accountAction ?? AccountButton(user: user), const SizedBox(width: 8)],
+      ),
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 88),
+        children: [
+          const Text(
+            'Free food from people near you',
+            style: TextStyle(fontSize: 28, height: 36 / 28, fontWeight: FontWeight.w600, color: ZhColors.text),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Help reduce food waste and share meals with your neighbours in Calgary.',
+            style: TextStyle(fontSize: 14, height: 20 / 14, color: ZhColors.textSecondary),
+          ),
+          const SizedBox(height: 24),
+          _ActionCard(
+            title: 'Find food',
+            subtitle: 'Browse food you can claim',
+            // Next step: open the Find food screen here.
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const FindFoodScreen()),
+            ),
+          ),
+          const SizedBox(height: 16),
+          _ActionCard(
+            title: 'Donate food',
+            subtitle: 'Post food you have',
+            tag: isGuest ? 'Account needed' : null,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const DonateFoodScreen()),
+            ),
+          ),
+          const SizedBox(height: 16),
+          _ActionCard(
+            title: 'My reservations',
+            subtitle: 'View your claims and pickup codes',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyReservationsScreen(
+                  chatService: chatService,
+                  accountAction: accountAction,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Pickup chats',
+        backgroundColor: ZhColors.primary,
+        foregroundColor: ZhColors.onPrimary,
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PickupChatsScreen(
+              chatService: chatService,
+              accountAction: accountAction,
+            ),
+          ),
+        ),
+        child: const Icon(Icons.message_rounded),
+      ),
     );
   }
 }

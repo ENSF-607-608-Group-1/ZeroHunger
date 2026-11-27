@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:zerohunger/screens/my_reservations_screen.dart';
+import 'package:zerohunger/screens/pickup_chat_screen.dart';
+import 'package:zerohunger/services/chat_service.dart';
 import 'package:zerohunger/services/query_service.dart';
 import 'package:zerohunger/services/zero_hunger_api.dart';
 import 'package:zerohunger/theme/app_theme.dart';
@@ -180,18 +182,23 @@ void main() {
     expect(openedChatFor?.reservationId, 'res-active');
   });
 
-  testWidgets('Open pickup chat shows notice when pickup chat screen is not wired yet', (tester) async {
+  testWidgets('Open pickup chat navigates directly to PickupChatScreen for that reservation', (tester) async {
     final query = _FakeQueryService(() async => [_buildSampleReservations()[1]]);
+    final chat = ChatService(initialThreads: const [], simulatedDelay: Duration.zero);
 
     await tester.pumpWidget(_wrap(MyReservationsScreen(
       queryService: query,
+      chatService: chat,
       accountAction: const SizedBox.shrink(),
     )));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Open pickup chat'));
-    await tester.pump();
-    expect(find.text('Pickup chat is coming soon.'), findsOneWidget);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(PickupChatScreen), findsOneWidget);
+    expect(find.text('Rice and stew'), findsOneWidget);
+    expect(find.text('Pickup chat opened'), findsOneWidget);
   });
 
   testWidgets('shows empty notice and recovers from error on refresh', (tester) async {
