@@ -11,6 +11,7 @@ import '../theme/app_theme.dart';
 import '../widgets/account_button.dart';
 import 'donate_food_screen.dart';
 import 'find_food_screen.dart';
+import 'my_reservations_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -75,6 +76,15 @@ class HomeScreen extends StatelessWidget {
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const DonateFoodScreen()),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _ActionCard(
+                title: 'My reservations',
+                subtitle: 'View your claims and pickup codes',
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyReservationsScreen()),
                 ),
               ),
             ],
