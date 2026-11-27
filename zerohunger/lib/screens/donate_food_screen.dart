@@ -11,7 +11,9 @@ import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../services/zero_hunger_api.dart';
 import '../theme/app_theme.dart';
+import '../widgets/account_button.dart';
 import '../widgets/form_parts.dart';
+import '../widgets/notification_button.dart';
 import 'sign_in_sheet.dart';
 
 // The choices in the dropdowns
@@ -272,7 +274,7 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
               'Donate food',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500, color: ZhColors.text),
             ),
-            actions: [_AccountButton(user: user), const SizedBox(width: 8)],
+            actions: [const NotificationButton(), AccountButton(user: user), const SizedBox(width: 8)],
           ),
           body: signedIn ? _form() : _GuestNotice(onSignIn: () => showSignInSheet(context)),
           bottomNavigationBar: signedIn ? _bottomBar() : null,
@@ -558,52 +560,6 @@ class _ItemDraft {
       );
 
   void dispose() => name.dispose();
-}
-
-// The round account button in the app bar: the first letter of the email for an account,
-// a person icon for a guest. Tap it to sign in, or to see your email and sign out.
-class _AccountButton extends StatelessWidget {
-  const _AccountButton({required this.user});
-
-  final User? user;
-
-  @override
-  Widget build(BuildContext context) {
-    final u = user;
-    final email = (u == null || u.isAnonymous) ? null : (u.email ?? '');
-
-    final avatar = CircleAvatar(
-      radius: 16,
-      backgroundColor: email == null ? ZhColors.divider : ZhColors.primaryContainer,
-      child: email == null
-          ? const Icon(Icons.person_rounded, size: 18, color: ZhColors.textSecondary)
-          : Text(
-              email.isEmpty ? '?' : email[0].toUpperCase(),
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: ZhColors.onPrimaryContainer),
-            ),
-    );
-
-    if (email == null) {
-      // Guest: tapping opens the sign-in sheet.
-      return IconButton(tooltip: 'Sign in', onPressed: () => showSignInSheet(context), icon: avatar);
-    }
-
-    // Account: tapping shows the email and "Sign out".
-    return PopupMenuButton<String>(
-      tooltip: 'Account',
-      onSelected: (_) => AuthService().signOut(),
-      itemBuilder: (context) => [
-        PopupMenuItem<String>(enabled: false, child: Text(email)),
-        const PopupMenuItem<String>(
-          value: 'sign-out',
-          child: Row(
-            children: [Icon(Icons.logout_rounded, size: 20), SizedBox(width: 12), Text('Sign out')],
-          ),
-        ),
-      ],
-      child: Padding(padding: const EdgeInsets.all(8), child: avatar),
-    );
-  }
 }
 
 // What a guest sees on this screen (behind the sheet, or after tapping "Not now").
