@@ -3,22 +3,36 @@
 //
 //   QueryService.upcomingEvents() -> a card per event -> tap one -> EventDetailsScreen
 //
-// EventDetailsScreen shows all event fields plus comments, RSVP (local state until backend
-// exists), Follow organization, and for the host, End early.
+// EventDetailsScreen shows schema-backed event fields; RSVP/follow actions need a backend callback.
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
 import '../services/query_service.dart';
+import '../services/zero_hunger_api.dart';
 import '../theme/app_theme.dart';
 import '../widgets/account_button.dart';
 import '../widgets/food_parts.dart';
 import '../widgets/form_parts.dart';
 
 typedef EndEventEarlyFn = Future<void> Function(String eventId);
-typedef ToggleFollowOrgFn = Future<void> Function(String organization, bool follow);
+typedef ToggleFollowOrgFn = Future<void> Function(
+  String organization,
+  bool follow,
+);
 typedef ToggleRsvpFn = Future<void> Function(String eventId, bool rsvp);
+
+String _eventAddress(PickupAddress address) {
+  final locality = [
+    address.city,
+    [
+      address.province,
+      address.postalCode,
+    ].where((part) => part.isNotEmpty).join(' '),
+  ].where((part) => part.isNotEmpty).join(', ');
+  return locality.isEmpty ? address.line1 : '${address.line1}\n$locality';
+}
 
 class EventsScreen extends StatefulWidget {
   const EventsScreen({
@@ -48,7 +62,8 @@ class _EventsScreenState extends State<EventsScreen> {
   List<CommunityEvent>? _events;
   bool _loading = true;
   bool _loadFailed = false;
-  EventKind? _kindFilter; // null shows both Food distribution and Donation event
+  EventKind?
+  _kindFilter; // null shows both Food distribution and Donation event
 
   @override
   void initState() {
@@ -104,9 +119,12 @@ class _EventsScreenState extends State<EventsScreen> {
       for (var i = 0; i < list.length; i++) {
         if (list[i].eventId == updated.eventId) {
           list[i] = updated;
-        } else if (updated.organization != null && list[i].organization == updated.organization) {
+        } else if (updated.organization != null &&
+            list[i].organization == updated.organization) {
           // Keep Follow state consistent across all events from the same organization.
-          list[i] = list[i].copyWith(followingOrganization: updated.followingOrganization);
+          list[i] = list[i].copyWith(
+            followingOrganization: updated.followingOrganization,
+          );
         }
       }
     });
@@ -123,14 +141,19 @@ class _EventsScreenState extends State<EventsScreen> {
         toolbarHeight: 64,
         title: const Text(
           'Events',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500, color: ZhColors.text),
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w500,
+            color: ZhColors.text,
+          ),
         ),
         actions: [
           if (widget.showAccountButton)
             StreamBuilder<User?>(
               stream: _auth.userChanges,
               initialData: _auth.currentUser,
-              builder: (context, snapshot) => AccountButton(user: snapshot.data),
+              builder: (context, snapshot) =>
+                  AccountButton(user: snapshot.data),
             ),
           const SizedBox(width: 8),
         ],
@@ -165,7 +188,10 @@ class _EventsScreenState extends State<EventsScreen> {
                           )
                         else
                           for (final event in _visibleEvents) ...[
-                            _EventCard(event: event, onTap: () => _openDetails(event)),
+                            _EventCard(
+                              event: event,
+                              onTap: () => _openDetails(event),
+                            ),
                             const SizedBox(height: 16),
                           ],
                       ],
@@ -237,16 +263,34 @@ class _EventCard extends StatelessWidget {
                 runSpacing: 6,
                 children: [
                   _EventKindBadge(kind: e.kind),
-                  if (e.endedEarly) const _SmallBadge(label: 'Ended early', bg: ZhColors.divider, fg: ZhColors.textSecondary),
-                  if (e.isHost) const _SmallBadge(label: 'Host', bg: ZhColors.divider, fg: ZhColors.text),
+                  if (e.endedEarly)
+                    const _SmallBadge(
+                      label: 'Ended early',
+                      bg: ZhColors.divider,
+                      fg: ZhColors.textSecondary,
+                    ),
+                  if (e.isHost)
+                    const _SmallBadge(
+                      label: 'Host',
+                      bg: ZhColors.divider,
+                      fg: ZhColors.text,
+                    ),
                   if (e.rsvped && !e.endedEarly)
-                    const _SmallBadge(label: 'Going', bg: ZhColors.primaryContainer, fg: ZhColors.onPrimaryContainer),
+                    const _SmallBadge(
+                      label: 'Going',
+                      bg: ZhColors.primaryContainer,
+                      fg: ZhColors.onPrimaryContainer,
+                    ),
                 ],
               ),
               const SizedBox(height: 10),
               Text(
                 e.title,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: ZhColors.text),
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  color: ZhColors.text,
+                ),
               ),
               const SizedBox(height: 12),
               IconLine(
@@ -254,23 +298,21 @@ class _EventCard extends StatelessWidget {
                 text: pickupWindowText(e.startTime, e.endTime),
               ),
               const SizedBox(height: 8),
-              IconLine(
-                icon: Icons.place_outlined,
-                text: '${a.line1}, ${a.city}, ${a.province} ${a.postalCode}',
-              ),
-              if (e.organization != null && e.organization!.trim().isNotEmpty) ...[
+              IconLine(icon: Icons.place_outlined, text: _eventAddress(a)),
+              if (e.organization != null &&
+                  e.organization!.trim().isNotEmpty) ...[
                 const SizedBox(height: 8),
-                IconLine(
-                  icon: Icons.groups_outlined,
-                  text: e.organization!,
-                ),
+                IconLine(icon: Icons.groups_outlined, text: e.organization!),
               ],
               const SizedBox(height: 14),
               Row(
                 children: [
                   Text(
                     '${e.rsvpCount} going',
-                    style: const TextStyle(fontSize: 13, color: ZhColors.textSecondary),
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: ZhColors.textSecondary,
+                    ),
                   ),
                   const Spacer(),
                   const Row(
@@ -278,10 +320,18 @@ class _EventCard extends StatelessWidget {
                     children: [
                       Text(
                         'View details',
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: ZhColors.primary),
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: ZhColors.primary,
+                        ),
                       ),
                       SizedBox(width: 2),
-                      Icon(Icons.chevron_right_rounded, size: 20, color: ZhColors.primary),
+                      Icon(
+                        Icons.chevron_right_rounded,
+                        size: 20,
+                        color: ZhColors.primary,
+                      ),
                     ],
                   ),
                 ],
@@ -336,17 +386,21 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       if (widget.onToggleRsvp != null) {
         await widget.onToggleRsvp!(_event.eventId, nextRsvp);
       } else {
-        // TODO: Wire RSVP to DistributionService once backend supports EventRSVP.
-        await Future<void>.delayed(const Duration(milliseconds: 150));
+        showZhMessage(context, 'Event RSVPs are not available yet.');
+        return;
       }
       if (!mounted) return;
-      final nextCount = (_event.rsvpCount + (nextRsvp ? 1 : -1)).clamp(0, 999999);
+      final nextCount = (_event.rsvpCount + (nextRsvp ? 1 : -1)).clamp(
+        0,
+        999999,
+      );
       setState(() {
         _event = _event.copyWith(rsvped: nextRsvp, rsvpCount: nextCount);
       });
       showZhMessage(context, nextRsvp ? 'RSVP confirmed!' : 'RSVP cancelled.');
     } catch (_) {
-      if (mounted) showZhMessage(context, 'Could not update RSVP. Please try again.');
+      if (mounted)
+        showZhMessage(context, 'Could not update RSVP. Please try again.');
     } finally {
       if (mounted) setState(() => _togglingRsvp = false);
     }
@@ -362,8 +416,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       if (widget.onToggleFollowOrg != null) {
         await widget.onToggleFollowOrg!(org, nextFollow);
       } else {
-        // TODO: Wire organization subscription to PushService / FCM topic once built.
-        await Future<void>.delayed(const Duration(milliseconds: 150));
+        showZhMessage(context, 'Organization follows are not available yet.');
+        return;
       }
       if (!mounted) return;
       setState(() {
@@ -371,10 +425,16 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       });
       showZhMessage(
         context,
-        nextFollow ? 'Following $org for future event alerts.' : 'Unfollowed $org.',
+        nextFollow
+            ? 'Following $org for future event alerts.'
+            : 'Unfollowed $org.',
       );
     } catch (_) {
-      if (mounted) showZhMessage(context, 'Could not update follow status. Please try again.');
+      if (mounted)
+        showZhMessage(
+          context,
+          'Could not update follow status. Please try again.',
+        );
     } finally {
       if (mounted) setState(() => _togglingFollow = false);
     }
@@ -382,31 +442,33 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
   Future<void> _confirmEndEarly() async {
     if (_event.endedEarly || _endingEarly) return;
+    if (widget.onEndEarly == null) {
+      showZhMessage(context, 'Ending events early is not available yet.');
+      return;
+    }
 
     final confirmed = await showModalBottomSheet<bool>(
       context: context,
       backgroundColor: ZhColors.surface,
       barrierColor: const Color(0x66000000),
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
       builder: (context) => _EndEarlySheet(title: _event.title),
     );
     if (confirmed != true || !mounted) return;
 
     setState(() => _endingEarly = true);
     try {
-      if (widget.onEndEarly != null) {
-        await widget.onEndEarly!(_event.eventId);
-      } else {
-        // TODO: Wire End early to DistributionService once backend supports ending events early.
-        await Future<void>.delayed(const Duration(milliseconds: 250));
-      }
+      await widget.onEndEarly!(_event.eventId);
       if (!mounted) return;
       setState(() {
         _event = _event.copyWith(endedEarly: true);
       });
       showZhMessage(context, 'Event ended early.');
     } catch (_) {
-      if (mounted) showZhMessage(context, 'Could not end event early. Please try again.');
+      if (mounted)
+        showZhMessage(context, 'Could not end event early. Please try again.');
     } finally {
       if (mounted) setState(() => _endingEarly = false);
     }
@@ -437,14 +499,19 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           ),
           title: const Text(
             'Event details',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500, color: ZhColors.text),
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w500,
+              color: ZhColors.text,
+            ),
           ),
           actions: [
             if (widget.showAccountButton)
               StreamBuilder<User?>(
                 stream: _auth.userChanges,
                 initialData: _auth.currentUser,
-                builder: (context, snapshot) => AccountButton(user: snapshot.data),
+                builder: (context, snapshot) =>
+                    AccountButton(user: snapshot.data),
               ),
             const SizedBox(width: 8),
           ],
@@ -458,14 +525,28 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               children: [
                 _EventKindBadge(kind: e.kind),
                 if (e.endedEarly)
-                  const _SmallBadge(label: 'Ended early', bg: ZhColors.divider, fg: ZhColors.textSecondary),
-                if (e.isHost) const _SmallBadge(label: 'Host', bg: ZhColors.divider, fg: ZhColors.text),
+                  const _SmallBadge(
+                    label: 'Ended early',
+                    bg: ZhColors.divider,
+                    fg: ZhColors.textSecondary,
+                  ),
+                if (e.isHost)
+                  const _SmallBadge(
+                    label: 'Host',
+                    bg: ZhColors.divider,
+                    fg: ZhColors.text,
+                  ),
               ],
             ),
             const SizedBox(height: 10),
             Text(
               e.title,
-              style: const TextStyle(fontSize: 28, height: 36 / 28, fontWeight: FontWeight.w600, color: ZhColors.text),
+              style: const TextStyle(
+                fontSize: 28,
+                height: 36 / 28,
+                fontWeight: FontWeight.w600,
+                color: ZhColors.text,
+              ),
             ),
             const SizedBox(height: 16),
 
@@ -477,10 +558,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   text: pickupWindowText(e.startTime, e.endTime),
                 ),
                 const SizedBox(height: 12),
-                IconLine(
-                  icon: Icons.place_outlined,
-                  text: '${a.line1}\n${a.city}, ${a.province} ${a.postalCode}',
-                ),
+                IconLine(icon: Icons.place_outlined, text: _eventAddress(a)),
                 if (hasOrg) ...[
                   const SizedBox(height: 14),
                   const Divider(height: 1, color: ZhColors.divider),
@@ -498,25 +576,38 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   const SizedBox(height: 12),
                   e.followingOrganization
                       ? FilledButton.tonalIcon(
-                          onPressed: _togglingFollow ? null : _toggleFollowOrganization,
+                          onPressed: _togglingFollow
+                              ? null
+                              : _toggleFollowOrganization,
                           icon: const Icon(Icons.check_rounded, size: 18),
                           label: const Text('Following organization'),
                           style: FilledButton.styleFrom(
                             backgroundColor: ZhColors.primaryContainer,
                             foregroundColor: ZhColors.onPrimaryContainer,
                             shape: const StadiumBorder(),
-                            textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                            textStyle: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         )
                       : OutlinedButton.icon(
-                          onPressed: _togglingFollow ? null : _toggleFollowOrganization,
-                          icon: const Icon(Icons.notifications_active_outlined, size: 18),
+                          onPressed: _togglingFollow
+                              ? null
+                              : _toggleFollowOrganization,
+                          icon: const Icon(
+                            Icons.notifications_active_outlined,
+                            size: 18,
+                          ),
                           label: const Text('Follow organization'),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: ZhColors.primary,
                             side: const BorderSide(color: ZhColors.primary),
                             shape: const StadiumBorder(),
-                            textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                            textStyle: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                 ],
@@ -531,7 +622,11 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   const SectionHeading('Comments'),
                   Text(
                     e.comments,
-                    style: const TextStyle(fontSize: 15, height: 1.5, color: ZhColors.text),
+                    style: const TextStyle(
+                      fontSize: 15,
+                      height: 1.5,
+                      color: ZhColors.text,
+                    ),
                   ),
                 ],
               ),
@@ -547,28 +642,46 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     e.endedEarly
                         ? 'This event has been ended early. Attendees and nearby users can see that it is closed.'
                         : 'Food ran out or need to close early? End this event early so nearby users know.',
-                    style: const TextStyle(fontSize: 14, height: 1.4, color: ZhColors.textSecondary),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      height: 1.4,
+                      color: ZhColors.textSecondary,
+                    ),
                   ),
                   const SizedBox(height: 14),
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton.icon(
-                      onPressed: e.endedEarly || _endingEarly ? null : _confirmEndEarly,
+                      onPressed: e.endedEarly || _endingEarly
+                          ? null
+                          : _confirmEndEarly,
                       icon: _endingEarly
                           ? const SizedBox(
                               width: 18,
                               height: 18,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: ZhColors.error),
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: ZhColors.error,
+                              ),
                             )
                           : const Icon(Icons.stop_circle_outlined, size: 20),
-                      label: Text(e.endedEarly ? 'Event ended early' : 'End early'),
+                      label: Text(
+                        e.endedEarly ? 'Event ended early' : 'End early',
+                      ),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: ZhColors.error,
                         disabledForegroundColor: ZhColors.textSecondary,
-                        side: BorderSide(color: e.endedEarly ? ZhColors.divider : ZhColors.error),
+                        side: BorderSide(
+                          color: e.endedEarly
+                              ? ZhColors.divider
+                              : ZhColors.error,
+                        ),
                         minimumSize: const Size.fromHeight(48),
                         shape: const StadiumBorder(),
-                        textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                        textStyle: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
@@ -602,12 +715,19 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   e.endedEarly
                       ? 'Event status'
                       : (e.rsvped ? "You're going" : 'Attendance'),
-                  style: const TextStyle(fontSize: 14, color: ZhColors.textSecondary),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: ZhColors.textSecondary,
+                  ),
                 ),
                 const Spacer(),
                 Text(
                   e.endedEarly ? 'Ended early' : '${e.rsvpCount} going',
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: ZhColors.text),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: ZhColors.text,
+                  ),
                 ),
               ],
             ),
@@ -622,7 +742,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   side: const BorderSide(color: ZhColors.primary),
                   minimumSize: const Size.fromHeight(52),
                   shape: const StadiumBorder(),
-                  textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  textStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               )
             else
@@ -659,18 +782,28 @@ class _EndEarlySheet extends StatelessWidget {
               child: Container(
                 width: 32,
                 height: 4,
-                decoration: BoxDecoration(color: ZhColors.outline, borderRadius: BorderRadius.circular(2)),
+                decoration: BoxDecoration(
+                  color: ZhColors.outline,
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
             ),
             const SizedBox(height: 16),
             const Text(
               'End event early?',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500, color: ZhColors.text),
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w500,
+                color: ZhColors.text,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
               '"$title" will be marked as ended early so people nearby know food is no longer being distributed.',
-              style: const TextStyle(fontSize: 14, color: ZhColors.textSecondary),
+              style: const TextStyle(
+                fontSize: 14,
+                color: ZhColors.textSecondary,
+              ),
             ),
             const SizedBox(height: 20),
             FilledButton(
@@ -679,7 +812,10 @@ class _EndEarlySheet extends StatelessWidget {
                 foregroundColor: ZhColors.onPrimary,
                 minimumSize: const Size.fromHeight(52),
                 shape: const StadiumBorder(),
-                textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               onPressed: () => Navigator.pop(context, true),
               child: const Text('End early'),
@@ -691,7 +827,10 @@ class _EndEarlySheet extends StatelessWidget {
                 style: TextButton.styleFrom(
                   foregroundColor: ZhColors.textSecondary,
                   minimumSize: const Size(0, 48),
-                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                  textStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 child: const Text('Keep running'),
               ),
@@ -713,7 +852,9 @@ class _EventKindBadge extends StatelessWidget {
     final isDistribution = kind == EventKind.foodDistribution;
     return _SmallBadge(
       label: kind.label,
-      bg: isDistribution ? ZhColors.primaryContainer : ZhColors.warningContainer,
+      bg: isDistribution
+          ? ZhColors.primaryContainer
+          : ZhColors.warningContainer,
       fg: isDistribution ? ZhColors.onPrimaryContainer : ZhColors.onWarning,
     );
   }
@@ -730,7 +871,10 @@ class _SmallBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Text(
         label,
         style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: fg),
@@ -753,13 +897,20 @@ class _Panel extends StatelessWidget {
         border: Border.all(color: ZhColors.divider),
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: children),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: children,
+      ),
     );
   }
 }
 
 class _Notice extends StatelessWidget {
-  const _Notice({required this.icon, required this.title, required this.subtitle});
+  const _Notice({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+  });
 
   final IconData icon;
   final String title;
@@ -774,14 +925,21 @@ class _Notice extends StatelessWidget {
           Container(
             width: 72,
             height: 72,
-            decoration: const BoxDecoration(color: ZhColors.primaryContainer, shape: BoxShape.circle),
+            decoration: const BoxDecoration(
+              color: ZhColors.primaryContainer,
+              shape: BoxShape.circle,
+            ),
             child: Icon(icon, size: 36, color: ZhColors.primary),
           ),
           const SizedBox(height: 16),
           Text(
             title,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: ZhColors.text),
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+              color: ZhColors.text,
+            ),
           ),
           const SizedBox(height: 8),
           Text(

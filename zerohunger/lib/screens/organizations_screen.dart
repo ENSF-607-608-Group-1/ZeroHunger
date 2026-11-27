@@ -4,7 +4,8 @@
 //
 //   QueryService.organizations() -> one row per organization (name, city, Follow/Following)
 //
-// Until PushService and the database exist, follow toggles update local state immediately.
+// Organization rows come from Data Connect. Follow toggles remain local until a
+// dedicated follow relation and notification subscription flow are available.
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -87,8 +88,8 @@ class _OrganizationsScreenState extends State<OrganizationsScreen> {
       if (widget.onToggleFollow != null) {
         await widget.onToggleFollow!(org.organizationId, nextFollow);
       } else {
-        // TODO: Subscribe/unsubscribe to FCM topic org_<id> via PushService once built.
-        await Future<void>.delayed(const Duration(milliseconds: 150));
+        showZhMessage(context, 'Organization follows are not available yet.');
+        return;
       }
       if (!mounted) return;
       setState(() {

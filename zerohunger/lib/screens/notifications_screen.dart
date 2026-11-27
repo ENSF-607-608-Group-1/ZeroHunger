@@ -3,7 +3,7 @@
 //
 //   NotificationService.myNotifications() -> a card per alert -> tap to open the food, chat, or event
 //
-// Until the database exists, the list is the sample notifications in notification_service.dart.
+// Notifications are unavailable until the backend can store their targets and read state.
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -207,8 +207,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       else if (all.isEmpty)
                         const _Notice(
                           icon: Icons.notifications_none_rounded,
-                          title: 'No notifications yet',
-                          subtitle: 'Alerts about nearby food, pickup chats, and events will show up here.',
+                          title: 'Notifications are not available yet',
+                          subtitle: 'The current database cannot store notification targets and read state.',
                         )
                       else if (shown.isEmpty)
                         const _Notice(

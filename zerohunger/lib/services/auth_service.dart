@@ -10,6 +10,8 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../generated/zerohunger.dart';
+
 class AuthService {
   // FirebaseAuth.instance is the app's one connection to Firebase Authentication.
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -38,22 +40,38 @@ class AuthService {
   Future<void> createAccount(String email, String password) async {
     final credential = EmailAuthProvider.credential(email: email, password: password);
     final user = _auth.currentUser;
+    late final UserCredential result;
     if (user != null && user.isAnonymous) {
-      await user.linkWithCredential(credential);
+      result = await user.linkWithCredential(credential);
     } else {
-      await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
     }
+    await _ensureDataConnectUser(result.user);
   }
 
   // Signs in to an existing account, e.g. on a new phone.
   Future<void> signIn(String email, String password) async {
-    await _auth.signInWithEmailAndPassword(email: email, password: password);
+    final credential = await _auth.signInWithEmailAndPassword(email: email, password: password);
+    await _ensureDataConnectUser(credential.user);
   }
 
   // Signs out, then carries on as a new guest.
   Future<void> signOut() async {
     await _auth.signOut();
     await signInAsGuest();
+  }
+
+  Future<void> _ensureDataConnectUser(User? user) async {
+    if (user == null) {
+      throw StateError('Firebase Authentication returned no user after sign-in.');
+    }
+
+    await user.getIdToken(true);
+    final connector = ZerohungerConnector.instance;
+    final currentUser = await connector.getCurrentUser().execute();
+    if (currentUser.data.users.isEmpty) {
+      await connector.createCurrentUser().execute();
+    }
   }
 }
 
