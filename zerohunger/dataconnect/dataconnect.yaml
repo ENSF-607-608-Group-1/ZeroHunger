@@ -5,7 +5,7 @@ schema:
   source: schema
   datasource:
     postgresql:
-      database: zerohunger-bbd36-2-database
+      database: zerohunger-bbd36-database
       cloudSql:
         instanceId: zerohunger-db
         schemaValidation: COMPATIBLE

@@ -36,48 +36,48 @@ BigInt bigIntFromJson(dynamic value) {
 
 
 class ZerohungerConnector {
-
-
+  
+  
   ListAvailableDonationsVariablesBuilder listAvailableDonations () {
     return ListAvailableDonationsVariablesBuilder(dataConnect, );
   }
-
-
+  
+  
   ListDonationStatusesVariablesBuilder listDonationStatuses () {
     return ListDonationStatusesVariablesBuilder(dataConnect, );
   }
-
-
+  
+  
   ListDistributionEventsVariablesBuilder listDistributionEvents ({required Timestamp asOf, }) {
     return ListDistributionEventsVariablesBuilder(dataConnect, asOf: asOf,);
   }
-
-
+  
+  
   ListOrganizationsVariablesBuilder listOrganizations () {
     return ListOrganizationsVariablesBuilder(dataConnect, );
   }
-
-
+  
+  
   ListFoodCategoriesVariablesBuilder listFoodCategories () {
     return ListFoodCategoriesVariablesBuilder(dataConnect, );
   }
-
-
+  
+  
   ListAllergensVariablesBuilder listAllergens () {
     return ListAllergensVariablesBuilder(dataConnect, );
   }
-
-
+  
+  
   CreateDonationVariablesBuilder createDonation ({required String donationTitle, required String pickupTime, required BigInt itemQuantities, required BigInt statusId, }) {
     return CreateDonationVariablesBuilder(dataConnect, donationTitle: donationTitle,pickupTime: pickupTime,itemQuantities: itemQuantities,statusId: statusId,);
   }
-
-
+  
+  
   GetCurrentUserVariablesBuilder getCurrentUser () {
     return GetCurrentUserVariablesBuilder(dataConnect, );
   }
-
-
+  
+  
   CreateCurrentUserVariablesBuilder createCurrentUser () {
     return CreateCurrentUserVariablesBuilder(dataConnect, );
   }
