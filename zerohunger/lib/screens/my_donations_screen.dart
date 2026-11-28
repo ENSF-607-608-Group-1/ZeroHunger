@@ -6,7 +6,7 @@
 //   - Cancel donation     -> ZeroHungerApi.cancelDonation
 //   - Open pickup chats   -> pickup chats for that donation
 //
-// Until the database exists, the initial list comes from QueryService.myDonations().
+// The current schema does not associate donations with their posting user.
 // Successful updates apply immediately in the UI after the backend accepts the event.
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -293,10 +293,10 @@ class _MyDonationsScreenState extends State<MyDonationsScreen> {
                         _Notice(
                           icon: Icons.volunteer_activism_outlined,
                           title: _statusFilter == null
-                              ? "You haven't posted any food yet"
+                              ? 'Your donations are not available yet'
                               : 'No ${_statusFilter!.label.toLowerCase()} donations',
                           subtitle: _statusFilter == null
-                              ? 'Post surplus food so people nearby can claim it.'
+                              ? 'The current database does not link donations to their owner.'
                               : 'Try choosing another status filter.',
                           actionLabel: _statusFilter == null ? 'Donate food' : null,
                           onAction: _statusFilter == null

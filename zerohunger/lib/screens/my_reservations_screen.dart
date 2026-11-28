@@ -3,7 +3,7 @@
 //
 //   QueryService.myReservations() -> a card per claim -> copy code or open pickup chat
 //
-// Until the database exists, the list is the sample reservations in query_service.dart.
+// The current schema has no reservation records; this screen shows an empty state.
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -151,8 +151,8 @@ class _MyReservationsScreenState extends State<MyReservationsScreen> {
                       else if (all.isEmpty)
                         const _Notice(
                           icon: Icons.receipt_long_rounded,
-                          title: 'No reservations yet',
-                          subtitle: 'Food you claim will show up here with its pickup code.',
+                          title: 'Reservation history is not available yet',
+                          subtitle: 'The current database does not store claims and pickup codes for this screen.',
                         )
                       else if (shown.isEmpty)
                         const _Notice(

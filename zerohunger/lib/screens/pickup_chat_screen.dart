@@ -285,6 +285,19 @@ class _PickupChatScreenState extends State<PickupChatScreen> {
     final thread = _thread!;
     final messages = thread.messages;
 
+    if (messages.isEmpty) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(24),
+          child: Text(
+            'Message history is not available yet. You can still send a message.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 14, color: ZhColors.textSecondary),
+          ),
+        ),
+      );
+    }
+
     return ListView.builder(
       controller: _scroll,
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),

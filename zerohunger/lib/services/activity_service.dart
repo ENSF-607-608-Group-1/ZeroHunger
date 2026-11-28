@@ -1,12 +1,7 @@
 // activity_service.dart
 // Tracks what a user has given and done on Zero Hunger: their impact totals and history.
 //
-// Backed by the Activity processor once the cloud QueryService and database are ready
-// (FoodAvailable, FoodClaimed, DonationStatusChanged -> ActivityProcessor).
-//
-// TODO: Review when database & Activity processor are complete. Replace the sample
-//   data below with real cloud queries (screens only ask this class, so real backend
-//   wiring changes this file only).
+// Activity records are unavailable until the activity processor persists them.
 
 // What kind of milestone happened in the user's history.
 enum ActivityKind {
@@ -73,7 +68,10 @@ class ActivityService {
     if (simulatedDelay > Duration.zero) {
       await Future<void>.delayed(simulatedDelay);
     }
-    final summary = initialSummary ?? _sampleActivity();
+    final summary = initialSummary;
+    if (summary == null) {
+      throw const ActivityUnavailableException();
+    }
     final sortedHistory = List<ActivityEntry>.of(summary.history)
       ..sort((a, b) => b.occurredAt.compareTo(a.occurredAt));
     return ActivitySummary(
@@ -83,75 +81,6 @@ class ActivityService {
   }
 }
 
-// Made-up activity data for building and testing My activity.
-ActivitySummary _sampleActivity() {
-  final now = DateTime.now();
-  DateTime ago(Duration d) => now.subtract(d);
-
-  return ActivitySummary(
-    totals: const ActivityTotals(
-      donationsPosted: 6,
-      foodGiven: 34,
-      claims: 4,
-      eventsHosted: 2,
-    ),
-    history: [
-      ActivityEntry(
-        entryId: 'act-1',
-        kind: ActivityKind.postedDonation,
-        summary: 'Posted Rice and stew',
-        detail: '10 portions · T2N, Calgary',
-        occurredAt: ago(const Duration(hours: 2)),
-      ),
-      ActivityEntry(
-        entryId: 'act-2',
-        kind: ActivityKind.foodGiven,
-        summary: 'Gave 6 portions of Homemade lentil soup',
-        detail: 'Picked up by Alex Chen',
-        occurredAt: ago(const Duration(days: 1, hours: 3)),
-      ),
-      ActivityEntry(
-        entryId: 'act-3',
-        kind: ActivityKind.claim,
-        summary: 'Claimed Fresh bagels and bread',
-        detail: '6 assorted bagels · T2G, Calgary',
-        occurredAt: ago(const Duration(days: 2, hours: 5)),
-      ),
-      ActivityEntry(
-        entryId: 'act-4',
-        kind: ActivityKind.eventHosted,
-        summary: 'Hosted Saturday Community Food Pantry',
-        detail: 'Food distribution · NW Calgary',
-        occurredAt: ago(const Duration(days: 5)),
-      ),
-      ActivityEntry(
-        entryId: 'act-5',
-        kind: ActivityKind.postedDonation,
-        summary: 'Posted Vegetable biryani and raita',
-        detail: '10 portions · T3A, Calgary',
-        occurredAt: ago(const Duration(days: 8)),
-      ),
-      ActivityEntry(
-        entryId: 'act-6',
-        kind: ActivityKind.foodGiven,
-        summary: 'Gave 8 items from Garden produce box',
-        detail: 'Picked up by Priya Nair',
-        occurredAt: ago(const Duration(days: 11)),
-      ),
-      ActivityEntry(
-        entryId: 'act-7',
-        kind: ActivityKind.claim,
-        summary: 'Claimed Pasta and tomato sauce',
-        detail: '3 portions · T2S, Calgary',
-        occurredAt: ago(const Duration(days: 14)),
-      ),
-      ActivityEntry(
-        entryId: 'act-8',
-        kind: ActivityKind.eventHosted,
-        summary: 'Hosted Campus Zero-Waste Share',
-        detail: 'Donation event · University District',
-        occurredAt: ago(const Duration(days: 21)),
-      ),
-    ],
-  );
+class ActivityUnavailableException implements Exception {
+  const ActivityUnavailableException();
 }

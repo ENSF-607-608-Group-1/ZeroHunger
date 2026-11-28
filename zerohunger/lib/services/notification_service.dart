@@ -1,12 +1,5 @@
 // notification_service.dart
-// Keeps every alert in one place so a missed push notification is never lost.
-//
-// Each notification knows what it is about (food, chat, or event) and its targetId,
-// so tapping a row opens that exact donation, pickup chat, or event.
-//
-// TODO: Review when database & Notification processor are complete. Replace the
-//   in-memory store below with real cloud queries / Cloud Functions calls
-//   (screens only ask this class, so real backend wiring changes this file only).
+// Notifications are unavailable until a processor writes targetable, readable alerts.
 
 import 'package:flutter/foundation.dart';
 
@@ -52,11 +45,10 @@ class AppNotification {
     );
   }
 }
-
 class NotificationService {
   // Shared in-memory store for the running app so reading a notification immediately
   // updates the unread badge next to the user icon on every screen.
-  static final List<AppNotification> _sharedStore = _seedNotifications();
+  static final List<AppNotification> _sharedStore = [];
   static final ValueNotifier<int> _sharedUnreadCount = ValueNotifier<int>(_countUnread(_sharedStore));
 
   NotificationService({
@@ -116,73 +108,4 @@ class NotificationService {
       _unreadNotifier.value = 0;
     }
   }
-}
-
-// Sample notifications linked to the sample donations and pickup chats in the app.
-List<AppNotification> _seedNotifications() {
-  final now = DateTime.now();
-  DateTime ago(Duration d) => now.subtract(d);
-
-  return [
-    AppNotification(
-      notificationId: 'notif-1',
-      title: 'New pickup message',
-      message: 'Maya Patel: Sounds great — bring a tote bag if you have one, there are 4 containers total.',
-      createdAt: ago(const Duration(minutes: 18)),
-      isRead: false,
-      targetType: NotificationTargetType.chat,
-      targetId: 'sample-res-rice-and-stew',
-      targetTitle: 'Rice and stew',
-    ),
-    AppNotification(
-      notificationId: 'notif-2',
-      title: 'New Halal & Vegan food near you',
-      message: 'Rice and stew (10 portions) was posted in T2N, Calgary.',
-      createdAt: ago(const Duration(minutes: 45)),
-      isRead: false,
-      targetType: NotificationTargetType.food,
-      targetId: 'sample-rice-and-stew',
-      targetTitle: 'Rice and stew',
-    ),
-    AppNotification(
-      notificationId: 'notif-3',
-      title: 'Pickup time rescheduled',
-      message: 'Vegetable biryani and raita moved to Tomorrow, 12–2 pm.',
-      createdAt: ago(const Duration(hours: 4, minutes: 15)),
-      isRead: false,
-      targetType: NotificationTargetType.chat,
-      targetId: 'sample-res-biryani-and-raita',
-      targetTitle: 'Vegetable biryani and raita',
-    ),
-    AppNotification(
-      notificationId: 'notif-4',
-      title: 'Upcoming food distribution',
-      message: 'Saturday Community Food Pantry starts tomorrow at 10 am in NW Calgary.',
-      createdAt: ago(const Duration(hours: 8)),
-      isRead: true,
-      targetType: NotificationTargetType.event,
-      targetId: 'sample-event-community-pantry',
-      targetTitle: 'Saturday Community Food Pantry',
-    ),
-    AppNotification(
-      notificationId: 'notif-5',
-      title: 'Fresh bagels and bread posted',
-      message: 'Assorted bagels and sourdough loaves available in T2G, Calgary.',
-      createdAt: ago(const Duration(days: 1, hours: 2)),
-      isRead: true,
-      targetType: NotificationTargetType.food,
-      targetId: 'sample-bagels-and-bread',
-      targetTitle: 'Fresh bagels and bread',
-    ),
-    AppNotification(
-      notificationId: 'notif-6',
-      title: 'New message from recipient',
-      message: 'Alex Chen asked about visitor parking for Homemade lentil soup.',
-      createdAt: ago(const Duration(days: 1, hours: 6)),
-      isRead: true,
-      targetType: NotificationTargetType.chat,
-      targetId: 'sample-donor-soup-alex',
-      targetTitle: 'Homemade lentil soup',
-    ),
-  ];
 }

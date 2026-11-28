@@ -1,0 +1,17 @@
+mutation CreateDonation(
+  $donationTitle: String!
+  $pickupTime: String!
+  $itemQuantities: Int64!
+  $statusId: Int64!
+  $eventId: Int64
+) @auth(expr: "auth.uid != '' && auth.token.firebase.sign_in_provider != 'anonymous'") {
+  donation_insert(
+    data: {
+      donationTitle: $donationTitle
+      pickupTime: $pickupTime
+      itemQuantities: $itemQuantities
+      statusId: $statusId
+      eventId: $eventId
+    }
+  )
+}

@@ -1,12 +1,9 @@
 // account_settings_service.dart
-// Stores the user's account profile details (role, followed organizations) and
-// alert settings (postal code area, food preferences, allergens to avoid, notifications on/off).
+// Models the user's profile details and alert settings for the Account and Settings screens.
 //
 // Used by AccountScreen and SettingsScreen (two separate pages under the Profile menu).
 //
-// TODO: Review when database & user profile API are complete. Replace the in-memory
-//   store below with real cloud queries / Cloud Functions calls (screens only ask this
-//   class, so real backend wiring changes this file only).
+// No persistent settings operation is available yet. Tests can inject initialPreferences.
 
 // Role chosen for the account (matches Sign in / create account roles).
 enum UserRole {
@@ -29,7 +26,7 @@ class FollowedOrganization {
 
 // Combined account & settings state for the signed-in user (or guest).
 class UserPreferences {
-  final UserRole role;
+  final UserRole? role;
   final String postalCode;               // Canadian format, e.g. "T2N 1N4"
   final Set<String> foodPreferences;     // from foodCategoryOptions in zero_hunger_api.dart
   final Set<String> allergensToAvoid;    // from allergenOptions in zero_hunger_api.dart (11 priority allergens)
@@ -65,10 +62,6 @@ class UserPreferences {
 }
 
 class AccountSettingsService {
-  // Shared in-memory store for the running app so changes saved in Settings or
-  // Account stay in place when navigating between screens.
-  static UserPreferences _sharedPrefs = _seedPreferences();
-
   AccountSettingsService({
     UserPreferences? initialPreferences,
     this.simulatedDelay = const Duration(milliseconds: 200),
@@ -77,22 +70,23 @@ class AccountSettingsService {
   UserPreferences? _localPrefs;
   final Duration simulatedDelay;
 
-  UserPreferences get _current => _localPrefs ?? _sharedPrefs;
+  bool get isAvailable => _localPrefs != null;
 
-  set _current(UserPreferences next) {
-    if (_localPrefs != null) {
-      _localPrefs = next;
-    } else {
-      _sharedPrefs = next;
-    }
-  }
+  static const UserPreferences _emptyPreferences = UserPreferences(
+    role: null,
+    postalCode: '',
+    foodPreferences: {},
+    allergensToAvoid: {},
+    notificationsEnabled: false,
+    followedOrganizations: [],
+  );
 
   // Loads the user's current account & settings data.
   Future<UserPreferences> load() async {
     if (simulatedDelay > Duration.zero) {
       await Future<void>.delayed(simulatedDelay);
     }
-    final p = _current;
+    final p = _localPrefs ?? _emptyPreferences;
     return p.copyWith(
       foodPreferences: Set<String>.unmodifiable(p.foodPreferences),
       allergensToAvoid: Set<String>.unmodifiable(p.allergensToAvoid),
@@ -105,7 +99,8 @@ class AccountSettingsService {
     if (simulatedDelay > Duration.zero) {
       await Future<void>.delayed(simulatedDelay);
     }
-    _current = _current.copyWith(role: role);
+    final current = _requireAvailable();
+    _localPrefs = current.copyWith(role: role);
     return load();
   }
 
@@ -114,10 +109,11 @@ class AccountSettingsService {
     if (simulatedDelay > Duration.zero) {
       await Future<void>.delayed(simulatedDelay);
     }
-    final updated = _current.followedOrganizations
+    final current = _requireAvailable();
+    final updated = current.followedOrganizations
         .where((org) => org.organizationId != organizationId)
         .toList();
-    _current = _current.copyWith(followedOrganizations: updated);
+    _localPrefs = current.copyWith(followedOrganizations: updated);
     return load();
   }
 
@@ -131,7 +127,8 @@ class AccountSettingsService {
     if (simulatedDelay > Duration.zero) {
       await Future<void>.delayed(simulatedDelay);
     }
-    _current = _current.copyWith(
+    final current = _requireAvailable();
+    _localPrefs = current.copyWith(
       postalCode: postalCode,
       foodPreferences: Set<String>.of(foodPreferences),
       allergensToAvoid: Set<String>.of(allergensToAvoid),
@@ -139,31 +136,12 @@ class AccountSettingsService {
     );
     return load();
   }
-}
 
-UserPreferences _seedPreferences() {
-  return const UserPreferences(
-    role: UserRole.donor,
-    postalCode: 'T2N 1N4',
-    foodPreferences: {'HALAL', 'VEGETARIAN'},
-    allergensToAvoid: {'PEANUTS'},
-    notificationsEnabled: true,
-    followedOrganizations: [
-      FollowedOrganization(
-        organizationId: 'org-calgary-food-bank',
-        name: 'Calgary Food Bank',
-        city: 'Calgary',
-      ),
-      FollowedOrganization(
-        organizationId: 'org-campus-kitchen',
-        name: 'Campus Community Kitchen',
-        city: 'Calgary',
-      ),
-      FollowedOrganization(
-        organizationId: 'org-sunside-pantry',
-        name: 'Sunside Neighbourhood Pantry',
-        city: 'Calgary',
-      ),
-    ],
-  );
+  UserPreferences _requireAvailable() {
+    final preferences = _localPrefs;
+    if (preferences == null) {
+      throw UnsupportedError('Account preferences are not connected to a persistent store.');
+    }
+    return preferences;
+  }
 }

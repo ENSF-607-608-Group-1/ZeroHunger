@@ -3,8 +3,7 @@
 //
 //   FoodDetailsScreen -> api-claimFood answers -> ClaimedScreen
 //
-// Until the database exists, the pickup times are the Claim processor's placeholders
-// (now to 2 hours from now) and the address comes from the sample donation.
+// The Claim processor currently supplies pickup times, and the address comes from the listing.
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -61,11 +60,15 @@ class ClaimedScreen extends StatelessWidget {
           _Panel(
             children: [
               const _Label('Pickup address'),
-              Text(address.line1, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: ZhColors.text)),
-              Text(
-                '${address.city}, ${address.province} ${address.postalCode}',
-                style: const TextStyle(fontSize: 15, color: ZhColors.text),
-              ),
+              if (address == null)
+                const Text('Pickup address unavailable.', style: TextStyle(fontSize: 15, color: ZhColors.text))
+              else ...[
+                Text(address.line1, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: ZhColors.text)),
+                Text(
+                  '${address.city}, ${address.province} ${address.postalCode}',
+                  style: const TextStyle(fontSize: 15, color: ZhColors.text),
+                ),
+              ],
               const SizedBox(height: 16),
               const _Label('Pickup time'),
               Text(

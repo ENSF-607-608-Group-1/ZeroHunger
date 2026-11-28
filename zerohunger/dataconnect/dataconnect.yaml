@@ -1,11 +1,11 @@
-serviceId: zerohunger
+serviceId: zerohunger-bbd36-service
 location: us-central1
 
 schema:
   source: schema
   datasource:
     postgresql:
-      database: zerohunger
+      database: zerohunger-bbd36-database
       cloudSql:
         instanceId: zerohunger-db
         schemaValidation: COMPATIBLE

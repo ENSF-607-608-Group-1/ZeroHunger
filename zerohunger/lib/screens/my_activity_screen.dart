@@ -1,10 +1,10 @@
 // my_activity_screen.dart
 // Shows what the user has given and done on Zero Hunger:
 //   - Totals: donations posted, food given, claims, events hosted
-//   - History: the date and what happened, e.g. "Posted Rice and stew"
+//   - History: the date and what happened
 //
 // Reached from the "My activity" section under the top-right Profile button.
-// Until the database exists, the summary comes from the sample data in activity_service.dart.
+// Activity history is unavailable until the activity processor persists user records.
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -92,16 +92,19 @@ class _MyActivityScreenState extends State<MyActivityScreen> {
           }
 
           if (snapshot.hasError) {
+            final unavailable = snapshot.error is ActivityUnavailableException;
             return RefreshIndicator(
               onRefresh: _reload,
               child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-                children: const [
+                children: [
                   _Notice(
                     icon: Icons.cloud_off_rounded,
-                    title: 'Could not load activity',
-                    subtitle: 'Check your connection, then pull down to try again.',
+                    title: unavailable ? 'Activity is not available yet' : 'Could not load activity',
+                    subtitle: unavailable
+                        ? 'Your activity history will appear here once it is stored.'
+                        : 'Check your connection, then pull down to try again.',
                   ),
                 ],
               ),

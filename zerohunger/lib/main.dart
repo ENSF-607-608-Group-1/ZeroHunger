@@ -2,14 +2,18 @@
 // import 'package:firebase_core/firebase_core.dart';
 // import 'firebase_options.dart';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'services/auth_service.dart';
+import 'generated/zerohunger.dart';
 //import 'screens/backend_test_screen.dart';
 //import 'screens/donate_food_screen.dart';
 import 'theme/app_theme.dart';
 import 'screens/home_screen.dart';
+
+const _useDataConnectEmulator = bool.fromEnvironment('USE_DATA_CONNECT_EMULATOR');
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +21,15 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Connect directly to Cloud SQL Data Connect by default.
+  // Pass --dart-define=USE_DATA_CONNECT_EMULATOR=true when testing against the local emulator.
+  if (kDebugMode && _useDataConnectEmulator) {
+    ZerohungerConnector.instance.dataConnect.useDataConnectEmulator(
+      defaultTargetPlatform == TargetPlatform.android ? '10.0.2.2' : 'localhost',
+      9399,
+    );
+  }
 
   // No one signed in yet? Sign in as a guest: no screen, no form.
   // Firebase remembers the user on the phone, so this only happens on first launch
