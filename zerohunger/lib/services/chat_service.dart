@@ -121,17 +121,16 @@ class ChatService {
 
   ChatService({
     List<PickupChatThread>? initialThreads,
-    ZeroHungerApi? api,
+    this.api,
     this.simulatedDelay = const Duration(milliseconds: 250),
   })
       : _store = initialThreads != null
             ? {for (final thread in initialThreads) thread.conversationId: thread}
             : _sharedStore,
-        _api = api,
         _useLocalData = initialThreads != null;
 
   final Map<String, PickupChatThread> _store;
-  final ZeroHungerApi? _api;
+  final ZeroHungerApi? api;
   final bool _useLocalData;
   final Duration simulatedDelay;
 
@@ -229,7 +228,7 @@ class ChatService {
 
     final messageId = _useLocalData
         ? 'msg-${++_sharedCounter}'
-        : (await (_api ?? ZeroHungerApi()).sendMessage(
+        : (await (api ?? ZeroHungerApi()).sendMessage(
             conversationId: conversationId,
             text: trimmed,
           ))

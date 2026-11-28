@@ -399,8 +399,9 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       });
       showZhMessage(context, nextRsvp ? 'RSVP confirmed!' : 'RSVP cancelled.');
     } catch (_) {
-      if (mounted)
+      if (mounted) {
         showZhMessage(context, 'Could not update RSVP. Please try again.');
+      }
     } finally {
       if (mounted) setState(() => _togglingRsvp = false);
     }
@@ -430,11 +431,12 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             : 'Unfollowed $org.',
       );
     } catch (_) {
-      if (mounted)
+      if (mounted) {
         showZhMessage(
           context,
           'Could not update follow status. Please try again.',
         );
+      }
     } finally {
       if (mounted) setState(() => _togglingFollow = false);
     }
@@ -467,8 +469,9 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       });
       showZhMessage(context, 'Event ended early.');
     } catch (_) {
-      if (mounted)
+      if (mounted) {
         showZhMessage(context, 'Could not end event early. Please try again.');
+      }
     } finally {
       if (mounted) setState(() => _endingEarly = false);
     }

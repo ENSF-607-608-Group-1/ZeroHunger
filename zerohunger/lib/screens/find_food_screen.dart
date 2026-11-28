@@ -204,12 +204,12 @@ class _DonationCard extends StatelessWidget {
                     shape: const StadiumBorder(),
                   ),
                   onPressed: onOpen,
-                  child: const Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(d.items.isEmpty ? 'View listing' : 'Claim food'),
-                      SizedBox(width: 4),
-                      Icon(Icons.chevron_right_rounded, size: 20),
+                      const SizedBox(width: 4),
+                      const Icon(Icons.chevron_right_rounded, size: 20),
                     ],
                   ),
                 ),

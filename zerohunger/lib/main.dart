@@ -13,6 +13,8 @@ import 'generated/zerohunger.dart';
 import 'theme/app_theme.dart';
 import 'screens/home_screen.dart';
 
+const _useDataConnectEmulator = bool.fromEnvironment('USE_DATA_CONNECT_EMULATOR');
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -20,7 +22,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  if (kDebugMode) {
+  // Connect directly to Cloud SQL Data Connect by default.
+  // Pass --dart-define=USE_DATA_CONNECT_EMULATOR=true when testing against the local emulator.
+  if (kDebugMode && _useDataConnectEmulator) {
     ZerohungerConnector.instance.dataConnect.useDataConnectEmulator(
       defaultTargetPlatform == TargetPlatform.android ? '10.0.2.2' : 'localhost',
       9399,

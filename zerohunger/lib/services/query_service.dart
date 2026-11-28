@@ -281,13 +281,13 @@ class OrganizationSummary {
 }
 
 class QueryService {
-  QueryService({ZerohungerConnector? connector}) : _connector = connector;
+  QueryService({this.connector});
 
-  final ZerohungerConnector? _connector;
+  final ZerohungerConnector? connector;
 
   // The donations that can be claimed now.
   Future<List<Donation>> availableDonations() async {
-    final result = await (_connector ?? ZerohungerConnector.instance)
+    final result = await (connector ?? ZerohungerConnector.instance)
         .listAvailableDonations()
         .execute();
     return result.data.donations
@@ -316,7 +316,7 @@ class QueryService {
   // Upcoming food distributions and donation events nearby.
   Future<List<CommunityEvent>> upcomingEvents() async {
     final now = DateTime.now();
-    final result = await (_connector ?? ZerohungerConnector.instance)
+    final result = await (connector ?? ZerohungerConnector.instance)
         .listDistributionEvents(
           asOf: Timestamp.fromJson(now.toUtc().toIso8601String()),
         )
@@ -348,7 +348,7 @@ class QueryService {
 
   // Local food banks and community groups users can follow for alerts.
   Future<List<OrganizationSummary>> organizations() async {
-    final result = await (_connector ?? ZerohungerConnector.instance)
+    final result = await (connector ?? ZerohungerConnector.instance)
         .listOrganizations()
         .execute();
     return result.data.organizations
