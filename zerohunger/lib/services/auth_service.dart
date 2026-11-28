@@ -9,6 +9,7 @@
 // the cloud_functions package adds the user's token for us.
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 import '../generated/zerohunger.dart';
 
@@ -34,44 +35,82 @@ class AuthService {
     }
   }
 
-  // A guest creates an account with an email and password.
-  // linkWithCredential adds the email to the SAME user, so the user ID stays the same
-  // and anything they did as a guest stays theirs.
-  Future<void> createAccount(String email, String password) async {
+  // Step 1 (Create account): creates or links the user in Firebase Authentication.
+  // When linking an anonymous guest, re-signs in with email/password so the issued ID token
+  // has sign_in_provider == "password" (required by CreateCurrentUser's @auth rule).
+  Future<User> createAuthUser(String email, String password) async {
     final credential = EmailAuthProvider.credential(email: email, password: password);
-    final user = _auth.currentUser;
+    final existing = _auth.currentUser;
     late final UserCredential result;
-    if (user != null && user.isAnonymous) {
-      result = await user.linkWithCredential(credential);
+    if (existing != null && existing.isAnonymous) {
+      await existing.linkWithCredential(credential);
+      result = await _auth.signInWithEmailAndPassword(email: email, password: password);
     } else {
       result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
     }
-    await _ensureDataConnectUser(result.user);
+    final user = result.user ?? _auth.currentUser;
+    if (user == null) {
+      throw StateError('Firebase Authentication returned no user after creating account.');
+    }
+    return user;
   }
 
-  // Signs in to an existing account, e.g. on a new phone.
+  // Step 1 (Sign in): signs in to an existing Firebase Authentication account.
+  Future<User> signInWithAuth(String email, String password) async {
+    final result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+    final user = result.user ?? _auth.currentUser;
+    if (user == null) {
+      throw StateError('Firebase Authentication returned no user after sign-in.');
+    }
+    return user;
+  }
+
+  // Step 2: uploads the signed-in user's row to the Cloud SQL Users table via Data Connect
+  // if they do not already exist there.
+  Future<void> uploadCurrentUserToCloudSql({
+    User? user,
+    String? firstName,
+    String? lastName,
+    String? phoneNumber,
+  }) async {
+    final activeUser = user ?? _auth.currentUser;
+    if (activeUser == null) {
+      throw StateError('No signed-in user to upload to Cloud SQL.');
+    }
+
+    await activeUser.getIdToken(true);
+    final connector = ZerohungerConnector.instance;
+    debugPrint('DataConnect: running GetCurrentUser for uid=${activeUser.uid}, email=${activeUser.email}');
+    final currentUser = await connector.getCurrentUser().execute();
+    if (currentUser.data.users.isEmpty) {
+      debugPrint('DataConnect: user not in Cloud SQL yet, running CreateCurrentUser');
+      final builder = connector.createCurrentUser();
+      if (firstName != null) builder.firstName(firstName);
+      if (lastName != null) builder.lastName(lastName);
+      if (phoneNumber != null) builder.phoneNumber(phoneNumber);
+      await builder.execute();
+      debugPrint('DataConnect: CreateCurrentUser succeeded');
+    } else {
+      debugPrint('DataConnect: user already exists in Cloud SQL (userId=${currentUser.data.users.first.userId})');
+    }
+  }
+
+  // Convenience wrapper: creates the Firebase Auth user and uploads them to Cloud SQL.
+  Future<void> createAccount(String email, String password) async {
+    final user = await createAuthUser(email, password);
+    await uploadCurrentUserToCloudSql(user: user);
+  }
+
+  // Convenience wrapper: signs in via Firebase Auth and ensures the user exists in Cloud SQL.
   Future<void> signIn(String email, String password) async {
-    final credential = await _auth.signInWithEmailAndPassword(email: email, password: password);
-    await _ensureDataConnectUser(credential.user);
+    final user = await signInWithAuth(email, password);
+    await uploadCurrentUserToCloudSql(user: user);
   }
 
   // Signs out, then carries on as a new guest.
   Future<void> signOut() async {
     await _auth.signOut();
     await signInAsGuest();
-  }
-
-  Future<void> _ensureDataConnectUser(User? user) async {
-    if (user == null) {
-      throw StateError('Firebase Authentication returned no user after sign-in.');
-    }
-
-    await user.getIdToken(true);
-    final connector = ZerohungerConnector.instance;
-    final currentUser = await connector.getCurrentUser().execute();
-    if (currentUser.data.users.isEmpty) {
-      await connector.createCurrentUser().execute();
-    }
   }
 }
 
