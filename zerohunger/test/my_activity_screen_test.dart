@@ -63,6 +63,17 @@ ActivitySummary _sampleSummary() {
 Widget _wrap(Widget child) => MaterialApp(theme: zeroHungerTheme(), home: child);
 
 void main() {
+  testWidgets('reports activity as unavailable instead of displaying sample totals', (tester) async {
+    await tester.pumpWidget(_wrap(MyActivityScreen(
+      activityService: ActivityService(simulatedDelay: Duration.zero),
+      accountAction: const SizedBox.shrink(),
+    )));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Activity is not available yet'), findsOneWidget);
+    expect(find.text('34'), findsNothing);
+  });
+
   testWidgets('Profile menu includes My activity section and opens MyActivityScreen', (tester) async {
     final activity = ActivityService(initialSummary: _sampleSummary(), simulatedDelay: Duration.zero);
 

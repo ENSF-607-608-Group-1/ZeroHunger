@@ -51,6 +51,10 @@ List<DonorDonation> _testDonations() {
 Widget _wrap(Widget child) => MaterialApp(theme: zeroHungerTheme(), home: child);
 
 void main() {
+  test('Unsupported donor listings do not return sample donations', () async {
+    expect(await QueryService().myDonations(), isEmpty);
+  });
+
   testWidgets('Guest sees sign-in notice', (tester) async {
     await tester.pumpWidget(_wrap(
       MyDonationsScreen(

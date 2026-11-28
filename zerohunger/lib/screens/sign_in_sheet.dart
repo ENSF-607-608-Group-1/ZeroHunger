@@ -7,6 +7,7 @@
 // "Create account" adds an email to the guest (same user ID). "Sign in" uses an existing account.
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_data_connect/firebase_data_connect.dart';
 import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
@@ -53,7 +54,7 @@ class _SignInSheetState extends State<_SignInSheet> {
     super.dispose();
   }
 
-  // Creates the account or signs in, depending on the tab, then closes the sheet.
+  // Creates the account (or signs in), then uploads the user record to Cloud SQL.
   Future<void> _submit() async {
     setState(() {
       _busy = true;
@@ -63,14 +64,23 @@ class _SignInSheetState extends State<_SignInSheet> {
     String? error;
     try {
       final email = _email.text.trim();
-      if (_mode == _Mode.createAccount) {
-        await _auth.createAccount(email, _password.text);
-      } else {
-        await _auth.signIn(email, _password.text);
-      }
+      final user = _mode == _Mode.createAccount
+          ? await _auth.createAuthUser(email, _password.text)
+          : await _auth.signInWithAuth(email, _password.text);
+      await _auth.uploadCurrentUserToCloudSql(user: user);
     } on FirebaseAuthException catch (e) {
       error = authErrorText(e); // e.g. "Wrong email or password."
+    } on DataConnectOperationError catch (e) {
+      final details = e.response.errors
+          .map((err) => err.path.isEmpty ? err.message : '${err.path.join('.')}: ${err.message}')
+          .join(' | ');
+      debugPrint('Cloud SQL operation error (${e.code}): $details');
+      error = 'Account signed in, but failed to save to database: $details';
+    } on DataConnectError catch (e) {
+      debugPrint('Cloud SQL user upload failed (${e.code}): ${e.message}');
+      error = 'Account signed in, but failed to save to database: ${e.message}';
     } catch (e) {
+      debugPrint('Sign-in or database upload failed: $e');
       error = 'Something went wrong. Please try again.';
     }
 

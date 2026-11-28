@@ -2,9 +2,12 @@
 
 ```dart
 ZerohungerConnector.instance.ListAvailableDonations().execute();
+ZerohungerConnector.instance.ListDonationStatuses().execute();
+ZerohungerConnector.instance.ListDistributionEvents(listDistributionEventsVariables).execute();
 ZerohungerConnector.instance.ListOrganizations().execute();
 ZerohungerConnector.instance.ListFoodCategories().execute();
 ZerohungerConnector.instance.ListAllergens().execute();
+ZerohungerConnector.instance.CreateDonation(createDonationVariables).execute();
 ZerohungerConnector.instance.GetCurrentUser().execute();
 ZerohungerConnector.instance.CreateCurrentUser(createCurrentUserVariables).execute();
 

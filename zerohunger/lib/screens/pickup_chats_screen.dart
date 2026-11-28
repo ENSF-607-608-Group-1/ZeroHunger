@@ -146,8 +146,8 @@ class _PickupChatsScreenState extends State<PickupChatsScreen> {
                       else if (all.isEmpty)
                         const _Notice(
                           icon: Icons.chat_bubble_outline_rounded,
-                          title: 'No pickup chats yet',
-                          subtitle: 'When you claim food or someone claims your donation, your chat will appear here.',
+                          title: 'Pickup chat history is not available yet',
+                          subtitle: 'The current database cannot associate pickup chats with reservations.',
                         )
                       else if (shown.isEmpty)
                         const _Notice(

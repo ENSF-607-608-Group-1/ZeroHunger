@@ -3,7 +3,7 @@
 // and a Sign out button (or Create account for guests).
 //
 // Reached from the "Account" section under the top-right Profile menu.
-// Until the database exists, role & followed organizations come from account_settings_service.dart.
+// Role and followed-organization data are not represented by the current account integration.
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -249,7 +249,7 @@ class _AccountDetailsCard extends StatelessWidget {
 
   final String? email;
   final bool isGuest;
-  final UserRole role;
+  final UserRole? role;
   final ValueChanged<UserRole>? onRoleChanged;
 
   @override
@@ -314,6 +314,11 @@ class _AccountDetailsCard extends StatelessWidget {
                   ),
                 ],
               ),
+            )
+          else if (role == null)
+            const Text(
+              'Role information is not available yet.',
+              style: TextStyle(fontSize: 14, color: ZhColors.textSecondary),
             )
           else
             Wrap(
@@ -409,13 +414,13 @@ class _EmptyOrganizationsCard extends StatelessWidget {
           Icon(Icons.groups_outlined, size: 32, color: ZhColors.textSecondary),
           SizedBox(height: 8),
           Text(
-            'Not following any organizations yet',
+            'Organization follows are not available yet',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: ZhColors.text),
           ),
           SizedBox(height: 4),
           Text(
-            'Organizations you follow for food and event alerts will appear here.',
+            'The current account integration does not store organization follows.',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 13, color: ZhColors.textSecondary),
           ),

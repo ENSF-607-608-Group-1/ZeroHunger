@@ -3,7 +3,7 @@
 // and whether notifications are on or off, so alerts fit their needs.
 //
 // Reached from the "Settings" section under the top-right Profile menu.
-// Until the database exists, preferences are stored in account_settings_service.dart.
+// Preferences are disabled until they can be stored persistently.
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -66,6 +66,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _loading = true;
       _loadFailed = false;
     });
+    if (!_service.isAvailable) {
+      setState(() {
+        _loading = false;
+        _loadFailed = true;
+      });
+      return;
+    }
     try {
       final prefs = await _service.load();
       if (!mounted) return;
@@ -185,27 +192,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: const Icon(Icons.cloud_off_rounded, size: 36, color: ZhColors.primary),
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Could not load settings',
+              Text(
+                _service.isAvailable ? 'Could not load settings' : 'Settings are not available yet',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: ZhColors.text),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Check your connection and try again.',
+              Text(
+                _service.isAvailable
+                    ? 'Check your connection and try again.'
+                    : 'Preferences are not connected to a persistent store, so they cannot be loaded or saved.',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14, color: ZhColors.textSecondary),
               ),
               const SizedBox(height: 16),
-              FilledButton(
-                style: FilledButton.styleFrom(
-                  backgroundColor: ZhColors.primary,
-                  foregroundColor: ZhColors.onPrimary,
-                  shape: const StadiumBorder(),
+              if (_service.isAvailable)
+                FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: ZhColors.primary,
+                    foregroundColor: ZhColors.onPrimary,
+                    shape: const StadiumBorder(),
+                  ),
+                  onPressed: _load,
+                  child: const Text('Try again'),
                 ),
-                onPressed: _load,
-                child: const Text('Try again'),
-              ),
             ],
           ),
         ),

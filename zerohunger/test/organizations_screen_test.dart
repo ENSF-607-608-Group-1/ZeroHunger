@@ -87,6 +87,22 @@ void main() {
     expect(find.text('Following (1)'), findsOneWidget);
   });
 
+  testWidgets('does not report a follow when no backend callback is available', (tester) async {
+    await tester.pumpWidget(_wrap(
+      OrganizationsScreen(
+        queryService: _FakeQueryService(_testOrganizations()),
+        showAccountButton: false,
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Follow').first);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Organization follows are not available yet.'), findsOneWidget);
+    expect(find.text('Following (1)'), findsOneWidget);
+  });
+
   testWidgets('Filters organizations by search query and Following chip', (tester) async {
     await tester.pumpWidget(_wrap(
       OrganizationsScreen(

@@ -1,15 +1,21 @@
-library zerohunger_data_connect;
+library zerohunger_data_connector;
 import 'package:firebase_data_connect/firebase_data_connect.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
 
 part 'list_available_donations.dart';
 
+part 'list_donation_statuses.dart';
+
+part 'list_distribution_events.dart';
+
 part 'list_organizations.dart';
 
 part 'list_food_categories.dart';
 
 part 'list_allergens.dart';
+
+part 'create_donation.dart';
 
 part 'get_current_user.dart';
 
@@ -37,6 +43,16 @@ class ZerohungerConnector {
   }
   
   
+  ListDonationStatusesVariablesBuilder listDonationStatuses () {
+    return ListDonationStatusesVariablesBuilder(dataConnect, );
+  }
+  
+  
+  ListDistributionEventsVariablesBuilder listDistributionEvents ({required Timestamp asOf, }) {
+    return ListDistributionEventsVariablesBuilder(dataConnect, asOf: asOf,);
+  }
+  
+  
   ListOrganizationsVariablesBuilder listOrganizations () {
     return ListOrganizationsVariablesBuilder(dataConnect, );
   }
@@ -49,6 +65,11 @@ class ZerohungerConnector {
   
   ListAllergensVariablesBuilder listAllergens () {
     return ListAllergensVariablesBuilder(dataConnect, );
+  }
+  
+  
+  CreateDonationVariablesBuilder createDonation ({required String donationTitle, required String pickupTime, required BigInt itemQuantities, required BigInt statusId, }) {
+    return CreateDonationVariablesBuilder(dataConnect, donationTitle: donationTitle,pickupTime: pickupTime,itemQuantities: itemQuantities,statusId: statusId,);
   }
   
   
@@ -65,7 +86,7 @@ class ZerohungerConnector {
   static ConnectorConfig connectorConfig = ConnectorConfig(
     'us-central1',
     'zerohunger',
-    'zerohunger-bbd36-service',
+    'zerohunger-bbd36-service-2',
   );
 
   ZerohungerConnector({required this.dataConnect});

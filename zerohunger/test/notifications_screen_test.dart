@@ -100,6 +100,13 @@ Donation _sampleBagelsDonation() {
 Widget _wrap(Widget child) => MaterialApp(theme: zeroHungerTheme(), home: child);
 
 void main() {
+  test('default notifications contain no fabricated alerts', () async {
+    final service = NotificationService(simulatedDelay: Duration.zero);
+
+    expect(await service.myNotifications(), isEmpty);
+    expect(service.unreadCount, 0);
+  });
+
   testWidgets('Home AppBar shows NotificationButton next to user icon and opens NotificationsScreen', (tester) async {
     final notifications = NotificationService(
       initialNotifications: _sampleNotifications(),
@@ -229,6 +236,6 @@ void main() {
     await tester.fling(find.text('Could not load notifications'), const Offset(0, 300), 1000);
     await tester.pumpAndSettle();
 
-    expect(find.text('No notifications yet'), findsOneWidget);
+    expect(find.text('Notifications are not available yet'), findsOneWidget);
   });
 }

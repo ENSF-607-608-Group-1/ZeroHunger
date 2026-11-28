@@ -70,7 +70,7 @@ void main() {
 
     expect(find.text('Saturday Community Food Distribution'), findsOneWidget);
     expect(find.text('Calgary Food Bank'), findsOneWidget);
-    expect(find.text('5000 11 St SE, Calgary, AB T2H 2Y5'), findsOneWidget);
+    expect(find.text('5000 11 St SE\nCalgary, AB T2H 2Y5'), findsOneWidget);
     expect(find.text('Beltline Donation Drive'), findsOneWidget);
 
     // Filter to Donation event only.
@@ -79,6 +79,24 @@ void main() {
 
     expect(find.text('Beltline Donation Drive'), findsOneWidget);
     expect(find.text('Saturday Community Food Distribution'), findsNothing);
+  });
+
+  testWidgets('does not fake RSVP or follow state without backend callbacks', (tester) async {
+    await tester.pumpWidget(_wrap(EventDetailsScreen(
+      event: _testEvents().first,
+      showAccountButton: false,
+    )));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Follow organization'));
+    await tester.pumpAndSettle();
+    expect(find.text('Organization follows are not available yet.'), findsOneWidget);
+    expect(find.text('Follow organization'), findsOneWidget);
+
+    await tester.tap(find.text('RSVP'));
+    await tester.pumpAndSettle();
+    expect(find.text('Event RSVPs are not available yet.'), findsOneWidget);
+    expect(find.text('RSVP'), findsOneWidget);
   });
 
   testWidgets('Opens event details, toggles RSVP and Follow organization', (tester) async {

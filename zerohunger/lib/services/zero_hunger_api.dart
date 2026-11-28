@@ -217,7 +217,7 @@ class ZeroHungerApi {
     final answer = await _answer('api-claimFood', {
       'donationId': donationId,
       'items': items.map((item) => item.toJson()).toList(),
-      'note': ?note,// left out if null
+      if (note != null) 'note': note,
     });
     return ClaimResult.fromJson(answer);
   }
@@ -250,7 +250,7 @@ class ZeroHungerApi {
       'address': address.toJson(),
       'startTime': startTime.toUtc().toIso8601String(),
       'endTime': endTime.toUtc().toIso8601String(),
-      'organizationId': ?organizationId, // left out if null
+      if (organizationId != null) 'organizationId': organizationId,
     });
     return DistributionSubmitted(answer['distributionId'] as String, answer['correlationId'] as String);
   }

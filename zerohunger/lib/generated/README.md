@@ -1,4 +1,4 @@
-# zerohunger_data_connect SDK
+# zerohunger_data_connector SDK
 
 ## Installation
 ```sh
@@ -56,6 +56,96 @@ Each builder returns an `execute` function, which is a helper function that crea
 An example of how to use the `Ref` object is shown below:
 ```dart
 final ref = ZerohungerConnector.instance.listAvailableDonations().ref();
+ref.execute();
+
+ref.subscribe(...);
+```
+
+
+### ListDonationStatuses
+#### Required Arguments
+```dart
+// No required arguments
+ZerohungerConnector.instance.listDonationStatuses().execute();
+```
+
+
+
+#### Return Type
+`execute()` returns a `QueryResult<ListDonationStatusesData, void>`
+```dart
+/// Result of an Operation Request (query/mutation).
+class OperationResult<Data, Variables> {
+  OperationResult(this.dataConnect, this.data, this.ref);
+  Data data;
+  OperationRef<Data, Variables> ref;
+  FirebaseDataConnect dataConnect;
+}
+
+/// Result of a query request. Created to hold extra variables in the future.
+class QueryResult<Data, Variables> extends OperationResult<Data, Variables> {
+  QueryResult(super.dataConnect, super.data, super.ref);
+}
+
+final result = await ZerohungerConnector.instance.listDonationStatuses();
+ListDonationStatusesData data = result.data;
+final ref = result.ref;
+```
+
+#### Getting the Ref
+Each builder returns an `execute` function, which is a helper function that creates a `Ref` object, and executes the underlying operation.
+An example of how to use the `Ref` object is shown below:
+```dart
+final ref = ZerohungerConnector.instance.listDonationStatuses().ref();
+ref.execute();
+
+ref.subscribe(...);
+```
+
+
+### ListDistributionEvents
+#### Required Arguments
+```dart
+Timestamp asOf = ...;
+ZerohungerConnector.instance.listDistributionEvents(
+  asOf: asOf,
+).execute();
+```
+
+
+
+#### Return Type
+`execute()` returns a `QueryResult<ListDistributionEventsData, ListDistributionEventsVariables>`
+```dart
+/// Result of an Operation Request (query/mutation).
+class OperationResult<Data, Variables> {
+  OperationResult(this.dataConnect, this.data, this.ref);
+  Data data;
+  OperationRef<Data, Variables> ref;
+  FirebaseDataConnect dataConnect;
+}
+
+/// Result of a query request. Created to hold extra variables in the future.
+class QueryResult<Data, Variables> extends OperationResult<Data, Variables> {
+  QueryResult(super.dataConnect, super.data, super.ref);
+}
+
+final result = await ZerohungerConnector.instance.listDistributionEvents(
+  asOf: asOf,
+);
+ListDistributionEventsData data = result.data;
+final ref = result.ref;
+```
+
+#### Getting the Ref
+Each builder returns an `execute` function, which is a helper function that creates a `Ref` object, and executes the underlying operation.
+An example of how to use the `Ref` object is shown below:
+```dart
+Timestamp asOf = ...;
+
+final ref = ZerohungerConnector.instance.listDistributionEvents(
+  asOf: asOf,
+).ref();
 ref.execute();
 
 ref.subscribe(...);
@@ -226,6 +316,84 @@ ref.subscribe(...);
 ```
 
 ## Mutations
+
+### CreateDonation
+#### Required Arguments
+```dart
+String donationTitle = ...;
+String pickupTime = ...;
+BigInt itemQuantities = ...;
+BigInt statusId = ...;
+ZerohungerConnector.instance.createDonation(
+  donationTitle: donationTitle,
+  pickupTime: pickupTime,
+  itemQuantities: itemQuantities,
+  statusId: statusId,
+).execute();
+```
+
+#### Optional Arguments
+We return a builder for each query. For CreateDonation, we created `CreateDonationBuilder`. For queries and mutations with optional parameters, we return a builder class.
+The builder pattern allows Data Connect to distinguish between fields that haven't been set and fields that have been set to null. A field can be set by calling its respective setter method like below:
+```dart
+class CreateDonationVariablesBuilder {
+  ...
+   CreateDonationVariablesBuilder eventId(BigInt? t) {
+   _eventId.value = t;
+   return this;
+  }
+
+  ...
+}
+ZerohungerConnector.instance.createDonation(
+  donationTitle: donationTitle,
+  pickupTime: pickupTime,
+  itemQuantities: itemQuantities,
+  statusId: statusId,
+)
+.eventId(eventId)
+.execute();
+```
+
+#### Return Type
+`execute()` returns a `OperationResult<CreateDonationData, CreateDonationVariables>`
+```dart
+/// Result of an Operation Request (query/mutation).
+class OperationResult<Data, Variables> {
+  OperationResult(this.dataConnect, this.data, this.ref);
+  Data data;
+  OperationRef<Data, Variables> ref;
+  FirebaseDataConnect dataConnect;
+}
+
+final result = await ZerohungerConnector.instance.createDonation(
+  donationTitle: donationTitle,
+  pickupTime: pickupTime,
+  itemQuantities: itemQuantities,
+  statusId: statusId,
+);
+CreateDonationData data = result.data;
+final ref = result.ref;
+```
+
+#### Getting the Ref
+Each builder returns an `execute` function, which is a helper function that creates a `Ref` object, and executes the underlying operation.
+An example of how to use the `Ref` object is shown below:
+```dart
+String donationTitle = ...;
+String pickupTime = ...;
+BigInt itemQuantities = ...;
+BigInt statusId = ...;
+
+final ref = ZerohungerConnector.instance.createDonation(
+  donationTitle: donationTitle,
+  pickupTime: pickupTime,
+  itemQuantities: itemQuantities,
+  statusId: statusId,
+).ref();
+ref.execute();
+```
+
 
 ### CreateCurrentUser
 #### Required Arguments
