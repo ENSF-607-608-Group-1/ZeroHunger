@@ -9,15 +9,71 @@ query GetCurrentUser @auth(level: USER) {
     userRole
     street
     postalCode {
+      postalCodeId
       code
       city
       province
     }
+    userOrganizations_on_user {
+      memberRole
+      organization {
+        orgId
+        orgName
+        orgPrimaryEmail
+        street
+        postalCode {
+          code
+          city
+          province
+        }
+      }
+    }
+    userPreferences_on_user {
+      profileId
+      radiusSearch
+      notificationPreference
+      alertSetting
+      locationId
+    }
   }
 }
 
-mutation CreateCurrentUser($firstName: String, $lastName: String, $phoneNumber: String)
-  @auth(expr: "auth.uid != '' && auth.token.firebase.sign_in_provider != 'anonymous' && auth.token.email != ''") {
+query GetPostalCodeByCode($code: String!) @auth(level: USER) {
+  postalCodes(where: { code: { eq: $code } }, limit: 1) {
+    postalCodeId
+    code
+    city
+    province
+  }
+}
+
+query GetOrganizationByPrimaryEmail($orgPrimaryEmail: String!) @auth(level: USER) {
+  organizations(where: { orgPrimaryEmail: { eq: $orgPrimaryEmail } }, limit: 1) {
+    orgId
+    orgName
+    orgPrimaryEmail
+  }
+}
+
+mutation CreatePostalCode($code: String!, $city: String, $province: String)
+  @auth(expr: "auth.uid != '' && auth.token.firebase.sign_in_provider != 'anonymous'") {
+  postalCode_insert(
+    data: {
+      code: $code
+      city: $city
+      province: $province
+    }
+  )
+}
+
+mutation CreateCurrentUser(
+  $firstName: String
+  $lastName: String
+  $phoneNumber: String
+  $userRole: String!
+  $street: String
+  $postalCodeId: Int64
+) @auth(expr: "auth.uid != '' && auth.token.firebase.sign_in_provider != 'anonymous' && auth.token.email != ''") {
   user_insert(
     data: {
       authUid_expr: "auth.uid"
@@ -25,6 +81,104 @@ mutation CreateCurrentUser($firstName: String, $lastName: String, $phoneNumber: 
       firstName: $firstName
       lastName: $lastName
       phoneNumber: $phoneNumber
+      userRole: $userRole
+      street: $street
+      postalCodeId: $postalCodeId
+    }
+  )
+}
+
+mutation UpdateCurrentUser(
+  $firstName: String
+  $lastName: String
+  $phoneNumber: String
+  $userRole: String
+  $street: String
+  $postalCodeId: Int64
+) @auth(expr: "auth.uid != '' && auth.token.firebase.sign_in_provider != 'anonymous'") {
+  user_update(
+    first: { where: { authUid: { eq_expr: "auth.uid" } } }
+    data: {
+      firstName: $firstName
+      lastName: $lastName
+      phoneNumber: $phoneNumber
+      userRole: $userRole
+      street: $street
+      postalCodeId: $postalCodeId
+    }
+  )
+}
+
+mutation UpdateCurrentUserRole($userRole: String!)
+  @auth(expr: "auth.uid != '' && auth.token.firebase.sign_in_provider != 'anonymous'") {
+  user_update(
+    first: { where: { authUid: { eq_expr: "auth.uid" } } }
+    data: {
+      userRole: $userRole
+    }
+  )
+}
+
+mutation CreateOrganization(
+  $orgName: String!
+  $orgPrimaryEmail: String!
+  $street: String
+  $postalCodeId: Int64
+) @auth(expr: "auth.uid != '' && auth.token.firebase.sign_in_provider != 'anonymous'") {
+  organization_insert(
+    data: {
+      orgName: $orgName
+      orgPrimaryEmail: $orgPrimaryEmail
+      street: $street
+      postalCodeId: $postalCodeId
+    }
+  )
+}
+
+mutation LinkUserToOrganization(
+  $userId: Int64!
+  $orgId: Int64!
+  $memberRole: String!
+) @auth(expr: "auth.uid != '' && auth.token.firebase.sign_in_provider != 'anonymous'") {
+  userOrganization_upsert(
+    data: {
+      userId: $userId
+      orgId: $orgId
+      memberRole: $memberRole
+    }
+  )
+}
+
+mutation CreateLocation(
+  $street: String!
+  $postalCodeId: Int64!
+  $userId: Int64
+  $orgId: Int64
+) @auth(expr: "auth.uid != '' && auth.token.firebase.sign_in_provider != 'anonymous'") {
+  locations_insert(
+    data: {
+      street: $street
+      postalCodeId: $postalCodeId
+      userId: $userId
+      orgId: $orgId
+    }
+  )
+}
+
+mutation CreateUserPreferences(
+  $userId: Int64!
+  $radiusSearch: Int
+  $notificationPreference: String
+  $alertSetting: String
+  $locationId: Int64
+) @auth(expr: "auth.uid != '' && auth.token.firebase.sign_in_provider != 'anonymous'") {
+  userPreferences_insert(
+    data: {
+      userId: $userId
+      radiusSearch: $radiusSearch
+      notificationPreference: $notificationPreference
+      alertSetting: $alertSetting
+      locationId: $locationId
     }
   )
 }
