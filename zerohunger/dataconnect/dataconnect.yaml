@@ -1,13 +1,13 @@
-serviceId: zerohunger-bbd36-service
+serviceId: zerohunger-bbd36-service-2
 location: us-central1
 
 schema:
   source: schema
   datasource:
     postgresql:
-      database: zerohunger-bbd36-database
+      database: zerohunger-bbd36-database-2
       cloudSql:
-        instanceId: zerohunger-db
+        instanceId:  zerohunger-database-inst
         schemaValidation: COMPATIBLE
 
 connectorDirs:

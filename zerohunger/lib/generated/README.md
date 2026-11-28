@@ -1,4 +1,4 @@
-# zerohunger_data_connect SDK
+# zerohunger_data_connector SDK
 
 ## Installation
 ```sh
