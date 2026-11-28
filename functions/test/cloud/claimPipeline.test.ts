@@ -58,6 +58,10 @@ let reply: {pickupCode?: string; correlationId?: string} = {};
 
 describe("Claim pipeline in the cloud", () => {
   beforeAll(async () => {
+    // Check the Google Cloud sign-in first. Without this, a sign-in problem shows up a minute later
+    // as a Pub/Sub timeout that hides the reason
+    await signInToGoogleCloud();
+
     // 1. Listen on every -sub, skipping anything that was already waiting there
     for (const name of SUBS) {
       const sub = pubsub.subscription(name);
@@ -127,6 +131,17 @@ function record(sub: string, m: Message): void {
 function find(h: Hop): Arrival | undefined {
   return arrivals.find((a) => a.correlationId === reply.correlationId &&
     a.sub === h.sub && a.type === h.type && a.kind === h.kind && a.hop === h.hop);
+}
+
+// Gets a Google Cloud token the same way the Pub/Sub calls do, and fails with Google's reason if it can't.
+// Google's sign-in code uses import(), which Jest only allows because test:cloud starts Node with
+// --experimental-vm-modules
+async function signInToGoogleCloud(): Promise<void> {
+  try {
+    await pubsub.auth.getAccessToken();
+  } catch (err) {
+    throw new Error(`couldn't sign in to Google Cloud: ${(err as Error).message}`);
+  }
 }
 
 // The Web API key: ZH_API_KEY on GitHub, or the app's google-services.json on your PC
