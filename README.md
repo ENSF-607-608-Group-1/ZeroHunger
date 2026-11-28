@@ -144,24 +144,8 @@ For iOS, ensure that the required Firebase configuration is available.
 
 Do not commit private credentials or service account keys to GitHub.
 
-### Step 3: Set Up the Backend
 
-From the project root:
-
-```bash
-cd functions
-npm ci
-npm run build
-cd ..
-```
-
-This installs the backend dependencies and compiles TypeScript into JavaScript.
-
-The backend uses Firebase Cloud Functions and Google Cloud Pub/Sub to handle application operations and events.
-
-If the team's backend is already deployed, no additional backend server needs to be started locally, provided the application is configured to use it.
-
-### Step 4: Set Up the Frontend
+### Step 3: Set Up the Frontend
 
 ```bash
 cd zerohunger
@@ -181,16 +165,6 @@ flutter devices
 flutter run
 ```
 
-### iOS (macOS Only)
-
-Start the iOS Simulator:
-
-```bash
-open -a Simulator
-flutter devices
-flutter run
-```
-
 ### Running on a Specific Device
 
 ```bash
@@ -201,20 +175,7 @@ Replace `DEVICE_ID` with the device identifier displayed by `flutter devices`.
 
 Press `q` in the terminal to stop the application.
 
-## 8. Running the Backend Locally (Optional)
-
-From the project root:
-
-```bash
-cd functions
-npm run serve
-```
-
-This builds the backend and starts the Firebase Functions emulator.
-
-Additional emulator configuration and frontend endpoint changes may be required to connect the application to the local backend. The Functions emulator alone does not isolate all Firebase services.
-
-## 9. Database and System Architecture
+## 8. Database and System Architecture
 
 ZeroHunger follows an event-driven architecture.
 
@@ -240,12 +201,10 @@ A typical demonstration follows these steps:
 2. Register or sign in using a test account.
 3. Open the Donate Food section.
 4. Enter food details and publish a donation.
-5. Sign in using a recipient test account.
+5. Open the Claim Food section.
 6. Browse available food and make a reservation.
 7. View donations and reservations.
 8. Explore pickup chats, notifications, organizations and community events.
-
-Use authorized test accounts and test data when demonstrating the application.
 
 ## 11. Testing
 
