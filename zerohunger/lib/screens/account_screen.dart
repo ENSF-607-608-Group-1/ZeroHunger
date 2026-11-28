@@ -3,7 +3,7 @@
 // and a Sign out button (or Create account for guests).
 //
 // Reached from the "Account" section under the top-right Profile menu.
-// Role and followed-organization data are not represented by the current account integration.
+// Role data is stored in Users; followed organizations are not represented by the current integration.
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,8 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  late final AccountSettingsService _service = widget.accountSettingsService ?? AccountSettingsService();
+  late final AccountSettingsService _service =
+      widget.accountSettingsService ?? AccountSettingsService.connected();
   late final AuthService? _auth =
       (widget.accountAction == null && widget.isGuestOverride == null) ? AuthService() : null;
 

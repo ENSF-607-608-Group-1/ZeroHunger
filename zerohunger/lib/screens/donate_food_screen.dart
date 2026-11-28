@@ -19,7 +19,21 @@ import 'sign_in_sheet.dart';
 // The choices in the dropdowns
 //DO NOT CHANGE PLS
 const _units = ['portions', 'items', 'kg', 'lb', 'litres'];
-const _provinces = ['AB', 'BC', 'MB', 'NB', 'NL', 'NS', 'NT', 'NU', 'ON', 'PE', 'QC', 'SK', 'YT'];
+const _provinces = [
+  'AB',
+  'BC',
+  'MB',
+  'NB',
+  'NL',
+  'NS',
+  'NT',
+  'NU',
+  'ON',
+  'PE',
+  'QC',
+  'SK',
+  'YT',
+];
 
 // A Canadian postal code once tidied up, e.g. "T2N 1N4" (the same rule the Listing processor checks).
 final _postalCodePattern = RegExp(r'^[A-Z]\d[A-Z] \d[A-Z]\d$');
@@ -35,7 +49,8 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
   final _auth = AuthService();
   final _api = ZeroHungerApi();
   final _formKey = GlobalKey<FormState>(); // lets us check every field at once
-  final _scroll = ScrollController();      // lets us scroll back up to the success card
+  final _scroll =
+      ScrollController(); // lets us scroll back up to the success card
 
   // What the donor types in.
   final _title = TextEditingController();
@@ -44,7 +59,9 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
   final _city = TextEditingController(text: 'Calgary');
   final _postalCode = TextEditingController();
   String _province = 'AB';
-  final List<_ItemDraft> _items = [_ItemDraft()]; // a donation needs at least one item
+  final List<_ItemDraft> _items = [
+    _ItemDraft(),
+  ]; // a donation needs at least one item
 
   // The pickup window: a day, a start time and an end time.
   late DateTime _date;
@@ -52,8 +69,8 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
   late TimeOfDay _to;
   bool _windowWrong = false; // true shows the pickup window in red
 
-  bool _posting = false;  // true while waiting for api-postFood
-  Submitted? _submitted;  // the last post, shown in the green card
+  bool _posting = false; // true while waiting for api-postFood
+  Submitted? _submitted; // the last post, shown in the green card
 
   @override
   void initState() {
@@ -78,19 +95,23 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
   }
 
   // PICKUP window
- 
+
   // Default window: today, starting at the next full hour, for two hours.
   void _resetWindow() {
     final now = DateTime.now();
     final startHour = now.hour < 23 ? now.hour + 1 : 23;
     _date = DateTime(now.year, now.month, now.day);
     _from = TimeOfDay(hour: startHour, minute: 0);
-    _to = startHour + 2 <= 23 ? TimeOfDay(hour: startHour + 2, minute: 0) : const TimeOfDay(hour: 23, minute: 59);
+    _to = startHour + 2 <= 23
+        ? TimeOfDay(hour: startHour + 2, minute: 0)
+        : const TimeOfDay(hour: 23, minute: 59);
     _windowWrong = false;
   }
 
-  DateTime get _start => DateTime(_date.year, _date.month, _date.day, _from.hour, _from.minute);
-  DateTime get _end => DateTime(_date.year, _date.month, _date.day, _to.hour, _to.minute);
+  DateTime get _start =>
+      DateTime(_date.year, _date.month, _date.day, _from.hour, _from.minute);
+  DateTime get _end =>
+      DateTime(_date.year, _date.month, _date.day, _to.hour, _to.minute);
 
   Future<void> _pickDate() async {
     final now = DateTime.now();
@@ -105,7 +126,10 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
   }
 
   Future<void> _pickTime({required bool from}) async {
-    final picked = await showTimePicker(context: context, initialTime: from ? _from : _to);
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: from ? _from : _to,
+    );
     if (picked == null) return;
     setState(() {
       if (from) {
@@ -120,10 +144,27 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
   // "Today", "Tomorrow" or e.g. "Nov 20".
   String _dateText(DateTime day) {
     final now = DateTime.now();
-    final daysAway = DateTime(day.year, day.month, day.day).difference(DateTime(now.year, now.month, now.day)).inDays;
+    final daysAway = DateTime(
+      day.year,
+      day.month,
+      day.day,
+    ).difference(DateTime(now.year, now.month, now.day)).inDays;
     if (daysAway == 0) return 'Today';
     if (daysAway == 1) return 'Tomorrow';
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     return '${months[day.month - 1]} ${day.day}';
   }
 
@@ -135,25 +176,24 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
   // Checks
   // ---------------------------------------------------------------------------
 
-  String? _required(String? value) => (value == null || value.trim().isEmpty) ? 'Required' : null;
+  String? _required(String? value) =>
+      (value == null || value.trim().isEmpty) ? 'Required' : null;
 
   // Tidies a postal code the way people type it: "t2n1n4" → "T2N 1N4".
   String _tidyPostalCode(String typed) {
     final letters = typed.toUpperCase().replaceAll(RegExp(r'\s'), '');
-    return letters.length == 6 ? '${letters.substring(0, 3)} ${letters.substring(3)}' : letters;
+    return letters.length == 6
+        ? '${letters.substring(0, 3)} ${letters.substring(3)}'
+        : letters;
   }
 
   String? _checkPostalCode(String? value) =>
-      _postalCodePattern.hasMatch(_tidyPostalCode(value ?? '')) ? null : 'Use the format A1A 1A1';
-
-
-
-
-
+      _postalCodePattern.hasMatch(_tidyPostalCode(value ?? ''))
+      ? null
+      : 'Use the format A1A 1A1';
 
   // Items
- 
- 
+
   void _addItem() => setState(() => _items.add(_ItemDraft()));
 
   void _removeItem(_ItemDraft item) {
@@ -175,16 +215,12 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
     return words[0].toUpperCase() + words.substring(1);
   }
 
- 
- 
- 
- 
- 
   // Posting
- 
+
   Future<void> _post() async {
     FocusScope.of(context).unfocus(); // closes the keyboard
-    final formOk = _formKey.currentState!.validate(); // shows "Required" etc. in red
+    final formOk = _formKey.currentState!
+        .validate(); // shows "Required" etc. in red
     final windowOk = _end.isAfter(_start);
     setState(() => _windowWrong = !windowOk);
     if (!formOk || !windowOk) {
@@ -207,24 +243,48 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
         pickupStart: _start,
         pickupEnd: _end,
       );
-      debugPrint('Posted. donationId: ${submitted.donationId}, correlationId: ${submitted.correlationId}');
+      debugPrint(
+        'Posted. donationId: ${submitted.donationId}, correlationId: ${submitted.correlationId}',
+      );
       if (!mounted) return;
       setState(() {
         _submitted = submitted;
         _clearFood();
       });
       if (_scroll.hasClients) {
-        _scroll.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+        _scroll.animateTo(
+          0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
       }
     } on ApiException catch (e) {
       if (!mounted) return;
       if (e.code == 'permission-denied' || e.code == 'unauthenticated') {
         showSignInSheet(context); // e.g. they signed out somewhere else
       } else {
-        showZhMessage(context, e.message, onRetry: e.code == 'unavailable' ? _post : null);
+        showZhMessage(
+          context,
+          e.message,
+          onRetry: e.code == 'unavailable' ? _post : null,
+        );
       }
-    } catch (e) {
-      if (mounted) showZhMessage(context, 'Something went wrong. Please try again.');
+    } on DonationPersistenceException catch (e, stackTrace) {
+      debugPrint('$e\n$stackTrace');
+      if (mounted) {
+        showZhMessage(
+          context,
+          'Donation accepted, but could not be saved. Do not resubmit; contact support with ID ${e.donationId}.',
+        );
+      }
+    } catch (e, stackTrace) {
+      debugPrint('Donation submission failed: $e\n$stackTrace');
+      if (mounted) {
+        showZhMessage(
+          context,
+          'Could not submit or save the donation. Please try again.',
+        );
+      }
     } finally {
       if (mounted) setState(() => _posting = false);
     }
@@ -246,13 +306,8 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
     });
   }
 
-
-
-
-
-
   // The screen
- 
+
   @override
   Widget build(BuildContext context) {
     // Redraws whenever the user changes, e.g. a guest signs in from the sheet.
@@ -272,11 +327,21 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
             toolbarHeight: 64,
             title: const Text(
               'Donate food',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500, color: ZhColors.text),
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w500,
+                color: ZhColors.text,
+              ),
             ),
-            actions: [const NotificationButton(), AccountButton(user: user), const SizedBox(width: 8)],
+            actions: [
+              const NotificationButton(),
+              AccountButton(user: user),
+              const SizedBox(width: 8),
+            ],
           ),
-          body: signedIn ? _form() : _GuestNotice(onSignIn: () => showSignInSheet(context)),
+          body: signedIn
+              ? _form()
+              : _GuestNotice(onSignIn: () => showSignInSheet(context)),
           bottomNavigationBar: signedIn ? _bottomBar() : null,
         );
       },
@@ -294,7 +359,10 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (_submitted != null) ...[
-              _SuccessCard(submitted: _submitted!, onClose: () => setState(() => _submitted = null)),
+              _SuccessCard(
+                submitted: _submitted!,
+                onClose: () => setState(() => _submitted = null),
+              ),
               const SizedBox(height: 24),
             ],
 
@@ -304,7 +372,8 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
               controller: _title,
               maxLength: 60,
               validator: _required,
-              onChanged: (_) => setState(() {}), // keeps the 0/60 counter up to date
+              onChanged: (_) =>
+                  setState(() {}), // keeps the 0/60 counter up to date
               decoration: zhField(
                 label: 'Title',
                 hint: 'e.g. Rice and bean stew',
@@ -338,7 +407,10 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
                 side: const BorderSide(color: ZhColors.primary),
                 minimumSize: const Size.fromHeight(44),
                 shape: const StadiumBorder(),
-                textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                textStyle: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             const SizedBox(height: 24),
@@ -348,23 +420,37 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
             TextFormField(
               controller: _street,
               validator: _required,
-              decoration: zhField(label: 'Street address', hint: 'e.g. 615 Macleod Trail SE'),
+              decoration: zhField(
+                label: 'Street address',
+                hint: 'e.g. 615 Macleod Trail SE',
+              ),
             ),
             const SizedBox(height: 12),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: TextFormField(controller: _city, validator: _required, decoration: zhField(label: 'City')),
+                  child: TextFormField(
+                    controller: _city,
+                    validator: _required,
+                    decoration: zhField(label: 'City'),
+                  ),
                 ),
                 const SizedBox(width: 12),
                 SizedBox(
                   width: 120,
                   child: DropdownButtonFormField<String>(
                     initialValue: _province,
-                    items: [for (final p in _provinces) DropdownMenuItem(value: p, child: Text(p))],
-                    onChanged: (p) => setState(() => _province = p ?? _province),
-                    decoration: zhField(label: 'Province', padding: const EdgeInsets.fromLTRB(12, 16, 8, 16)),
+                    items: [
+                      for (final p in _provinces)
+                        DropdownMenuItem(value: p, child: Text(p)),
+                    ],
+                    onChanged: (p) =>
+                        setState(() => _province = p ?? _province),
+                    decoration: zhField(
+                      label: 'Province',
+                      padding: const EdgeInsets.fromLTRB(12, 16, 8, 16),
+                    ),
                   ),
                 ),
               ],
@@ -378,7 +464,11 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
                   controller: _postalCode,
                   textCapitalization: TextCapitalization.characters,
                   validator: _checkPostalCode,
-                  decoration: zhField(label: 'Postal code', hint: 'A1A 1A1', helper: 'Format: A1A 1A1'),
+                  decoration: zhField(
+                    label: 'Postal code',
+                    hint: 'A1A 1A1',
+                    helper: 'Format: A1A 1A1',
+                  ),
                 ),
               ),
             ),
@@ -426,7 +516,10 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
               padding: const EdgeInsets.only(top: 6, left: 4),
               child: Text(
                 'Pickup must end after it starts.',
-                style: TextStyle(fontSize: 12, color: _windowWrong ? ZhColors.error : ZhColors.textSecondary),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: _windowWrong ? ZhColors.error : ZhColors.textSecondary,
+                ),
               ),
             ),
           ],
@@ -438,7 +531,9 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
   // One item's card: name, quantity, unit, categories and allergens.
   Widget _itemCard(_ItemDraft item) {
     return Container(
-      key: ObjectKey(item), // keeps each card's fields with its own item when one is removed
+      key: ObjectKey(
+        item,
+      ), // keeps each card's fields with its own item when one is removed
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: ZhColors.surface,
@@ -470,14 +565,23 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
           const SizedBox(height: 16),
           Row(
             children: [
-              QuantityStepper(value: item.quantity, onChanged: (q) => setState(() => item.quantity = q)),
+              QuantityStepper(
+                value: item.quantity,
+                onChanged: (q) => setState(() => item.quantity = q),
+              ),
               const SizedBox(width: 12),
               Expanded(
                 child: DropdownButtonFormField<String>(
                   initialValue: item.unit,
-                  items: [for (final u in _units) DropdownMenuItem(value: u, child: Text(u))],
+                  items: [
+                    for (final u in _units)
+                      DropdownMenuItem(value: u, child: Text(u)),
+                  ],
                   onChanged: (u) => setState(() => item.unit = u ?? item.unit),
-                  decoration: zhField(label: 'Unit', padding: const EdgeInsets.fromLTRB(12, 12, 8, 12)),
+                  decoration: zhField(
+                    label: 'Unit',
+                    padding: const EdgeInsets.fromLTRB(12, 12, 8, 12),
+                  ),
                 ),
               ),
             ],
@@ -533,7 +637,10 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
               ? const SizedBox(
                   width: 20,
                   height: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2, color: ZhColors.onPrimary),
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: ZhColors.onPrimary,
+                  ),
                 )
               : const Icon(Icons.send_rounded, size: 20),
           label: Text(_posting ? 'Posting…' : 'Post food'),
@@ -549,15 +656,15 @@ class _ItemDraft {
   int quantity = 1;
   String unit = 'portions';
   final categories = <String>{}; // e.g. {"HALAL", "VEGAN"}
-  final allergens = <String>{};  // e.g. {"SOY"}
+  final allergens = <String>{}; // e.g. {"SOY"}
 
   FoodItem toFoodItem() => FoodItem(
-        name: name.text.trim(),
-        categories: categories.toList(),
-        allergens: allergens.toList(),
-        quantity: quantity,
-        unit: unit,
-      );
+    name: name.text.trim(),
+    categories: categories.toList(),
+    allergens: allergens.toList(),
+    quantity: quantity,
+    unit: unit,
+  );
 
   void dispose() => name.dispose();
 }
@@ -579,14 +686,25 @@ class _GuestNotice extends StatelessWidget {
             Container(
               width: 80,
               height: 80,
-              decoration: const BoxDecoration(color: ZhColors.warningContainer, shape: BoxShape.circle),
-              child: const Icon(Icons.lock_outline_rounded, size: 40, color: ZhColors.warningIcon),
+              decoration: const BoxDecoration(
+                color: ZhColors.warningContainer,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.lock_outline_rounded,
+                size: 40,
+                color: ZhColors.warningIcon,
+              ),
             ),
             const SizedBox(height: 16),
             const Text(
               'Sign in to donate food',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500, color: ZhColors.text),
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w500,
+                color: ZhColors.text,
+              ),
             ),
             const SizedBox(height: 8),
             const Text(
@@ -595,7 +713,11 @@ class _GuestNotice extends StatelessWidget {
               style: TextStyle(fontSize: 14, color: ZhColors.textSecondary),
             ),
             const SizedBox(height: 24),
-            FilledButton(style: zhPrimaryButton(), onPressed: onSignIn, child: const Text('Sign in or create account')),
+            FilledButton(
+              style: zhPrimaryButton(),
+              onPressed: onSignIn,
+              child: const Text('Sign in or create account'),
+            ),
           ],
         ),
       ),
@@ -614,11 +736,18 @@ class _SuccessCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 16, 4, 16),
-      decoration: BoxDecoration(color: ZhColors.primaryContainer, borderRadius: BorderRadius.circular(16)),
+      decoration: BoxDecoration(
+        color: ZhColors.primaryContainer,
+        borderRadius: BorderRadius.circular(16),
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.check_circle_rounded, size: 32, color: ZhColors.primary),
+          const Icon(
+            Icons.check_circle_rounded,
+            size: 32,
+            color: ZhColors.primary,
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -626,17 +755,27 @@ class _SuccessCard extends StatelessWidget {
               children: [
                 const Text(
                   'Submitted',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: ZhColors.onPrimaryContainer),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: ZhColors.onPrimaryContainer,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 const Text(
                   "Your food is being listed. People nearby will be told once it's live.",
-                  style: TextStyle(fontSize: 14, color: ZhColors.onPrimaryContainer),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: ZhColors.onPrimaryContainer,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 SelectableText(
                   'Donation ID: ${submitted.donationId}',
-                  style: const TextStyle(fontSize: 12, color: ZhColors.textSecondary),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: ZhColors.textSecondary,
+                  ),
                 ),
               ],
             ),
@@ -644,7 +783,11 @@ class _SuccessCard extends StatelessWidget {
           IconButton(
             tooltip: 'Close',
             onPressed: onClose,
-            icon: const Icon(Icons.close_rounded, size: 20, color: ZhColors.onPrimaryContainer),
+            icon: const Icon(
+              Icons.close_rounded,
+              size: 20,
+              color: ZhColors.onPrimaryContainer,
+            ),
           ),
         ],
       ),

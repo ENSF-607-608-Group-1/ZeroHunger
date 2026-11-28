@@ -66,3 +66,24 @@ query ListAllergens @auth(level: USER_ANON) {
     description
   }
 }
+
+query ListMyActivity @auth(level: USER) {
+  userActivities(
+    where: { user: { authUid: { eq_expr: "auth.uid" } } }
+    orderBy: { occurredAt: DESC }
+  ) {
+    activityId
+    activityType
+    occurredAt
+    donation {
+      donationTitle
+      itemQuantities
+      status {
+        name
+      }
+    }
+    event {
+      eventType
+    }
+  }
+}

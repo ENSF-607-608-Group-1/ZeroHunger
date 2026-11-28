@@ -15,11 +15,15 @@ part 'list_food_categories.dart';
 
 part 'list_allergens.dart';
 
+part 'list_my_activity.dart';
+
 part 'create_donation.dart';
 
 part 'get_current_user.dart';
 
 part 'create_current_user.dart';
+
+part 'update_current_user_role.dart';
 
 
 String? bigIntToJson(BigInt? value) {
@@ -68,6 +72,11 @@ class ZerohungerConnector {
   }
   
   
+  ListMyActivityVariablesBuilder listMyActivity () {
+    return ListMyActivityVariablesBuilder(dataConnect, );
+  }
+  
+  
   CreateDonationVariablesBuilder createDonation ({required String donationTitle, required String pickupTime, required BigInt itemQuantities, required BigInt statusId, }) {
     return CreateDonationVariablesBuilder(dataConnect, donationTitle: donationTitle,pickupTime: pickupTime,itemQuantities: itemQuantities,statusId: statusId,);
   }
@@ -80,6 +89,11 @@ class ZerohungerConnector {
   
   CreateCurrentUserVariablesBuilder createCurrentUser () {
     return CreateCurrentUserVariablesBuilder(dataConnect, );
+  }
+  
+  
+  UpdateCurrentUserRoleVariablesBuilder updateCurrentUserRole ({required String userRole, }) {
+    return UpdateCurrentUserRoleVariablesBuilder(dataConnect, userRole: userRole,);
   }
   
 

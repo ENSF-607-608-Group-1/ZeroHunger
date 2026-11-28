@@ -1,12 +1,17 @@
 mutation CreateDonation(
+  $donationId: UUID
   $donationTitle: String!
   $pickupTime: String!
   $itemQuantities: Int64!
   $statusId: Int64!
   $eventId: Int64
 ) @auth(expr: "auth.uid != '' && auth.token.firebase.sign_in_provider != 'anonymous'") {
+  available_status: donationStatus_upsert(
+    data: { statusId: 1, name: "AVAILABLE" }
+  )
   donation_insert(
     data: {
+      donationId: $donationId
       donationTitle: $donationTitle
       pickupTime: $pickupTime
       itemQuantities: $itemQuantities

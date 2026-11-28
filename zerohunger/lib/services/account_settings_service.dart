@@ -3,7 +3,10 @@
 //
 // Used by AccountScreen and SettingsScreen (two separate pages under the Profile menu).
 //
-// No persistent settings operation is available yet. Tests can inject initialPreferences.
+// Role changes use Data Connect; settings and follows remain injectable until their
+// persisted fields can be mapped to the current schema.
+
+import '../generated/zerohunger.dart';
 
 // Role chosen for the account (matches Sign in / create account roles).
 enum UserRole {
@@ -64,10 +67,15 @@ class UserPreferences {
 class AccountSettingsService {
   AccountSettingsService({
     UserPreferences? initialPreferences,
+    this.connector,
     this.simulatedDelay = const Duration(milliseconds: 200),
   }) : _localPrefs = initialPreferences;
 
+  AccountSettingsService.connected()
+      : this(connector: ZerohungerConnector.instance);
+
   UserPreferences? _localPrefs;
+  final ZerohungerConnector? connector;
   final Duration simulatedDelay;
 
   bool get isAvailable => _localPrefs != null;
@@ -86,11 +94,30 @@ class AccountSettingsService {
     if (simulatedDelay > Duration.zero) {
       await Future<void>.delayed(simulatedDelay);
     }
-    final p = _localPrefs ?? _emptyPreferences;
-    return p.copyWith(
-      foodPreferences: Set<String>.unmodifiable(p.foodPreferences),
-      allergensToAvoid: Set<String>.unmodifiable(p.allergensToAvoid),
-      followedOrganizations: List<FollowedOrganization>.unmodifiable(p.followedOrganizations),
+    final local = _localPrefs;
+    if (local != null) {
+      return local.copyWith(
+        foodPreferences: Set<String>.unmodifiable(local.foodPreferences),
+        allergensToAvoid: Set<String>.unmodifiable(local.allergensToAvoid),
+        followedOrganizations:
+            List<FollowedOrganization>.unmodifiable(local.followedOrganizations),
+      );
+    }
+
+    final activeConnector = connector;
+    if (activeConnector == null) return _emptyPreferences;
+
+    final result = await activeConnector.getCurrentUser().execute();
+    if (result.data.users.isEmpty) return _emptyPreferences;
+    final user = result.data.users.first;
+    final role = switch (user.userRole.toLowerCase()) {
+      'donor' => UserRole.donor,
+      'organization' => UserRole.organization,
+      _ => null,
+    };
+    return _emptyPreferences.copyWith(
+      role: role,
+      postalCode: user.postalCode?.code ?? '',
     );
   }
 
@@ -99,8 +126,19 @@ class AccountSettingsService {
     if (simulatedDelay > Duration.zero) {
       await Future<void>.delayed(simulatedDelay);
     }
-    final current = _requireAvailable();
-    _localPrefs = current.copyWith(role: role);
+    final local = _localPrefs;
+    if (local != null) {
+      _localPrefs = local.copyWith(role: role);
+    } else {
+      final activeConnector = connector;
+      if (activeConnector == null) _requireAvailable();
+      final result = await activeConnector!.updateCurrentUserRole(
+        userRole: role.name,
+      ).execute();
+      if (result.data.user_update == null) {
+        throw StateError('The signed-in user is not present in the database.');
+      }
+    }
     return load();
   }
 
