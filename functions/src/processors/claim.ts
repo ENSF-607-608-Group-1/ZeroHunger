@@ -68,7 +68,7 @@ export class ClaimProcessor extends EventProcessor {
     //   - failed-precondition if it isn't AVAILABLE, if who.userId is its donor,
     //     or if an item has less left than asked for
     // Until then, these stand-in values let the whole flow run in the cloud:
-    const donorId = "unknown-donor";                                  // Donation.donorId
+    const donorId = request.donorId ?? "unknown-donor";               // Donation.donorId
     const remainingBefore = total;                                    // pretend exactly enough is left
     const pickupStart = new Date().toISOString();                     // Donation.pickupStart
     const pickupEnd = new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(); // 2 hours later
@@ -93,6 +93,8 @@ export class ClaimProcessor extends EventProcessor {
       pickupStart,
       pickupEnd,
       pickupLocationId,
+      pickupCode,
+      donationTitle: request.donationTitle,
     };
 
     // The claim request is the initiating event. It isn't published (the app waits for this answer),

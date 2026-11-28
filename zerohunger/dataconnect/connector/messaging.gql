@@ -1,0 +1,111 @@
+query ListMyConversations @auth(level: USER) {
+  userConversations(where: { user: { authUid: { eq_expr: "auth.uid" } } }) {
+    conversation {
+      conversationId
+      conversationType
+      createdAt
+      userConversations_on_conversation {
+        user {
+          userId
+          authUid
+          firstName
+          lastName
+          userRole
+        }
+      }
+      messagess_on_conversation(orderBy: { sentAt: ASC }) {
+        messageId
+        content
+        sentAt
+        readAt
+        sender {
+          userId
+          authUid
+          firstName
+          lastName
+        }
+      }
+    }
+  }
+}
+
+query GetDonationDonor($donationId: UUID!) @auth(level: USER_ANON) {
+  userActivities(
+    where: {
+      donationId: { eq: $donationId }
+      activityType: { eq: "FOOD_POSTED" }
+    }
+    orderBy: { occurredAt: DESC }
+    limit: 1
+  ) {
+    user {
+      userId
+      authUid
+      firstName
+      lastName
+    }
+  }
+}
+
+mutation CreateConversation($conversationType: String!) @auth(level: USER) {
+  conversations_insert(
+    data: {
+      conversationType: $conversationType
+    }
+  )
+}
+
+mutation AddConversationMember(
+  $userId: Int64!
+  $conversationId: Int64!
+) @auth(level: USER) {
+  userConversation_upsert(
+    data: {
+      userId: $userId
+      conversationId: $conversationId
+    }
+  )
+}
+
+mutation SendChatMessage(
+  $senderId: Int64!
+  $conversationId: Int64!
+  $content: String!
+) @auth(level: USER) {
+  messages_insert(
+    data: {
+      senderId: $senderId
+      conversationId: $conversationId
+      content: $content
+    }
+  )
+}
+
+mutation CreateNotificationForUser(
+  $userId: Int64!
+  $title: String!
+  $content: String!
+  $eventId: Int64
+) @auth(level: USER) {
+  notification_insert(
+    data: {
+      userId: $userId
+      title: $title
+      content: $content
+      eventId: $eventId
+    }
+  )
+}
+
+mutation RecordClaimActivity(
+  $userId: Int64!
+  $donationId: UUID!
+) @auth(level: USER) {
+  userActivity_insert(
+    data: {
+      userId: $userId
+      donationId: $donationId
+      activityType: "FOOD_CLAIMED"
+    }
+  )
+}

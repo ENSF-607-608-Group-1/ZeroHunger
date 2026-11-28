@@ -297,6 +297,18 @@ class QueryService {
             title: donation.donationTitle,
             pickupTime: donation.pickupTime,
             totalQuantity: donation.itemQuantities,
+            items: donation.itemQuantities > BigInt.zero
+                ? [
+                    DonationItem(
+                      itemId: donation.donationId,
+                      name: donation.donationTitle,
+                      quantityLeft: donation.itemQuantities.toInt(),
+                      unit: donation.itemQuantities == BigInt.one
+                          ? 'portion'
+                          : 'portions',
+                    ),
+                  ]
+                : const [],
           ),
         )
         .toList();

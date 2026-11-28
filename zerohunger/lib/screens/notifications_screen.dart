@@ -18,6 +18,7 @@ import '../widgets/account_button.dart';
 import '../widgets/form_parts.dart';
 import 'food_details_screen.dart';
 import 'pickup_chat_screen.dart';
+import 'pickup_chats_screen.dart';
 
 enum _NotificationFilter { all, unread, food, chat, event }
 
@@ -45,7 +46,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   late final NotificationService _notifications = widget.notificationService ??
       (widget.accountAction == null ? NotificationService.connected() : NotificationService());
   late final QueryService _query = widget.queryService ?? QueryService();
-  late final ChatService _chat = widget.chatService ?? ChatService();
+  late final ChatService _chat = widget.chatService ??
+      (widget.accountAction == null ? ChatService.connected() : ChatService());
   late final AuthService? _auth = widget.accountAction == null ? AuthService() : null;
 
   late Future<List<AppNotification>> _listFuture = _notifications.myNotifications();
@@ -115,6 +117,18 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
     switch (notification.targetType) {
       case NotificationTargetType.chat:
+        if (notification.targetId.startsWith('db-')) {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PickupChatsScreen(
+                chatService: _chat,
+                accountAction: widget.accountAction,
+              ),
+            ),
+          );
+          return;
+        }
         await Navigator.push(
           context,
           MaterialPageRoute(

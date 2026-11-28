@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
+import '../services/chat_service.dart';
 import '../services/query_service.dart';
 import '../services/zero_hunger_api.dart';
 import '../theme/app_theme.dart';
@@ -46,6 +47,8 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
       _claiming = true;
     });
     try {
+      final chatService = ChatService.connected();
+      final donor = await chatService.resolveDonationDonor(widget.donation.donationId);
       final result = await _api.claimFood(
         donationId: widget.donation.donationId,
         items: [
@@ -53,6 +56,13 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
           for (final item in widget.donation.items)
             if (_wanted.contains(item.itemId)) ClaimItem(itemId: item.itemId, quantity: item.quantityLeft),
         ],
+        donorId: donor?.authUid,
+        donationTitle: widget.donation.title,
+      );
+      final chatThread = await chatService.createPickupChatForClaim(
+        claim: result,
+        donation: widget.donation,
+        donor: donor,
       );
       if (!mounted) return; // the screen was closed while we waited
       debugPrint('Claimed: reservation ${result.reservationId}, pickup code ${result.pickupCode}');
@@ -64,6 +74,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
             donation: widget.donation,
             items: [for (final item in widget.donation.items) if (_wanted.contains(item.itemId)) item],
             result: result,
+            chatThread: chatThread,
           ),
         ),
       );

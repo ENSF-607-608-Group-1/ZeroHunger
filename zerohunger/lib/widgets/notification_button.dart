@@ -56,11 +56,11 @@ class NotificationButton extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 16,
-                backgroundColor: hasUnread ? ZhColors.primaryContainer : ZhColors.divider,
+                backgroundColor: hasUnread ? ZhColors.warningContainer : ZhColors.divider,
                 child: Icon(
-                  hasUnread ? Icons.notifications_rounded : Icons.notifications_none_rounded,
+                  hasUnread ? Icons.notifications_active_rounded : Icons.notifications_none_rounded,
                   size: 18,
-                  color: hasUnread ? ZhColors.onPrimaryContainer : ZhColors.textSecondary,
+                  color: hasUnread ? ZhColors.error : ZhColors.textSecondary,
                 ),
               ),
               if (hasUnread)

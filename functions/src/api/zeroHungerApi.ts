@@ -178,6 +178,8 @@ export class ZeroHungerApi {
       donationId: needText(d.donationId, "donationId"),
       items: needList(d.items, "items").map((item, i) => checkClaimItem(item, i + 1)),
       note: optionalText(d.note, "note") || undefined, // left out if empty
+      donorId: optionalText(d.donorId, "donorId") || undefined,
+      donationTitle: optionalText(d.donationTitle, "donationTitle") || undefined,
     };
 
     try {
@@ -207,6 +209,8 @@ export class ZeroHungerApi {
       senderId,
       senderIsGuest: request.auth?.token.firebase.sign_in_provider === "anonymous",
       text,
+      donationId: optionalText(d.donationId, "donationId") || undefined,
+      receiverId: optionalText(d.receiverId, "receiverId") || undefined,
     };
     const event = createEvent("SendMessage", message);
     await this.publish(Topics.sendMessage, event);

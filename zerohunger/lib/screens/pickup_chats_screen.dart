@@ -38,11 +38,30 @@ class PickupChatsScreen extends StatefulWidget {
 }
 
 class _PickupChatsScreenState extends State<PickupChatsScreen> {
-  late final ChatService _chat = widget.chatService ?? ChatService();
+  late final ChatService _chat = widget.chatService ??
+      (widget.accountAction == null ? ChatService.connected() : ChatService());
   late final AuthService? _auth = widget.accountAction == null ? AuthService() : null;
 
   late Future<List<PickupChatThread>> _threads = _chat.myChats(donationId: widget.donationId);
   _ChatFilter _filter = _ChatFilter.all;
+
+  @override
+  void initState() {
+    super.initState();
+    ChatService.updatesListenable.addListener(_handleRemoteUpdate);
+  }
+
+  @override
+  void dispose() {
+    ChatService.updatesListenable.removeListener(_handleRemoteUpdate);
+    super.dispose();
+  }
+
+  void _handleRemoteUpdate() {
+    if (mounted && _chat.isConnected) {
+      _reload();
+    }
+  }
 
   Future<void> _reload() async {
     final next = _chat.myChats(donationId: widget.donationId);
@@ -144,11 +163,19 @@ class _PickupChatsScreenState extends State<PickupChatsScreen> {
                           subtitle: 'Check your connection, then pull down to try again.',
                         )
                       else if (all.isEmpty)
-                        const _Notice(
-                          icon: Icons.chat_bubble_outline_rounded,
-                          title: 'Pickup chat history is not available yet',
-                          subtitle: 'The current database cannot associate pickup chats with reservations.',
-                        )
+                        _chat.isConnected
+                            ? const _Notice(
+                                icon: Icons.chat_bubble_outline_rounded,
+                                title: 'No pickup chats yet',
+                                subtitle:
+                                    'Claim a food listing or wait for someone to claim your donation to start a pickup chat.',
+                              )
+                            : const _Notice(
+                                icon: Icons.chat_bubble_outline_rounded,
+                                title: 'Pickup chat history is not available yet',
+                                subtitle:
+                                    'The current database cannot associate pickup chats with reservations.',
+                              )
                       else if (shown.isEmpty)
                         const _Notice(
                           icon: Icons.search_off_rounded,
@@ -282,6 +309,22 @@ class _ChatThreadCard extends StatelessWidget {
                           ),
                         ),
                         _StatusBadge(status: thread.status),
+                        if (thread.pickupCode != null && thread.pickupCode!.isNotEmpty)
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: ZhColors.primaryContainer,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              'Code ${formatPickupCode(thread.pickupCode!)}',
+                              style: const TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                                color: ZhColors.onPrimaryContainer,
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                     const SizedBox(height: 6),

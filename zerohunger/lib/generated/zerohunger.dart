@@ -43,6 +43,8 @@ part 'create_location.dart';
 
 part 'create_user_preferences.dart';
 
+part 'messaging_operations.dart';
+
 
 String? bigIntToJson(BigInt? value) {
   return value?.toString();
@@ -157,6 +159,66 @@ class ZerohungerConnector {
   
   CreateUserPreferencesVariablesBuilder createUserPreferences ({required BigInt userId, }) {
     return CreateUserPreferencesVariablesBuilder(dataConnect, userId: userId,);
+  }
+
+  ListMyConversationsVariablesBuilder listMyConversations () {
+    return ListMyConversationsVariablesBuilder(dataConnect);
+  }
+
+  GetDonationDonorVariablesBuilder getDonationDonor ({required String donationId}) {
+    return GetDonationDonorVariablesBuilder(dataConnect, donationId: donationId);
+  }
+
+  CreateConversationVariablesBuilder createConversation ({required String conversationType}) {
+    return CreateConversationVariablesBuilder(dataConnect, conversationType: conversationType);
+  }
+
+  AddConversationMemberVariablesBuilder addConversationMember ({
+    required BigInt userId,
+    required BigInt conversationId,
+  }) {
+    return AddConversationMemberVariablesBuilder(
+      dataConnect,
+      userId: userId,
+      conversationId: conversationId,
+    );
+  }
+
+  SendChatMessageVariablesBuilder sendChatMessage ({
+    required BigInt senderId,
+    required BigInt conversationId,
+    required String content,
+  }) {
+    return SendChatMessageVariablesBuilder(
+      dataConnect,
+      senderId: senderId,
+      conversationId: conversationId,
+      content: content,
+    );
+  }
+
+  CreateNotificationForUserVariablesBuilder createNotificationForUser ({
+    required BigInt userId,
+    required String title,
+    required String content,
+  }) {
+    return CreateNotificationForUserVariablesBuilder(
+      dataConnect,
+      userId: userId,
+      title: title,
+      content: content,
+    );
+  }
+
+  RecordClaimActivityVariablesBuilder recordClaimActivity ({
+    required BigInt userId,
+    required String donationId,
+  }) {
+    return RecordClaimActivityVariablesBuilder(
+      dataConnect,
+      userId: userId,
+      donationId: donationId,
+    );
   }
   
 

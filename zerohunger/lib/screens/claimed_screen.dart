@@ -8,17 +8,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../services/chat_service.dart';
 import '../services/query_service.dart';
 import '../services/zero_hunger_api.dart';
 import '../theme/app_theme.dart';
 import '../widgets/food_parts.dart';
+import 'pickup_chat_screen.dart';
 
 class ClaimedScreen extends StatelessWidget {
-  const ClaimedScreen({super.key, required this.donation, required this.items, required this.result});
+  const ClaimedScreen({
+    super.key,
+    required this.donation,
+    required this.items,
+    required this.result,
+    this.chatThread,
+    this.chatService,
+  });
 
-  final Donation donation;         // the donation the food came from
-  final List<DonationItem> items;  // the items that were switched on
-  final ClaimResult result;        // api-claimFood's answer: the reservation and pickup code
+  final Donation donation;          // the donation the food came from
+  final List<DonationItem> items;   // the items that were switched on
+  final ClaimResult result;         // api-claimFood's answer: the reservation and pickup code
+  final PickupChatThread? chatThread;
+  final ChatService? chatService;
 
   @override
   Widget build(BuildContext context) {
@@ -102,10 +113,50 @@ class ClaimedScreen extends StatelessWidget {
         top: false,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-          child: FilledButton(
-            style: zhPrimaryButton(),
-            onPressed: () => Navigator.popUntil(context, (route) => route.isFirst), // back to Home
-            child: const Text('Back to home'),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              FilledButton.icon(
+                style: zhPrimaryButton(),
+                onPressed: () {
+                  final screen = chatThread != null
+                      ? PickupChatScreen.fromThread(chatThread!, chatService: chatService)
+                      : PickupChatScreen(
+                          conversationId: result.reservationId,
+                          donationId: donation.donationId,
+                          donationTitle: donation.title,
+                          myRole: ChatRole.recipient,
+                          status: ReservationStatus.active,
+                          pickupCode: result.pickupCode,
+                          pickupStart: result.pickupStart,
+                          pickupEnd: result.pickupEnd,
+                          address: donation.address,
+                          chatService: chatService,
+                        );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => screen),
+                  );
+                },
+                icon: const Icon(Icons.chat_bubble_outline_rounded, size: 18),
+                label: const Text('Open pickup chat'),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: ZhColors.primary,
+                    side: const BorderSide(color: ZhColors.primary),
+                    minimumSize: const Size.fromHeight(48),
+                    shape: const StadiumBorder(),
+                    textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                  ),
+                  onPressed: () => Navigator.popUntil(context, (route) => route.isFirst), // back to Home
+                  child: const Text('Back to home'),
+                ),
+              ),
+            ],
           ),
         ),
       ),

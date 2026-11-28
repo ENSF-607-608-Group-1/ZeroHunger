@@ -18,9 +18,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import '../screens/notifications_screen.dart';
+import '../screens/pickup_chat_screen.dart';
 import '../theme/app_theme.dart';
 import 'account_settings_service.dart';
 import 'auth_service.dart';
+import 'chat_service.dart';
 import 'notification_service.dart';
 
 const String defaultAreaCode = 'T2N';
@@ -121,6 +123,8 @@ class PushNotificationService {
   bool _initialized = false;
   GlobalKey<ScaffoldMessengerState>? _messengerKey;
   GlobalKey<NavigatorState>? _navigatorKey;
+  OverlayEntry? _activeBannerEntry;
+  Timer? _activeBannerTimer;
 
   StreamSubscription<RemoteMessage>? _onMessageSub;
   StreamSubscription<RemoteMessage>? _onOpenedSub;
@@ -238,6 +242,9 @@ class PushNotificationService {
     if (notification == null) return;
 
     NotificationService.recordIncoming(notification);
+    if (kind == 'NEW_MESSAGE' || kind == 'FOOD_CLAIMED') {
+      ChatService.notifyIncomingUpdate();
+    }
     _showForegroundBanner(notification);
   }
 
@@ -262,6 +269,16 @@ class PushNotificationService {
   }
 
   void _showForegroundBanner(AppNotification notification) {
+    final overlay = _navigatorKey?.currentState?.overlay;
+    if (overlay != null) {
+      showTopNotificationBanner(
+        overlay: overlay,
+        notification: notification,
+        onView: () => _openNotificationTarget(notification),
+      );
+      return;
+    }
+
     final messenger = _messengerKey?.currentState;
     if (messenger == null) return;
     messenger
@@ -271,33 +288,76 @@ class PushNotificationService {
           behavior: SnackBarBehavior.floating,
           backgroundColor: ZhColors.primary,
           duration: const Duration(seconds: 5),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                notification.title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: ZhColors.onPrimary,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                notification.message,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(color: ZhColors.onPrimary),
-              ),
-            ],
-          ),
+          content: Text('${notification.title}: ${notification.message}'),
           action: SnackBarAction(
             label: 'View',
             textColor: ZhColors.onPrimary,
-            onPressed: _openNotificationsScreen,
+            onPressed: () => _openNotificationTarget(notification),
           ),
         ),
       );
+  }
+
+  // Displays a heads-up push notification sliding in from the top of the screen.
+  void showTopNotificationBanner({
+    required OverlayState overlay,
+    required AppNotification notification,
+    required VoidCallback onView,
+    Duration duration = const Duration(seconds: 5),
+  }) {
+    dismissTopBanner();
+
+    late final OverlayEntry entry;
+    entry = OverlayEntry(
+      builder: (context) => _TopNotificationBanner(
+        notification: notification,
+        onDismiss: () {
+          if (_activeBannerEntry == entry) {
+            dismissTopBanner();
+          }
+        },
+        onView: () {
+          if (_activeBannerEntry == entry) {
+            dismissTopBanner();
+          }
+          onView();
+        },
+      ),
+    );
+
+    _activeBannerEntry = entry;
+    overlay.insert(entry);
+    _activeBannerTimer = Timer(duration, () {
+      if (_activeBannerEntry == entry) {
+        dismissTopBanner();
+      }
+    });
+  }
+
+  void dismissTopBanner() {
+    _activeBannerTimer?.cancel();
+    _activeBannerTimer = null;
+    _activeBannerEntry?.remove();
+    _activeBannerEntry = null;
+  }
+
+  void _openNotificationTarget(AppNotification notification) {
+    final navigator = _navigatorKey?.currentState;
+    if (navigator == null) return;
+    if (notification.targetType == NotificationTargetType.chat &&
+        notification.targetId.isNotEmpty &&
+        !notification.targetId.startsWith('db-')) {
+      navigator.push(
+        MaterialPageRoute(
+          builder: (_) => PickupChatScreen(
+            conversationId: notification.targetId,
+            donationTitle: notification.targetTitle,
+          ),
+        ),
+      );
+      return;
+    }
+    _openNotificationsScreen();
   }
 
   void _openNotificationsScreen() {
@@ -314,6 +374,7 @@ class PushNotificationService {
     if (uidChanged) {
       _lastSyncedUid = uid;
       NotificationService.clearSession();
+      ChatService.clearSession();
     }
 
     final messaging = FirebaseMessaging.instance;
@@ -395,9 +456,140 @@ class PushNotificationService {
   }
 
   Future<void> dispose() async {
+    dismissTopBanner();
     await _onMessageSub?.cancel();
     await _onOpenedSub?.cancel();
     await _authSub?.cancel();
     _initialized = false;
+  }
+}
+
+class _TopNotificationBanner extends StatefulWidget {
+  const _TopNotificationBanner({
+    required this.notification,
+    required this.onDismiss,
+    required this.onView,
+  });
+
+  final AppNotification notification;
+  final VoidCallback onDismiss;
+  final VoidCallback onView;
+
+  @override
+  State<_TopNotificationBanner> createState() => _TopNotificationBannerState();
+}
+
+class _TopNotificationBannerState extends State<_TopNotificationBanner>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 240),
+  )..forward();
+
+  late final Animation<Offset> _slide = Tween<Offset>(
+    begin: const Offset(0, -1.2),
+    end: Offset.zero,
+  ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final icon = switch (widget.notification.targetType) {
+      NotificationTargetType.chat => Icons.chat_bubble_rounded,
+      NotificationTargetType.event => Icons.event_rounded,
+      NotificationTargetType.food => Icons.notifications_active_rounded,
+    };
+
+    return Positioned(
+      top: 0,
+      left: 0,
+      right: 0,
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+          child: SlideTransition(
+            position: _slide,
+            child: Dismissible(
+              key: ValueKey('top-notif-${widget.notification.notificationId}'),
+              direction: DismissDirection.up,
+              onDismissed: (_) => widget.onDismiss(),
+              child: Material(
+                color: ZhColors.primary,
+                elevation: 8,
+                shadowColor: Colors.black38,
+                borderRadius: BorderRadius.circular(14),
+                clipBehavior: Clip.antiAlias,
+                child: InkWell(
+                  onTap: widget.onView,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(14, 12, 8, 12),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 34,
+                          height: 34,
+                          decoration: BoxDecoration(
+                            color: ZhColors.onPrimary.withValues(alpha: 0.16),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(icon, size: 18, color: ZhColors.onPrimary),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.notification.title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: ZhColors.onPrimary,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                widget.notification.message,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  height: 1.3,
+                                  color: ZhColors.onPrimary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: widget.onView,
+                          style: TextButton.styleFrom(
+                            foregroundColor: ZhColors.onPrimary,
+                            textStyle: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          child: const Text('View'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
