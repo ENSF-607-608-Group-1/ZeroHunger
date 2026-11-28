@@ -1,4 +1,4 @@
-library zerohunger_data_connect;
+library zerohunger_data_connector;
 import 'package:firebase_data_connect/firebase_data_connect.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
@@ -86,7 +86,7 @@ class ZerohungerConnector {
   static ConnectorConfig connectorConfig = ConnectorConfig(
     'us-central1',
     'zerohunger',
-    'zerohunger-bbd36-service',
+    'zerohunger-bbd36-service-2',
   );
 
   ZerohungerConnector({required this.dataConnect});

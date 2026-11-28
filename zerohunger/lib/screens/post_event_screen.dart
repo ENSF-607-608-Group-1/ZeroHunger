@@ -2,10 +2,8 @@
 // Lets a signed-in donor or organization announce a food distribution or donation event.
 // Guests see a sign-in notice (and get the sign-in sheet first), matching DonateFoodScreen.
 //
-//   form ──"Post event"──> DistributionService (TODO) ──DistributionScheduled──> Notification & Activity
-//
-// Until DistributionService / api-postEvent is built on the backend, submitting uses a local
-// stub so the screen can be tested end-to-end; swap the TODO in _post() once the API is ready.
+//   form ──"Post event"──> ZeroHungerApi.postDistribution ──api-postDistribution
+//   ──PostDistribution──> Distribution processor
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -92,6 +90,8 @@ class PostEventScreen extends StatefulWidget {
 class _PostEventScreenState extends State<PostEventScreen> {
   AuthService? _authInstance;
   AuthService get _auth => _authInstance ??= AuthService();
+  ZeroHungerApi? _apiInstance;
+  ZeroHungerApi get _api => _apiInstance ??= ZeroHungerApi();
 
   final _formKey = GlobalKey<FormState>();
   final _scroll = ScrollController();
@@ -207,12 +207,24 @@ class _PostEventScreenState extends State<PostEventScreen> {
   String? _checkPostalCode(String? value) =>
       _postalCodePattern.hasMatch(_tidyPostalCode(value ?? '')) ? null : 'Use the format A1A 1A1';
 
-  // Default placeholder submission until DistributionService is built.
+  // Calls the production distribution API when no test callback is supplied.
   Future<SubmittedEvent> _defaultPostEvent(PostEventData data) async {
-    // TODO: Replace with DistributionService.postEvent(data) once api-postEvent is built.
-    await Future<void>.delayed(const Duration(milliseconds: 400));
-    final id = 'evt-${DateTime.now().millisecondsSinceEpoch}';
-    return SubmittedEvent(eventId: id, title: data.title, kind: data.kind);
+    final submitted = await _api.postDistribution(
+      kind: data.kind == EventKind.foodDistribution
+          ? 'DISTRIBUTION'
+          : 'DONATION_EVENT',
+      title: data.title,
+      comments: data.comments,
+      address: data.address,
+      startTime: data.startTime,
+      endTime: data.endTime,
+      organizationId: null,
+    );
+    return SubmittedEvent(
+      eventId: submitted.distributionId,
+      title: data.title,
+      kind: data.kind,
+    );
   }
 
   Future<void> _post() async {
