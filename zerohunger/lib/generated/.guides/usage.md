@@ -7,6 +7,7 @@ ZerohungerConnector.instance.ListDistributionEvents(listDistributionEventsVariab
 ZerohungerConnector.instance.ListOrganizations().execute();
 ZerohungerConnector.instance.ListFoodCategories().execute();
 ZerohungerConnector.instance.ListAllergens().execute();
+ZerohungerConnector.instance.ListMyActivity().execute();
 ZerohungerConnector.instance.CreateDonation(createDonationVariables).execute();
 ZerohungerConnector.instance.GetCurrentUser().execute();
 ZerohungerConnector.instance.GetPostalCodeByCode(getPostalCodeByCodeVariables).execute();

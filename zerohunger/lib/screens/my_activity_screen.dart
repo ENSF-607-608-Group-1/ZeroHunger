@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 
 import '../services/activity_service.dart';
 import '../services/auth_service.dart';
+import '../generated/zerohunger.dart';
 import '../theme/app_theme.dart';
 import '../widgets/account_button.dart';
 import '../widgets/form_parts.dart';
@@ -33,7 +34,8 @@ class MyActivityScreen extends StatefulWidget {
 }
 
 class _MyActivityScreenState extends State<MyActivityScreen> {
-  late final ActivityService _activity = widget.activityService ?? ActivityService();
+  late final ActivityService _activity = widget.activityService ??
+      ActivityService(connector: ZerohungerConnector.instance);
   late final AuthService? _auth = widget.accountAction == null ? AuthService() : null;
 
   late Future<ActivitySummary> _summaryFuture = _activity.myActivity();
