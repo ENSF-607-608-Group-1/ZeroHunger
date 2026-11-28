@@ -129,6 +129,8 @@ export interface SendMessage {
   senderId: string;        // whoever is signed in
   senderIsGuest: boolean;  // guests can only write in their own pickup chat
   text: string;
+  donationId?: string;     // optional donation linked to this pickup chat
+  receiverId?: string;     // optional other participant's userId for push routing
 }
 
 // PostDistribution: an organization or donor posts a distribution or a donation event
@@ -161,7 +163,9 @@ export interface ClaimItem {
 export interface ClaimFoodRequest {
   donationId: string;
   items: ClaimItem[];
-  note?: string;  // optional message for the donor
+  note?: string;          // optional message for the donor
+  donorId?: string;       // optional donor authUid so FoodClaimed reaches the donor
+  donationTitle?: string; // optional title included in the opening pickup chat message
 }
 
 // What the app gets back when the claim worked.
@@ -194,6 +198,8 @@ export interface FoodClaimed {
   pickupStart: string;
   pickupEnd: string;
   pickupLocationId: string;
+  pickupCode?: string;        // unique 6-digit code shown at the top of the pickup chat
+  donationTitle?: string;
 }
 
 // FoodAvailable: a listing is live.

@@ -30,8 +30,10 @@ export class MessagingProcessor extends EventProcessor {
       //   doesn't exist, the sender isn't in it, or a guest writes anywhere but their own pickup chat.
       //   Then save the Message (if m.messageId is already saved it's a repeat, so send nothing)
       // Stand-in values until then
-      const donationId = "unknown-donation";     // Conversation.donationId
-      const receiverIds = ["unknown-receiver"];  // everyone else in the chat
+      const donationId = m.donationId ?? "unknown-donation";
+      const receiverIds = m.receiverId && m.receiverId !== m.senderId ?
+        [m.receiverId] :
+        ["unknown-receiver"];
 
       const sent: MessageSent = {
         messageId: m.messageId,
@@ -55,6 +57,13 @@ export class MessagingProcessor extends EventProcessor {
       // TODO: Review when database is complete. Save the Conversation (ID c.reservationId, type PICKUP,
       //   members c.donorId and c.recipientId) and this first message
 
+      const formattedCode = c.pickupCode && c.pickupCode.length === 6 ?
+        `${c.pickupCode.slice(0, 3)} ${c.pickupCode.slice(3)}` :
+        c.pickupCode;
+      const openingText = formattedCode ?
+        `Pickup chat opened. Pickup code: ${formattedCode}. Show this code to the donor at pickup.` :
+        "Pickup chat opened. Use it to arrange the pickup.";
+
       const opened: MessageSent = {
         messageId: randomUUID(),
         conversationId: c.reservationId, // a pickup chat uses the reservation's ID
@@ -62,7 +71,7 @@ export class MessagingProcessor extends EventProcessor {
         senderId: "system",
         receiverIds: [c.donorId, c.recipientId],
         kind: "SYSTEM",
-        text: "Pickup chat opened. Use it to arrange the pickup.",
+        text: openingText,
         sentAt: new Date().toISOString(),
       };
       return [out(Topics.messageSent, createEvent("MessageSent", opened, e))];

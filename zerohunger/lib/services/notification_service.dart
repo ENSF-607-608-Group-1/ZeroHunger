@@ -148,10 +148,22 @@ class NotificationService {
     return records.map((record) {
       final id = 'db-${record.notificationId}';
       final isEvent = record.eventId != null;
+      final lowerTitle = record.title.toLowerCase();
+      final isChat = !isEvent &&
+          (lowerTitle.contains('message') || lowerTitle.contains('claimed'));
       final content = record.content.trim();
-      final extractedFoodTitle = content.contains(' • ')
+      final extractedTitle = content.contains(' • ')
           ? content.split(' • ').first.trim()
           : (content.isNotEmpty ? content : record.title);
+
+      final NotificationTargetType targetType;
+      if (isEvent) {
+        targetType = NotificationTargetType.event;
+      } else if (isChat) {
+        targetType = NotificationTargetType.chat;
+      } else {
+        targetType = NotificationTargetType.food;
+      }
 
       return AppNotification(
         notificationId: id,
@@ -159,9 +171,9 @@ class NotificationService {
         message: content,
         createdAt: record.createdAt.toDateTime(),
         isRead: readIds.contains(id),
-        targetType: isEvent ? NotificationTargetType.event : NotificationTargetType.food,
+        targetType: targetType,
         targetId: isEvent ? record.eventId.toString() : id,
-        targetTitle: isEvent ? record.title : extractedFoodTitle,
+        targetTitle: isEvent ? record.title : extractedTitle,
       );
     }).toList();
   }

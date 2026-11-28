@@ -92,7 +92,7 @@ class PickupChatScreen extends StatefulWidget {
 }
 
 class _PickupChatScreenState extends State<PickupChatScreen> {
-  late final ChatService _chat = widget.chatService ?? ChatService();
+  late final ChatService _chat = widget.chatService ?? ChatService.connected();
   final _input = TextEditingController();
   final _scroll = ScrollController();
 
@@ -105,15 +105,44 @@ class _PickupChatScreenState extends State<PickupChatScreen> {
   void initState() {
     super.initState();
     _input.addListener(_onInputChanged);
+    ChatService.updatesListenable.addListener(_handleRemoteUpdate);
     _load();
   }
 
   @override
   void dispose() {
+    ChatService.updatesListenable.removeListener(_handleRemoteUpdate);
     _input.removeListener(_onInputChanged);
     _input.dispose();
     _scroll.dispose();
     super.dispose();
+  }
+
+  void _handleRemoteUpdate() {
+    if (mounted && _chat.isConnected && !_loading) {
+      _refreshQuietly();
+    }
+  }
+
+  Future<void> _refreshQuietly() async {
+    try {
+      final loaded = await _chat.openChat(
+        conversationId: widget.conversationId,
+        donationId: widget.donationId,
+        donationTitle: widget.donationTitle,
+        otherPartyName: widget.otherPartyName,
+        myRole: widget.myRole,
+        status: widget.status,
+        pickupCode: widget.pickupCode,
+        pickupStart: widget.pickupStart,
+        pickupEnd: widget.pickupEnd,
+        address: widget.address,
+      );
+      if (!mounted) return;
+      final grew = loaded.messages.length > (_thread?.messages.length ?? 0);
+      setState(() => _thread = loaded);
+      if (grew) _scrollToBottom();
+    } catch (_) {}
   }
 
   void _onInputChanged() {
@@ -231,6 +260,14 @@ class _PickupChatScreenState extends State<PickupChatScreen> {
             ),
           ],
         ),
+        actions: [
+          if (_chat.isConnected)
+            IconButton(
+              tooltip: 'Refresh messages',
+              onPressed: _loading ? null : _refreshQuietly,
+              icon: const Icon(Icons.refresh_rounded, size: 22),
+            ),
+        ],
       ),
       body: Column(
         children: [
@@ -286,13 +323,15 @@ class _PickupChatScreenState extends State<PickupChatScreen> {
     final messages = thread.messages;
 
     if (messages.isEmpty) {
-      return const Center(
+      return Center(
         child: Padding(
-          padding: EdgeInsets.all(24),
+          padding: const EdgeInsets.all(24),
           child: Text(
-            'Message history is not available yet. You can still send a message.',
+            _chat.isConnected
+                ? 'Pickup chat is ready. Send a message to coordinate pickup.'
+                : 'Message history is not available yet. You can still send a message.',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 14, color: ZhColors.textSecondary),
+            style: const TextStyle(fontSize: 14, color: ZhColors.textSecondary),
           ),
         ),
       );
@@ -412,7 +451,8 @@ class _PickupChatScreenState extends State<PickupChatScreen> {
   }
 }
 
-// Compact context strip under the AppBar showing pickup time, status, and pickup code.
+// Prominent banner pinned at the top of the chat showing the unique pickup verification
+// code, unique reservation ID, pickup time window, and reservation status.
 class _PickupSummaryBar extends StatelessWidget {
   const _PickupSummaryBar({required this.thread});
 
@@ -424,15 +464,16 @@ class _PickupSummaryBar extends StatelessWidget {
     final end = thread.pickupEnd?.toLocal();
     final code = thread.pickupCode;
 
-    if (start == null && code == null) return const SizedBox.shrink();
+    if (start == null && (code == null || code.isEmpty)) return const SizedBox.shrink();
 
-    final formattedCode = (code != null && code.length == 6)
-        ? '${code.substring(0, 3)} ${code.substring(3)}'
-        : code;
+    final formattedCode = (code != null && code.isNotEmpty) ? formatPickupCode(code) : null;
+    final instruction = thread.myRole == ChatRole.recipient
+        ? 'Show this code to the donor to receive your food.'
+        : 'Verify this code from the recipient at pickup.';
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       decoration: const BoxDecoration(
         color: ZhColors.surface,
         border: Border(
@@ -440,48 +481,116 @@ class _PickupSummaryBar extends StatelessWidget {
           bottom: BorderSide(color: ZhColors.divider),
         ),
       ),
-      child: Wrap(
-        spacing: 12,
-        runSpacing: 6,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        alignment: WrapAlignment.spaceBetween,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (start != null && end != null)
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.schedule_rounded, size: 16, color: ZhColors.primary),
-                const SizedBox(width: 6),
-                Text(
-                  pickupWindowText(start, end),
-                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: ZhColors.text),
-                ),
-              ],
-            ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (formattedCode != null) ...[
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: ZhColors.primaryContainer,
-                    borderRadius: BorderRadius.circular(8),
+          if (formattedCode != null) ...[
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              decoration: BoxDecoration(
+                color: ZhColors.primaryContainer,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: ZhColors.primary.withValues(alpha: 0.25)),
+              ),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.verified_user_outlined,
+                    size: 22,
+                    color: ZhColors.onPrimaryContainer,
                   ),
-                  child: Text(
-                    'Code: $formattedCode',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: ZhColors.onPrimaryContainer,
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Text(
+                              'PICKUP CODE',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 1.0,
+                                color: ZhColors.onPrimaryContainer,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'ID #${thread.shortReservationId}',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                color: ZhColors.onPrimaryContainer.withValues(alpha: 0.8),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          formattedCode,
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 2.5,
+                            color: ZhColors.onPrimaryContainer,
+                          ),
+                        ),
+                        Text(
+                          instruction,
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: ZhColors.onPrimaryContainer.withValues(alpha: 0.9),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  TextButton.icon(
+                    onPressed: () async {
+                      await Clipboard.setData(ClipboardData(text: code!));
+                      if (context.mounted) showZhMessage(context, 'Pickup code copied');
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: ZhColors.onPrimaryContainer,
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    icon: const Icon(Icons.copy_rounded, size: 15),
+                    label: const Text(
+                      'Copy',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (start != null && end != null) const SizedBox(height: 8),
+          ],
+          if (start != null && end != null)
+            Row(
+              children: [
+                const Icon(Icons.schedule_rounded, size: 15, color: ZhColors.primary),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    pickupWindowText(start, end),
+                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: ZhColors.text),
+                  ),
                 ),
-                const SizedBox(width: 8),
+                _MiniStatusPill(status: thread.status),
               ],
-              _MiniStatusPill(status: thread.status),
-            ],
-          ),
+            )
+          else if (formattedCode != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [_MiniStatusPill(status: thread.status)],
+              ),
+            ),
         ],
       ),
     );

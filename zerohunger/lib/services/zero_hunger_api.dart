@@ -339,11 +339,16 @@ class ZeroHungerApi {
     required String donationId,
     required List<ClaimItem> items,
     String? note,
+    String? donorId,
+    String? donationTitle,
   }) async {
     final answer = await _answer('api-claimFood', {
       'donationId': donationId,
       'items': items.map((item) => item.toJson()).toList(),
       if (note != null) 'note': note,
+      if (donorId != null && donorId.isNotEmpty) 'donorId': donorId,
+      if (donationTitle != null && donationTitle.isNotEmpty)
+        'donationTitle': donationTitle,
     });
     final result = ClaimResult.fromJson(answer);
     unawaited(PushNotificationService.instance.subscribeToDonation(result.donationId));
@@ -355,10 +360,14 @@ class ZeroHungerApi {
   Future<MessageSubmitted> sendMessage({
     required String conversationId,
     required String text,
+    String? donationId,
+    String? receiverId,
   }) async {
     final answer = await _answer('api-sendMessage', {
       'conversationId': conversationId,
       'text': text,
+      if (donationId != null && donationId.isNotEmpty) 'donationId': donationId,
+      if (receiverId != null && receiverId.isNotEmpty) 'receiverId': receiverId,
     });
     return MessageSubmitted(
       answer['messageId'] as String,
