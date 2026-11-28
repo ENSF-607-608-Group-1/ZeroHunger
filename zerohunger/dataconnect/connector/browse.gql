@@ -1,5 +1,5 @@
 query ListAvailableDonations @auth(level: USER_ANON) {
-  donations(where: { status: { name: { eq: "AVAILABLE" } } }) {
+  donations(where: { statusId: { eq: 1 } }) {
     donationId
     donationTitle
     pickupTime
