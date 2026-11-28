@@ -152,11 +152,6 @@ class ZerohungerConnector {
     return CreateUserPreferencesVariablesBuilder(dataConnect, userId: userId,);
   }
   
-  
-  UpdateCurrentUserRoleVariablesBuilder updateCurrentUserRole ({required String userRole, }) {
-    return UpdateCurrentUserRoleVariablesBuilder(dataConnect, userRole: userRole,);
-  }
-  
 
   static ConnectorConfig connectorConfig = ConnectorConfig(
     'us-central1',
