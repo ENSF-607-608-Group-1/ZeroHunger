@@ -9,7 +9,8 @@ ZerohungerConnector.instance.ListFoodCategories().execute();
 ZerohungerConnector.instance.ListAllergens().execute();
 ZerohungerConnector.instance.CreateDonation(createDonationVariables).execute();
 ZerohungerConnector.instance.GetCurrentUser().execute();
-ZerohungerConnector.instance.CreateCurrentUser(createCurrentUserVariables).execute();
+ZerohungerConnector.instance.GetPostalCodeByCode(getPostalCodeByCodeVariables).execute();
+ZerohungerConnector.instance.GetOrganizationByPrimaryEmail(getOrganizationByPrimaryEmailVariables).execute();
 
 ```
 
@@ -22,8 +23,8 @@ Optional fields can be discovered based on classes that have `Optional` object t
 This is an example of a mutation with an optional field:
 
 ```dart
-await ZerohungerConnector.instance.CreateCurrentUser({ ... })
-.firstName(...)
+await ZerohungerConnector.instance.CreateUserPreferences({ ... })
+.radiusSearch(...)
 .execute();
 ```
 

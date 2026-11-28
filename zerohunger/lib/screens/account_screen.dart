@@ -1,9 +1,9 @@
 // account_screen.dart
-// Shows the user's account details: email (read-only), role, organizations they follow,
-// and a Sign out button (or Create account for guests).
+// Shows the user's account details: name, email (read-only), phone, address, role,
+// organizations they belong to / follow, and a Sign out button (or Create account for guests).
 //
 // Reached from the "Account" section under the top-right Profile menu.
-// Role and followed-organization data are not represented by the current account integration.
+// Loads profile and role data from Cloud SQL via Firebase Data Connect when signed in.
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -39,9 +39,16 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  late final AccountSettingsService _service = widget.accountSettingsService ?? AccountSettingsService();
   late final AuthService? _auth =
       (widget.accountAction == null && widget.isGuestOverride == null) ? AuthService() : null;
+
+  late final AccountSettingsService _service = widget.accountSettingsService ??
+      (_auth != null
+          ? AccountSettingsService(
+              remoteLoader: _auth.getCurrentUserProfile,
+              remoteRoleUpdater: _auth.updateCurrentUserRole,
+            )
+          : AccountSettingsService());
 
   late Future<UserPreferences> _prefsFuture = _service.load();
   bool _signingOut = false;
@@ -61,7 +68,7 @@ class _AccountScreenState extends State<AccountScreen> {
       setState(() {
         _prefsFuture = Future.value(updated);
       });
-      showZhMessage(context, 'Role updated to ${_roleLabel(role)}');
+      showZhMessage(context, 'Role updated to ${role.label}');
     } catch (_) {
       if (!mounted) return;
       showZhMessage(context, 'Could not update role. Please try again.');
@@ -92,6 +99,7 @@ class _AccountScreenState extends State<AccountScreen> {
       }
       if (!mounted) return;
       showZhMessage(context, 'Signed out');
+      await _reload();
     } catch (_) {
       if (!mounted) return;
       showZhMessage(context, 'Could not sign out. Please try again.');
@@ -100,12 +108,15 @@ class _AccountScreenState extends State<AccountScreen> {
     }
   }
 
-  void _handleCreateAccount() {
+  Future<void> _handleCreateAccount() async {
     if (widget.onCreateAccount != null) {
       widget.onCreateAccount!();
       return;
     }
-    showSignInSheet(context);
+    final created = await showSignInSheet(context);
+    if (created && mounted) {
+      await _reload();
+    }
   }
 
   @override
@@ -194,7 +205,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 _AccountDetailsCard(
                   email: email,
                   isGuest: isGuest,
-                  role: prefs.role,
+                  prefs: prefs,
                   onRoleChanged: isGuest ? null : _changeRole,
                 ),
                 const SizedBox(height: 24),
@@ -238,23 +249,24 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 }
 
-// White card holding read-only Email and Role selector/badge.
+// White card holding read-only profile fields (name, email, phone, address) and Role selector/badge.
 class _AccountDetailsCard extends StatelessWidget {
   const _AccountDetailsCard({
     required this.email,
     required this.isGuest,
-    required this.role,
+    required this.prefs,
     required this.onRoleChanged,
   });
 
   final String? email;
   final bool isGuest;
-  final UserRole? role;
+  final UserPreferences prefs;
   final ValueChanged<UserRole>? onRoleChanged;
 
   @override
   Widget build(BuildContext context) {
     final displayEmail = isGuest ? 'Not signed in (Guest)' : (email ?? '');
+    final role = prefs.role;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -266,33 +278,37 @@ class _AccountDetailsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (!isGuest && prefs.fullName.isNotEmpty) ...[
+            const GroupLabel('Name'),
+            _ReadOnlyValueRow(
+              icon: Icons.badge_outlined,
+              value: prefs.fullName,
+            ),
+            const SizedBox(height: 16),
+          ],
           const GroupLabel('Email'),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-            decoration: BoxDecoration(
-              color: ZhColors.background,
-              border: Border.all(color: ZhColors.divider),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.mail_outline_rounded, size: 20, color: ZhColors.textSecondary),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    displayEmail,
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: isGuest ? ZhColors.textSecondary : ZhColors.text,
-                    ),
-                  ),
-                ),
-                if (!isGuest)
-                  const Icon(Icons.lock_outline_rounded, size: 16, color: ZhColors.textSecondary),
-              ],
-            ),
+          _ReadOnlyValueRow(
+            icon: Icons.mail_outline_rounded,
+            value: displayEmail,
+            muted: isGuest,
+            locked: !isGuest,
           ),
+          if (!isGuest && prefs.phoneNumber.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            const GroupLabel('Phone'),
+            _ReadOnlyValueRow(
+              icon: Icons.phone_outlined,
+              value: prefs.phoneNumber,
+            ),
+          ],
+          if (!isGuest && prefs.street.trim().isNotEmpty) ...[
+            const SizedBox(height: 16),
+            const GroupLabel('Address'),
+            _ReadOnlyValueRow(
+              icon: Icons.location_on_outlined,
+              value: prefs.formattedAddress,
+            ),
+          ],
           const SizedBox(height: 16),
           const GroupLabel('Role'),
           if (isGuest)
@@ -308,7 +324,7 @@ class _AccountDetailsCard extends StatelessWidget {
                   SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Guest — create an account to choose Donor or Organization and post food.',
+                      'Guest — create an account to choose Donor, Recipient, or Organization.',
                       style: TextStyle(fontSize: 13, color: ZhColors.onWarning),
                     ),
                   ),
@@ -327,12 +343,56 @@ class _AccountDetailsCard extends StatelessWidget {
               children: [
                 for (final option in UserRole.values)
                   TagChip(
-                    label: _roleLabel(option),
+                    label: option.label,
                     selected: role == option,
                     onTap: () => onRoleChanged?.call(option),
                   ),
               ],
             ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ReadOnlyValueRow extends StatelessWidget {
+  const _ReadOnlyValueRow({
+    required this.icon,
+    required this.value,
+    this.muted = false,
+    this.locked = false,
+  });
+
+  final IconData icon;
+  final String value;
+  final bool muted;
+  final bool locked;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      decoration: BoxDecoration(
+        color: ZhColors.background,
+        border: Border.all(color: ZhColors.divider),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 20, color: ZhColors.textSecondary),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(
+                fontSize: 15,
+                color: muted ? ZhColors.textSecondary : ZhColors.text,
+              ),
+            ),
+          ),
+          if (locked)
+            const Icon(Icons.lock_outline_rounded, size: 16, color: ZhColors.textSecondary),
         ],
       ),
     );
@@ -347,6 +407,12 @@ class _OrganizationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final subtitleParts = [
+      if (organization.city.isNotEmpty) organization.city,
+      if (organization.memberRole != null && organization.memberRole!.isNotEmpty)
+        organization.memberRole!,
+    ].join(' • ');
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -371,11 +437,13 @@ class _OrganizationCard extends StatelessWidget {
                   organization.name,
                   style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: ZhColors.text),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  organization.city,
-                  style: const TextStyle(fontSize: 13, color: ZhColors.textSecondary),
-                ),
+                if (subtitleParts.isNotEmpty) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitleParts,
+                    style: const TextStyle(fontSize: 13, color: ZhColors.textSecondary),
+                  ),
+                ],
               ],
             ),
           ),
@@ -414,13 +482,13 @@ class _EmptyOrganizationsCard extends StatelessWidget {
           Icon(Icons.groups_outlined, size: 32, color: ZhColors.textSecondary),
           SizedBox(height: 8),
           Text(
-            'Organization follows are not available yet',
+            'No linked organizations yet',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: ZhColors.text),
           ),
           SizedBox(height: 4),
           Text(
-            'The current account integration does not store organization follows.',
+            'Register as an Organization or follow local groups to see them here.',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 13, color: ZhColors.textSecondary),
           ),
@@ -429,11 +497,6 @@ class _EmptyOrganizationsCard extends StatelessWidget {
     );
   }
 }
-
-String _roleLabel(UserRole role) => switch (role) {
-      UserRole.donor => 'Donor',
-      UserRole.organization => 'Organization',
-    };
 
 class _Notice extends StatelessWidget {
   const _Notice({required this.icon, required this.title, required this.subtitle});

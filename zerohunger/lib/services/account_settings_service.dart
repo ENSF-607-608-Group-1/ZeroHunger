@@ -3,30 +3,66 @@
 //
 // Used by AccountScreen and SettingsScreen (two separate pages under the Profile menu).
 //
-// No persistent settings operation is available yet. Tests can inject initialPreferences.
+// Supports Cloud SQL-backed profile loading & role updates via optional remote callbacks,
+// while keeping default construction safe for widget tests without Firebase.
 
-// Role chosen for the account (matches Sign in / create account roles).
+// Role chosen for the account (matches project requirements & Users.UserRole in Cloud SQL).
 enum UserRole {
   donor,
-  organization,
+  recipient,
+  organization;
+
+  String get dbValue => switch (this) {
+        UserRole.donor => 'donor',
+        UserRole.recipient => 'recipient',
+        UserRole.organization => 'organization',
+      };
+
+  String get label => switch (this) {
+        UserRole.donor => 'Donor',
+        UserRole.recipient => 'Recipient',
+        UserRole.organization => 'Organization',
+      };
+
+  static UserRole? fromDbValue(String? raw) {
+    if (raw == null) return null;
+    switch (raw.trim().toLowerCase()) {
+      case 'donor':
+        return UserRole.donor;
+      case 'recipient':
+        return UserRole.recipient;
+      case 'organization':
+        return UserRole.organization;
+      default:
+        return null;
+    }
+  }
 }
 
-// One food bank or community group the user follows for alerts.
+// One food bank or community group linked to / followed by the user.
 class FollowedOrganization {
   final String organizationId;
   final String name; // e.g. "Calgary Food Bank"
   final String city; // e.g. "Calgary"
+  final String? memberRole; // e.g. "admin", "member", "follower"
 
   const FollowedOrganization({
     required this.organizationId,
     required this.name,
     required this.city,
+    this.memberRole,
   });
 }
 
 // Combined account & settings state for the signed-in user (or guest).
 class UserPreferences {
   final UserRole? role;
+  final String firstName;
+  final String lastName;
+  final String phoneNumber;
+  final String street;
+  final String city;
+  final String province;
   final String postalCode;               // Canadian format, e.g. "T2N 1N4"
   final Set<String> foodPreferences;     // from foodCategoryOptions in zero_hunger_api.dart
   final Set<String> allergensToAvoid;    // from allergenOptions in zero_hunger_api.dart (11 priority allergens)
@@ -35,6 +71,12 @@ class UserPreferences {
 
   const UserPreferences({
     required this.role,
+    this.firstName = '',
+    this.lastName = '',
+    this.phoneNumber = '',
+    this.street = '',
+    this.city = '',
+    this.province = '',
     required this.postalCode,
     required this.foodPreferences,
     required this.allergensToAvoid,
@@ -42,8 +84,21 @@ class UserPreferences {
     required this.followedOrganizations,
   });
 
+  String get fullName => [firstName.trim(), lastName.trim()].where((s) => s.isNotEmpty).join(' ');
+
+  String get formattedAddress {
+    final cityProv = [city.trim(), province.trim()].where((s) => s.isNotEmpty).join(', ');
+    return [street.trim(), cityProv, postalCode.trim()].where((s) => s.isNotEmpty).join(' • ');
+  }
+
   UserPreferences copyWith({
     UserRole? role,
+    String? firstName,
+    String? lastName,
+    String? phoneNumber,
+    String? street,
+    String? city,
+    String? province,
     String? postalCode,
     Set<String>? foodPreferences,
     Set<String>? allergensToAvoid,
@@ -52,6 +107,12 @@ class UserPreferences {
   }) {
     return UserPreferences(
       role: role ?? this.role,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      street: street ?? this.street,
+      city: city ?? this.city,
+      province: province ?? this.province,
       postalCode: postalCode ?? this.postalCode,
       foodPreferences: foodPreferences ?? this.foodPreferences,
       allergensToAvoid: allergensToAvoid ?? this.allergensToAvoid,
@@ -65,10 +126,14 @@ class AccountSettingsService {
   AccountSettingsService({
     UserPreferences? initialPreferences,
     this.simulatedDelay = const Duration(milliseconds: 200),
+    this.remoteLoader,
+    this.remoteRoleUpdater,
   }) : _localPrefs = initialPreferences;
 
   UserPreferences? _localPrefs;
   final Duration simulatedDelay;
+  final Future<UserPreferences> Function()? remoteLoader;
+  final Future<UserPreferences> Function(UserRole role)? remoteRoleUpdater;
 
   bool get isAvailable => _localPrefs != null;
 
@@ -83,6 +148,14 @@ class AccountSettingsService {
 
   // Loads the user's current account & settings data.
   Future<UserPreferences> load() async {
+    if (remoteLoader != null) {
+      final loaded = await remoteLoader!();
+      return loaded.copyWith(
+        foodPreferences: Set<String>.unmodifiable(loaded.foodPreferences),
+        allergensToAvoid: Set<String>.unmodifiable(loaded.allergensToAvoid),
+        followedOrganizations: List<FollowedOrganization>.unmodifiable(loaded.followedOrganizations),
+      );
+    }
     if (simulatedDelay > Duration.zero) {
       await Future<void>.delayed(simulatedDelay);
     }
@@ -94,8 +167,11 @@ class AccountSettingsService {
     );
   }
 
-  // Updates the account role (Donor or Organization).
+  // Updates the account role (Donor, Recipient, or Organization).
   Future<UserPreferences> updateRole(UserRole role) async {
+    if (remoteRoleUpdater != null) {
+      return remoteRoleUpdater!(role);
+    }
     if (simulatedDelay > Duration.zero) {
       await Future<void>.delayed(simulatedDelay);
     }
