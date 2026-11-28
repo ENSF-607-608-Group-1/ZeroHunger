@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'services/auth_service.dart';
+import 'services/push_notification_service.dart';
 import 'generated/zerohunger.dart';
 //import 'screens/backend_test_screen.dart';
 //import 'screens/donate_food_screen.dart';
@@ -14,6 +15,9 @@ import 'theme/app_theme.dart';
 import 'screens/home_screen.dart';
 
 const _useDataConnectEmulator = bool.fromEnvironment('USE_DATA_CONNECT_EMULATOR');
+final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<ScaffoldMessengerState> appScaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,6 +45,15 @@ void main() async {
     debugPrint('Guest sign-in failed: $e'); // e.g. no internet; the app still opens
   }
 
+  try {
+    await PushNotificationService.instance.initialize(
+      messengerKey: appScaffoldMessengerKey,
+      navigatorKey: appNavigatorKey,
+    );
+  } catch (e) {
+    debugPrint('Push notifications setup failed: $e');
+  }
+
   runApp(const MyApp());
 }
 
@@ -51,6 +64,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: appNavigatorKey,
+      scaffoldMessengerKey: appScaffoldMessengerKey,
       title: 'Zero Hunger',
       theme: zeroHungerTheme(),
       //COMMENTED OUT TO TRY NEW THEME FOR SCREENS

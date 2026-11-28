@@ -182,14 +182,29 @@ class AccountSettingsService {
     final result = await activeConnector.getCurrentUser().execute();
     if (result.data.users.isEmpty) return _emptyPreferences;
     final user = result.data.users.first;
-    final role = switch (user.userRole.toLowerCase()) {
-      'donor' => UserRole.donor,
-      'organization' => UserRole.organization,
-      _ => null,
-    };
+    final prefs = user.userPreferences_on_user;
+    final notifPref = (prefs?.notificationPreference ?? '').toLowerCase();
+    final notificationsEnabled = prefs != null && notifPref != 'disabled' && notifPref != 'none';
     return _emptyPreferences.copyWith(
-      role: role,
+      role: UserRole.fromDbValue(user.userRole),
+      firstName: user.firstName ?? '',
+      lastName: user.lastName ?? '',
+      phoneNumber: user.phoneNumber ?? '',
+      street: user.street ?? '',
+      city: user.postalCode?.city ?? '',
+      province: user.postalCode?.province ?? '',
       postalCode: user.postalCode?.code ?? '',
+      notificationsEnabled: notificationsEnabled,
+      followedOrganizations: user.userOrganizations_on_user
+          .map(
+            (link) => FollowedOrganization(
+              organizationId: link.organization.orgId.toString(),
+              name: link.organization.orgName,
+              city: link.organization.postalCode?.city ?? '',
+              memberRole: link.memberRole,
+            ),
+          )
+          .toList(),
     );
   }
 

@@ -17,6 +17,8 @@ part 'list_allergens.dart';
 
 part 'list_my_activity.dart';
 
+part 'list_my_notifications.dart';
+
 part 'create_donation.dart';
 
 part 'get_current_user.dart';
@@ -90,6 +92,11 @@ class ZerohungerConnector {
   
   ListMyActivityVariablesBuilder listMyActivity () {
     return ListMyActivityVariablesBuilder(dataConnect, );
+  }
+  
+  
+  ListMyNotificationsVariablesBuilder listMyNotifications () {
+    return ListMyNotificationsVariablesBuilder(dataConnect, );
   }
   
   

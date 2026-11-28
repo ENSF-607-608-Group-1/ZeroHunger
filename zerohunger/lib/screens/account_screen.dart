@@ -1,9 +1,12 @@
 // account_screen.dart
 // Shows the user's account details: name, email (read-only), phone, address, role,
-// organizations they belong to / follow, and a Sign out button (or Create account for guests).
+// organizations they belong to / follow, and a Sign out button (or Sign in / Create account for guests).
 //
 // Reached from the "Account" section under the top-right Profile menu.
-// Loads profile and role data from Cloud SQL via Firebase Data Connect when signed in.
+// Loads profile and role data from Cloud SQL via Firebase Data Connect when signed in,
+// and reloads automatically whenever the authenticated user changes.
+
+import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -51,10 +54,37 @@ class _AccountScreenState extends State<AccountScreen> {
           : AccountSettingsService());
 
   late Future<UserPreferences> _prefsFuture = _service.load();
+  StreamSubscription<User?>? _authSub;
+  String? _lastAuthKey;
   bool _signingOut = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final auth = _auth;
+    if (auth != null) {
+      _lastAuthKey = _authKey(auth.currentUser);
+      _authSub = auth.userChanges.listen((user) {
+        final nextKey = _authKey(user);
+        if (nextKey != _lastAuthKey && mounted) {
+          _lastAuthKey = nextKey;
+          _reload();
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _authSub?.cancel();
+    super.dispose();
+  }
+
+  String _authKey(User? user) => '${user?.uid ?? ''}:${user?.isAnonymous ?? true}:${user?.email ?? ''}';
 
   Future<void> _reload() async {
     final next = _service.load();
+    if (!mounted) return;
     setState(() {
       _prefsFuture = next;
     });
@@ -108,15 +138,23 @@ class _AccountScreenState extends State<AccountScreen> {
     }
   }
 
+  Future<void> _openAuthSheet(SignInSheetMode mode) async {
+    final authenticated = await showSignInSheet(context, initialMode: mode);
+    if (authenticated && mounted) {
+      await _reload();
+    }
+  }
+
+  Future<void> _handleSignIn() async {
+    await _openAuthSheet(SignInSheetMode.signIn);
+  }
+
   Future<void> _handleCreateAccount() async {
     if (widget.onCreateAccount != null) {
       widget.onCreateAccount!();
       return;
     }
-    final created = await showSignInSheet(context);
-    if (created && mounted) {
-      await _reload();
-    }
+    await _openAuthSheet(SignInSheetMode.createAccount);
   }
 
   @override
@@ -165,7 +203,12 @@ class _AccountScreenState extends State<AccountScreen> {
           if (widget.accountAction != null)
             widget.accountAction!
           else
-            AccountButton(user: user, showAccount: false),
+            AccountButton(
+              user: user,
+              showAccount: false,
+              onSignIn: _handleSignIn,
+              onSignOut: _handleSignOut,
+            ),
           const SizedBox(width: 8),
         ],
       ),
@@ -222,10 +265,30 @@ class _AccountScreenState extends State<AccountScreen> {
                   ],
                 const SizedBox(height: 24),
                 if (isGuest)
-                  FilledButton(
-                    style: zhPrimaryButton(),
-                    onPressed: _handleCreateAccount,
-                    child: const Text('Create account'),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: FilledButton(
+                          style: zhPrimaryButton(),
+                          onPressed: _handleSignIn,
+                          child: const Text('Sign in'),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: ZhColors.primary,
+                            side: const BorderSide(color: ZhColors.primary),
+                            minimumSize: const Size.fromHeight(52),
+                            shape: const StadiumBorder(),
+                            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                          onPressed: _handleCreateAccount,
+                          child: const Text('Create account'),
+                        ),
+                      ),
+                    ],
                   )
                 else
                   OutlinedButton.icon(
@@ -301,7 +364,7 @@ class _AccountDetailsCard extends StatelessWidget {
               value: prefs.phoneNumber,
             ),
           ],
-          if (!isGuest && prefs.street.trim().isNotEmpty) ...[
+          if (!isGuest && (prefs.street.trim().isNotEmpty || prefs.city.trim().isNotEmpty)) ...[
             const SizedBox(height: 16),
             const GroupLabel('Address'),
             _ReadOnlyValueRow(
@@ -324,7 +387,7 @@ class _AccountDetailsCard extends StatelessWidget {
                   SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Guest — create an account to choose Donor, Recipient, or Organization.',
+                      'Guest — sign in or create an account to choose Donor, Recipient, or Organization.',
                       style: TextStyle(fontSize: 13, color: ZhColors.onWarning),
                     ),
                   ),
