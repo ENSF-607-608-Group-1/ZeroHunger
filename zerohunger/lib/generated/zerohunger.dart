@@ -45,7 +45,7 @@ String? bigIntToJson(BigInt? value) {
 }
 
 BigInt bigIntFromJson(dynamic value) {
-  return BigInt.parse(value);
+  return BigInt.parse(value.toString());
 }
 
 

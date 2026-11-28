@@ -12,10 +12,17 @@
 // the cloud_functions package adds the user's token for us.
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_data_connect/firebase_data_connect.dart';
 import 'package:flutter/foundation.dart';
 
 import '../generated/zerohunger.dart';
 import 'account_settings_service.dart';
+
+bool _isOperationNotDeployed(Object error) {
+  if (error is! DataConnectError) return false;
+  final msg = error.message ?? '';
+  return msg.contains('NOT_FOUND') || msg.contains('status code of 404');
+}
 
 final RegExp _canadianPostalCodePattern = RegExp(r'^[A-Z]\d[A-Z] \d[A-Z]\d$');
 final RegExp _emailPattern = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
@@ -264,8 +271,16 @@ class AuthService {
         if (registration != null || role != null) updateBuilder.userRole(resolvedRole.dbValue);
         if (resolvedStreet != null) updateBuilder.street(resolvedStreet);
         if (postalCodeId != null) updateBuilder.postalCodeId(postalCodeId);
-        await updateBuilder.execute();
-        debugPrint('DataConnect: UpdateCurrentUser synced profile for userId=$userId');
+        try {
+          await updateBuilder.execute();
+          debugPrint('DataConnect: UpdateCurrentUser synced profile for userId=$userId');
+        } catch (e) {
+          if (_isOperationNotDeployed(e)) {
+            debugPrint('DataConnect: UpdateCurrentUser is not deployed on connector yet; skipping.');
+          } else {
+            rethrow;
+          }
+        }
       }
     }
 
@@ -313,8 +328,16 @@ class AuthService {
         ..notificationPreference(resolvedNotifications ? 'enabled' : 'disabled')
         ..alertSetting(resolvedNotifications ? 'all' : 'paused');
       if (locationId != null) prefBuilder.locationId(locationId);
-      await prefBuilder.execute();
-      debugPrint('DataConnect: CreateUserPreferences succeeded for userId=$userId');
+      try {
+        await prefBuilder.execute();
+        debugPrint('DataConnect: CreateUserPreferences succeeded for userId=$userId');
+      } catch (e) {
+        if (_isOperationNotDeployed(e)) {
+          debugPrint('DataConnect: CreateUserPreferences is not deployed on connector yet; skipping.');
+        } else {
+          rethrow;
+        }
+      }
     }
   }
 

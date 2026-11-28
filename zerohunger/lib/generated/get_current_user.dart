@@ -36,14 +36,19 @@ class GetCurrentUserUsers {
   lastName = json['lastName'] == null ? null : nativeFromJson<String>(json['lastName']),
   email = json['email'] == null ? null : nativeFromJson<String>(json['email']),
   phoneNumber = json['phoneNumber'] == null ? null : nativeFromJson<String>(json['phoneNumber']),
-  isActive = nativeFromJson<bool>(json['isActive']),
-  userRole = nativeFromJson<String>(json['userRole']),
+  isActive = json['isActive'] == null ? true : nativeFromJson<bool>(json['isActive']),
+  userRole = json['userRole'] == null ? 'guest' : nativeFromJson<String>(json['userRole']),
   street = json['street'] == null ? null : nativeFromJson<String>(json['street']),
-  postalCode = json['postalCode'] == null ? null : GetCurrentUserUsersPostalCode.fromJson(json['postalCode']),
-  userOrganizations_on_user = (json['userOrganizations_on_user'] as List<dynamic>)
+  postalCode = (json['postalCode'] == null || json['postalCode']['code'] == null)
+      ? null
+      : GetCurrentUserUsersPostalCode.fromJson(json['postalCode']),
+  userOrganizations_on_user = ((json['userOrganizations_on_user'] as List<dynamic>?) ?? const [])
+        .where((e) => e != null && e['organization'] != null)
         .map((e) => GetCurrentUserUsersUserOrganizationsOnUser.fromJson(e))
         .toList(),
-  userPreferences_on_user = json['userPreferences_on_user'] == null ? null : GetCurrentUserUsersUserPreferencesOnUser.fromJson(json['userPreferences_on_user']);
+  userPreferences_on_user = (json['userPreferences_on_user'] == null || json['userPreferences_on_user']['profileId'] == null)
+      ? null
+      : GetCurrentUserUsersUserPreferencesOnUser.fromJson(json['userPreferences_on_user']);
   @override
   bool operator ==(Object other) {
     if(identical(this, other)) {
@@ -124,7 +129,7 @@ class GetCurrentUserUsersPostalCode {
   final String? province;
   GetCurrentUserUsersPostalCode.fromJson(dynamic json):
   
-  postalCodeId = bigIntFromJson(json['postalCodeId']),
+  postalCodeId = json['postalCodeId'] == null ? BigInt.zero : bigIntFromJson(json['postalCodeId']),
   code = nativeFromJson<String>(json['code']),
   city = json['city'] == null ? null : nativeFromJson<String>(json['city']),
   province = json['province'] == null ? null : nativeFromJson<String>(json['province']);
@@ -221,7 +226,9 @@ class GetCurrentUserUsersUserOrganizationsOnUserOrganization {
   orgName = nativeFromJson<String>(json['orgName']),
   orgPrimaryEmail = nativeFromJson<String>(json['orgPrimaryEmail']),
   street = json['street'] == null ? null : nativeFromJson<String>(json['street']),
-  postalCode = json['postalCode'] == null ? null : GetCurrentUserUsersUserOrganizationsOnUserOrganizationPostalCode.fromJson(json['postalCode']);
+  postalCode = (json['postalCode'] == null || json['postalCode']['code'] == null)
+      ? null
+      : GetCurrentUserUsersUserOrganizationsOnUserOrganizationPostalCode.fromJson(json['postalCode']);
   @override
   bool operator ==(Object other) {
     if(identical(this, other)) {
