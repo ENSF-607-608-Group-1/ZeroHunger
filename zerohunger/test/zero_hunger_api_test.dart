@@ -25,4 +25,21 @@ void main() {
       contains('donation_insert: foreign key constraint failed'),
     );
   });
+
+  test('uuidsMatch compares hyphenated and unhyphenated Data Connect UUIDs', () {
+    expect(
+      uuidsMatch(
+        '311379b8891640de8367b5eec6b8fe84',
+        '311379b8-8916-40de-8367-b5eec6b8fe84',
+      ),
+      isTrue,
+    );
+    expect(
+      uuidsMatch(
+        '311379b8-8916-40de-8367-b5eec6b8fe84',
+        '00000000-0000-0000-0000-000000000000',
+      ),
+      isFalse,
+    );
+  });
 }

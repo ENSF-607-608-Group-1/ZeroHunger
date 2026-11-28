@@ -87,3 +87,17 @@ query ListMyActivity @auth(level: USER) {
     }
   }
 }
+
+query ListMyNotifications @auth(level: USER) {
+  notifications(
+    where: { user: { authUid: { eq_expr: "auth.uid" } } }
+    orderBy: { createdAt: DESC }
+    limit: 50
+  ) {
+    notificationId
+    title
+    content
+    createdAt
+    eventId
+  }
+}

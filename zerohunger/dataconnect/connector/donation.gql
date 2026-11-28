@@ -6,17 +6,35 @@ mutation CreateDonation(
   $statusId: Int64!
   $eventId: Int64
 ) @auth(expr: "auth.uid != '' && auth.token.firebase.sign_in_provider != 'anonymous'") {
-  available_status: donationStatus_upsert(
-    data: { statusId: 1, name: "AVAILABLE" }
+  donation_insert: _executeReturningFirst(
+    sql: """
+    INSERT INTO donation (donationid, donationtitle, pickuptime, itemquantities, statusid, eventid)
+    VALUES (COALESCE($1::uuid, gen_random_uuid()), $2, $3::time, $4::bigint, $5::bigint, $6::bigint)
+    RETURNING donationid::text AS "donationId"
+    """
+    params: [$donationId, $donationTitle, $pickupTime, $itemQuantities, $statusId, $eventId]
   )
-  donation_insert(
-    data: {
-      donationId: $donationId
-      donationTitle: $donationTitle
-      pickupTime: $pickupTime
-      itemQuantities: $itemQuantities
-      statusId: $statusId
-      eventId: $eventId
-    }
+  activity_insert: _execute(
+    sql: """
+    INSERT INTO useractivity (activitytype, userid, donationid, eventid)
+    SELECT 'FOOD_POSTED', userid, $1::uuid, $3::bigint
+    FROM users
+    WHERE authuid = $2 AND $1 IS NOT NULL
+    LIMIT 1
+    """
+    params: [$donationId, { _expr: "auth.uid" }, $eventId]
+  )
+  notify_others: _execute(
+    sql: """
+    INSERT INTO notification (title, content, userid, eventid)
+    SELECT
+      'New food near you',
+      $2 || ' • Pickup at ' || to_char($3::time, 'FMHH12:MI AM') || ' (' || $4::bigint || ' available)',
+      userid,
+      $5::bigint
+    FROM users
+    WHERE authuid <> $1 AND isactive = true
+    """
+    params: [{ _expr: "auth.uid" }, $donationTitle, $pickupTime, $itemQuantities, $eventId]
   )
 }

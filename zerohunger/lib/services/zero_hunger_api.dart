@@ -15,11 +15,14 @@
 // We never send donorId: the cloud_functions package adds the signed-in user's token,
 // and the function takes the user ID from that
 
+import 'dart:async';
+
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_data_connect/firebase_data_connect.dart'
     show DataConnectOperationError;
 
 import '../generated/zerohunger.dart';
+import 'push_notification_service.dart';
 
 //the same as FOOD_CATEGORIES and ALLERGENS in types.ts
 // Screens can use these lists to show the choices
@@ -176,6 +179,12 @@ class ApiException implements Exception {
   String toString() => message;
 }
 
+// Compares UUIDs ignoring hyphens and casing (Data Connect returns 32-char hex UUIDs,
+// while Cloud Functions randomUUID() returns hyphenated 36-char UUIDs).
+bool uuidsMatch(String a, String b) =>
+    a.replaceAll('-', '').trim().toLowerCase() ==
+    b.replaceAll('-', '').trim().toLowerCase();
+
 class DonationPersistenceException implements Exception {
   final String donationId;
   final Object cause;
@@ -225,6 +234,7 @@ class ZeroHungerApi {
       'pickupStart': pickupStart.toUtc().toIso8601String(),
       'pickupEnd': pickupEnd.toUtc().toIso8601String(),
     });
+    PushNotificationService.instance.markOwnDonation(submitted.donationId);
     try {
       await _saveDonationToDatabase(
         donationId: submitted.donationId,
@@ -247,19 +257,40 @@ class ZeroHungerApi {
     required List<FoodItem> items,
     required DateTime pickupStart,
   }) async {
+    final activeConnector = connector ?? ZerohungerConnector.instance;
     final quantity = items.fold<int>(0, (total, item) => total + item.quantity);
-    final saved = await (connector ?? ZerohungerConnector.instance)
+    final statusId = await _resolveAvailableStatusId(activeConnector);
+    final saved = await activeConnector
         .createDonation(
           donationTitle: title,
           pickupTime: _databaseTime(pickupStart),
           itemQuantities: BigInt.from(quantity),
-          statusId: BigInt.one,
+          statusId: statusId,
         )
         .donationId(donationId)
         .execute();
-    if (saved.data.donation_insert.donationId != donationId) {
-      throw StateError('Data Connect saved a different donation ID.');
+    if (!uuidsMatch(saved.data.donation_insert.donationId, donationId)) {
+      throw StateError(
+        'Data Connect saved a different donation ID (${saved.data.donation_insert.donationId}).',
+      );
     }
+  }
+
+  Future<BigInt> _resolveAvailableStatusId(ZerohungerConnector activeConnector) async {
+    try {
+      final statuses = await activeConnector.listDonationStatuses().execute();
+      for (final status in statuses.data.donationStatuses) {
+        if (status.name.trim().toLowerCase() == 'available') {
+          return status.statusId;
+        }
+      }
+      if (statuses.data.donationStatuses.isNotEmpty) {
+        return statuses.data.donationStatuses.first.statusId;
+      }
+    } catch (_) {
+      // Fall back to statusId 1 ("Available") if status lookup is unavailable.
+    }
+    return BigInt.one;
   }
 
   String _databaseTime(DateTime time) =>
@@ -314,7 +345,9 @@ class ZeroHungerApi {
       'items': items.map((item) => item.toJson()).toList(),
       if (note != null) 'note': note,
     });
-    return ClaimResult.fromJson(answer);
+    final result = ClaimResult.fromJson(answer);
+    unawaited(PushNotificationService.instance.subscribeToDonation(result.donationId));
+    return result;
   }
 
   // api-sendMessage: send a message in a chat

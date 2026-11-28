@@ -12,6 +12,7 @@ import '../services/auth_service.dart';
 import '../services/chat_service.dart';
 import '../services/notification_service.dart';
 import '../services/query_service.dart';
+import '../services/zero_hunger_api.dart';
 import '../theme/app_theme.dart';
 import '../widgets/account_button.dart';
 import '../widgets/form_parts.dart';
@@ -41,13 +42,37 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
-  late final NotificationService _notifications = widget.notificationService ?? NotificationService();
+  late final NotificationService _notifications = widget.notificationService ??
+      (widget.accountAction == null ? NotificationService.connected() : NotificationService());
   late final QueryService _query = widget.queryService ?? QueryService();
   late final ChatService _chat = widget.chatService ?? ChatService();
   late final AuthService? _auth = widget.accountAction == null ? AuthService() : null;
 
   late Future<List<AppNotification>> _listFuture = _notifications.myNotifications();
   _NotificationFilter _filter = _NotificationFilter.all;
+  int _lastUnreadCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _lastUnreadCount = _notifications.unreadCount;
+    _notifications.unreadCountListenable.addListener(_handleUnreadChanged);
+  }
+
+  @override
+  void dispose() {
+    _notifications.unreadCountListenable.removeListener(_handleUnreadChanged);
+    super.dispose();
+  }
+
+  void _handleUnreadChanged() {
+    final current = _notifications.unreadCount;
+    final increased = current > _lastUnreadCount;
+    _lastUnreadCount = current;
+    if (increased && mounted) {
+      _reload();
+    }
+  }
 
   // Loads the list again (pull down to refresh).
   Future<void> _reload() async {
@@ -106,9 +131,20 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           if (!mounted) return;
           Donation? match;
           for (final d in donations) {
-            if (d.donationId == notification.targetId) {
+            if (uuidsMatch(d.donationId, notification.targetId)) {
               match = d;
               break;
+            }
+          }
+          if (match == null &&
+              notification.targetTitle != null &&
+              notification.targetTitle!.trim().isNotEmpty) {
+            final expectedTitle = notification.targetTitle!.trim().toLowerCase();
+            for (final d in donations) {
+              if (d.title.trim().toLowerCase() == expectedTitle) {
+                match = d;
+                break;
+              }
             }
           }
           if (match == null) {
@@ -205,11 +241,19 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           subtitle: 'Check your connection, then pull down to try again.',
                         )
                       else if (all.isEmpty)
-                        const _Notice(
-                          icon: Icons.notifications_none_rounded,
-                          title: 'Notifications are not available yet',
-                          subtitle: 'The current database cannot store notification targets and read state.',
-                        )
+                        _notifications.isConnected
+                            ? const _Notice(
+                                icon: Icons.notifications_none_rounded,
+                                title: 'No notifications yet',
+                                subtitle:
+                                    'When someone posts food nearby or updates a pickup, alerts will appear here.',
+                              )
+                            : const _Notice(
+                                icon: Icons.notifications_none_rounded,
+                                title: 'Notifications are not available yet',
+                                subtitle:
+                                    'The current database cannot store notification targets and read state.',
+                              )
                       else if (shown.isEmpty)
                         const _Notice(
                           icon: Icons.search_off_rounded,

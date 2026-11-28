@@ -101,11 +101,11 @@ class CreateDonationDonationInsert {
 
 @immutable
 class CreateDonationData {
-  final CreateDonationAvailableStatus available_status;
+  final CreateDonationAvailableStatus? available_status;
   final CreateDonationDonationInsert donation_insert;
   CreateDonationData.fromJson(dynamic json):
   
-  available_status = CreateDonationAvailableStatus.fromJson(json['available_status']),
+  available_status = json['available_status'] == null ? null : CreateDonationAvailableStatus.fromJson(json['available_status']),
   donation_insert = CreateDonationDonationInsert.fromJson(json['donation_insert']);
   @override
   bool operator ==(Object other) {
@@ -127,13 +127,15 @@ class CreateDonationData {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
-    json['available_status'] = available_status.toJson();
+    if (available_status != null) {
+      json['available_status'] = available_status!.toJson();
+    }
     json['donation_insert'] = donation_insert.toJson();
     return json;
   }
 
   CreateDonationData({
-    required this.available_status,
+    this.available_status,
     required this.donation_insert,
   });
 }

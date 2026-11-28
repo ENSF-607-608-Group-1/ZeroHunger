@@ -28,7 +28,8 @@ class NotificationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final service = notificationService ?? NotificationService();
+    final service = notificationService ??
+        (accountAction == null ? NotificationService.connected() : NotificationService());
 
     return ValueListenableBuilder<int>(
       valueListenable: service.unreadCountListenable,

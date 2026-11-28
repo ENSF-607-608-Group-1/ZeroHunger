@@ -441,7 +441,11 @@ class AuthService {
       );
     }
 
-    final result = await _connector.getCurrentUser().execute();
+    await activeUser.getIdToken();
+    final result = await _connector
+        .getCurrentUser()
+        .ref()
+        .execute(fetchPolicy: QueryFetchPolicy.serverOnly);
     if (result.data.users.isEmpty) {
       return const UserPreferences(
         role: null,
@@ -485,7 +489,10 @@ class AuthService {
 
   // Persists a role change in Cloud SQL Users.UserRole and returns the refreshed profile.
   Future<UserPreferences> updateCurrentUserRole(UserRole role) async {
-    await _connector.updateCurrentUserRole(userRole: role.dbValue).execute();
+    final result = await _connector.updateCurrentUserRole(userRole: role.dbValue).execute();
+    if (result.data.user_update == null) {
+      throw StateError('The signed-in user is not present in the database.');
+    }
     return getCurrentUserProfile();
   }
 

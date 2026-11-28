@@ -272,10 +272,7 @@ class _DonateFoodScreenState extends State<DonateFoodScreen> {
     } on DonationPersistenceException catch (e, stackTrace) {
       debugPrint('$e\n$stackTrace');
       if (mounted) {
-        showZhMessage(
-          context,
-          'Donation accepted, but could not be saved. Do not resubmit; contact support with ID ${e.donationId}.',
-        );
+        showZhMessage(context, e.toString());
       }
     } catch (e, stackTrace) {
       debugPrint('Donation submission failed: $e\n$stackTrace');
