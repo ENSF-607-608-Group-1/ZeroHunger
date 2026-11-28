@@ -28,3 +28,10 @@ mutation CreateCurrentUser($firstName: String, $lastName: String, $phoneNumber: 
     }
   )
 }
+
+mutation UpdateCurrentUserRole($userRole: String!) @auth(level: USER) {
+  user_update(
+    first: { where: { authUid: { eq_expr: "auth.uid" } } }
+    data: { userRole: $userRole }
+  )
+}
