@@ -84,7 +84,6 @@ Install the following software before running the project:
 - [Flutter SDK](https://docs.flutter.dev/get-started/install)
 - [Node.js 24 and npm](https://nodejs.org/)
 - [Android Studio](https://developer.android.com/studio) for Android development.
-- Xcode and CocoaPods for iOS development on macOS.
 - Firebase CLI.
 - Access to the team's GitHub repository and Firebase project.
 
@@ -239,7 +238,7 @@ firebase deploy --only functions
 
 Coordinate with the team before deploying or modifying shared cloud resources.
 
-## 13. Troubleshooting
+## 13. Commmon problems
 
 | Problem | Solution |
 |---|---|
